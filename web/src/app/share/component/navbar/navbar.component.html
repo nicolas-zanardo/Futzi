@@ -1,0 +1,15 @@
+<nav class="d-flex">
+  <div class="logo" routerLink="/">
+    <img src="{{logo}}" alt="football club OSNY">
+  </div>
+  <div class="menu">
+    <button mat-flat-button routerLink=""  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</button>
+    <button mat-flat-button routerLink="match"  routerLinkActive="active-link">Match</button>
+    <button mat-flat-button routerLink="entrainement"  routerLinkActive="active-link">Entraînement</button>
+  </div>
+  <div class="user">
+    <button class="btn-user" routerLink="member/dashboard" routerLinkActive="active-user">
+      <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="person"></mat-icon>
+    </button>
+  </div>
+</nav>

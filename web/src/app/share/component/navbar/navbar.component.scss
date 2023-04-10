@@ -1,0 +1,74 @@
+@import "src/scss/_queries.scss";
+/***********************************************
+ * NAVBAR - DESKTOP
+ *  mixin MENU -> @mixin sm  #Landscape phone
+ ***********************************************/
+
+
+nav {
+  display: flex;
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  height: 10vh;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding: 1rem;
+  background-color: var(--background);
+  border-bottom: 1px var(--text);
+  box-shadow: 0px 3px 15px 0px #000;
+
+  /* -------      LOGO        ------- */
+  .logo {
+    flex: 1;
+    cursor: pointer;
+    img {
+      height: 50px;
+    }
+  }
+
+  /* -------      MENU        ------- */
+  .menu {
+    flex: 2;
+    font-size: x-small;
+    display: none;
+    @include sm {
+      display: flex;
+      justify-content: center;
+    }
+    button {
+      font-size: x-small !important;
+    }
+  }
+
+  /* -------      USER        ------- */
+  .user {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    .btn-user {
+      display: flex;
+      margin: 0;
+      background-color: var(--light);
+      border: none;
+      padding: 0.5rem 0.5rem;
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      transition-duration: 0.4s;
+      &:hover {
+        background-color: var(--primary);
+      }
+    }
+  }
+}
+
+.active-link {
+  border-bottom: 3px solid var(--light);
+}
+
+.active-user {
+  background-color: var(--primary) !important;
+}

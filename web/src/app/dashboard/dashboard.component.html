@@ -1,0 +1,86 @@
+<div class="container">
+  <h1>Dashboard</h1>
+  <div class="barre-light mb-4"></div>
+  <div>
+    <div class="row m-3" class="flex-horizontal-center">
+      <div class="col-lg-1">
+        <button mat-raised-button color="primary" class="h-100">
+          <mat-icon fontIcon="edit"></mat-icon> <small>edit</small>
+        </button>
+      </div>
+      <div class="col-lg-11 ml-2">
+        <div class="row">
+          <span>Bonjour, <strong>{{lastName | uppercase}} {{firstName | uppercase}}</strong></span>
+          <small class="flex-horizontal-center"><mat-icon fontIcon="mail"></mat-icon>{{email}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="barre-second my-4"></div>
+    <div class="flex-warp justify-content-center">
+      <mat-card class="m-2 w-25">
+        <div class="barre-light"></div>
+        <mat-card-header class="justify-content-between align-content-center">
+          <mat-card-title><h4>Match</h4></mat-card-title>
+          <mat-icon aria-hidden="false" fontIcon="touch_app"></mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <hr>
+          <div class="d-flex justify-content-between p-3">
+            <div class="me-4">Saison :</div><div>{{ seasonDate }}</div>
+          </div>
+          <div class="flex-column  p-3">
+            <div class="me-4 justify-content-between"><b>Match Total :</b><div>20</div></div>
+            <div class="me-4 justify-content-between"><b>Match Jouer :</b><div>20</div></div>
+          </div>
+          <div class="p-3">
+            <h5>Prochain match</h5>
+            <div>à <span>Saint Germain-en-Laye</span></div>
+          </div>
+          <div class="d-flex justify-content-between p-3">
+            <div class="me-4"><b>date :</b></div><div>20</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="m-2">
+        <div class="barre-light"></div>
+        <mat-card-header class="justify-content-between align-content-center">
+          <mat-card-title><h4>Entrainement</h4></mat-card-title>
+          <mat-icon aria-hidden="false" fontIcon="touch_app"></mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <hr>
+          <div class="d-flex justify-content-between p-3">
+            <div class="me-4">Nombre total d'entrainement</div><div>14/14</div>
+          </div>
+          <div class="flex-column  p-3">
+            <div class="me-4 justify-content-between"><b>Terrain</b><div>1</div></div>
+            <div class="me-4 justify-content-between"><b>Terrain</b><div>2</div></div>
+            <div class="me-4 justify-content-between"><b>Terrain</b><div>3</div></div>
+            <div class="me-4 justify-content-between"><b>Terrain</b><div>4</div></div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="m-2">
+        <div class="barre-light"></div>
+        <mat-card-header class="justify-content-between align-content-center">
+          <mat-card-title><h4>Membre</h4></mat-card-title>
+          <mat-icon aria-hidden="false" fontIcon="touch_app"></mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <hr>
+          <div class="d-flex justify-content-between p-3">
+            <div class="me-4">Inscrit :</div><div>93</div>
+          </div>
+          <div class="flex-column  p-3">
+            <div class="me-4 justify-content-between"><b>Actif</b><div class="colorActif"><b>1</b></div></div>
+            <div class="me-4 justify-content-between"><b>Inactif</b><div class="colorInactif"><b>2</b></div></div>
+            <div class="me-4 justify-content-between"><b>Demande</b><div class="colorDemande"><b>3</b></div></div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+</div>
+

@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+@import "scss/_font.scss";
+@import "scss/_variables.scss";
+@import "scss/_base.scss";
+@import "scss/_reset.scss";
+
+/* Layout */
+@import "~bootstrap/dist/css/bootstrap-grid.css";
+@import "node_modules/material-design-icons-iconfont";
+
+/**
+  HAUTEUR LARGEUR MARGE
+ */
+.h-100 {
+  height: 100%;
+}
+.ml-2 {
+  margin-left: 2rem;
+}
+
+.m-2 {
+  margin: 2rem;
+}
+
+/**
+  FLEX
+ */
+
+.flex-warp {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-all-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-horizontal-center {
+  display: flex;
+  align-items: center;
+}
+
+.justify-content-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+/**
+  BARRES
+ */
+.barre-light {
+  background-color: var(--light);
+  height: 0.8rem;
+  border-radius: 25px 25px 0 0;
+}
+
+.barre-second {
+  background-color: #676767;
+  height: 0.8rem;
+  border-radius: 0 0 25px 25px;
+}

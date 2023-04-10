@@ -1,0 +1,9 @@
+<div class="slideshow-container">
+  <div *ngFor="let pathImage of imgSlide" class="mySlides fade" style="{{pathImage.css}}"></div>
+  <a class="prev" (click)="plusSlides(-1)">❮</a>
+  <a class="next" (click)="plusSlides(1)">❯</a>
+</div>
+
+<div class="slideBtn">
+  <span *ngFor="let pathImage of imgSlide let index = index;" class="dot" (click)="currentSlide(index+1)"></span>
+</div>

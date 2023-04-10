@@ -1,0 +1,10 @@
+# rm cache IDE
+
+/web/.idea/
+/web/.vscode/
+/server/.idea/
+/server/.vscode/
+/mobile/.idea/
+/mobile/.vscode/
+
+

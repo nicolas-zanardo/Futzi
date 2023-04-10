@@ -1,0 +1,40 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: var(--font-family-regular);
+  background-color: var(--background);
+  color: var(--text);
+  font-size: 1.6rem;
+}
+
+html, body { min-height: 100vh; }
+
+
+p {
+  margin: 1rem 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-blod);
+  color: var(--primary);
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
