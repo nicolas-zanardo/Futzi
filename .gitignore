@@ -1,5 +1,6 @@
 # rm cache IDE
-
+.idea
+../.idea/
 /web/.idea/
 /web/.vscode/
 /server/.idea/
