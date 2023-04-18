@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
 import {DashboardRoutingModule} from "./dashboard-routing.module";
 import { DashboardComponent } from './dashboard.component';
-import {MaterialModules} from "../share/layout/material.modules";
+import {MaterialModules} from "../shared/layout/material.modules";
 
 
 

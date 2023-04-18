@@ -1,0 +1,50 @@
+<div class="d-flex full-page justify-content-center align-items-center p-5">
+
+  <mat-card>
+<!--    HEADER-->
+    <div class="pt-3 px-3"><div class="barre-light"></div></div>
+    <mat-card-title class="p-4 d-flex justify-content-center"><h1>Connexion</h1></mat-card-title>
+    <div class="px-3"><div class="barre-second"></div></div>
+
+<!--    FORM-->
+    <form class="form" [formGroup]="form" (submit)="submit()">
+
+<!--      EMAIL-->
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email"
+               placeholder="Ex. pat@example.com">
+        <mat-icon matSuffix>mail</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('pattern') && !form.get('email')?.hasError('required')">
+          Veuillez entrez une email valide
+        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">
+          l'email est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+<!--      PASSWORD-->
+      <mat-form-field class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">
+          le mot de passe est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+<!--      BTN SUBMIT-->
+      <div class="d-flex justify-content-around mt-4">
+        <button mat-button (click)="inscription()">Inscription</button>
+        <button mat-raised-button color="primary">Connectez-vous</button>
+      </div>
+
+    </form>
+
+  </mat-card>
+
+</div>
+
+

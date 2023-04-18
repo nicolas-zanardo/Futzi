@@ -6,7 +6,6 @@
 
 
 nav {
-  display: flex;
   position: fixed;
   z-index: 9999;
   width: 100%;
@@ -14,7 +13,6 @@ nav {
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  padding: 1rem;
   background-color: var(--background);
   border-bottom: 1px var(--text);
   box-shadow: 0px 3px 15px 0px #000;
@@ -23,6 +21,7 @@ nav {
   .logo {
     flex: 1;
     cursor: pointer;
+    margin: 1rem;
     img {
       height: 50px;
     }

@@ -1,5 +1,5 @@
 <nav class="d-flex">
-  <div class="logo" routerLink="/">
+  <div class="logo d-flex align-items-center" routerLink="/">
     <img src="{{logo}}" alt="football club OSNY">
   </div>
   <div class="menu">
@@ -9,6 +9,9 @@
   </div>
   <div class="user">
     <button class="btn-user" routerLink="member/dashboard" routerLinkActive="active-user">
+      <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="person"></mat-icon>
+    </button>
+    <button class="btn-user" routerLink="connexion" routerLinkActive="active-user">
       <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="person"></mat-icon>
     </button>
   </div>

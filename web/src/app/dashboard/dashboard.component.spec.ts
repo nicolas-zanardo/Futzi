@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardComponent } from './dashboard.component';
-import {MaterialModules} from "../share/layout/material.modules";
+import {MaterialModules} from "../shared/layout/material.modules";
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
