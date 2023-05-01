@@ -8,4 +8,9 @@
 /mobile/.idea/
 /mobile/.vscode/
 
+# node module
+/web/node_modules/**/*
+/server/node_modules/**/*
+/mobile/node_modules/**/*
+
 
