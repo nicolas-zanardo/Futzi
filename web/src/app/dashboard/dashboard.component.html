@@ -4,20 +4,20 @@
   <div>
     <div class="row m-3" class="d-flex align-items-center">
       <div class="col-lg-1 me-1">
-        <button mat-raised-button color="primary" class="h-100">
+        <button mat-raised-button color="primary" class="h-100 p-3 mx-3"  routerLink="/member/profile">
           <mat-icon fontIcon="edit"></mat-icon> <small>edit</small>
         </button>
       </div>
       <div class="col-lg-11 ml-2">
         <div class="row">
-          <span>Bonjour, <strong>{{lastName | uppercase}} {{firstName | uppercase}}</strong></span>
+          <span>Bonjour, <strong>{{firstName | uppercase}} {{lastName | uppercase}}</strong></span>
           <small class="d-flex align-items-center"><mat-icon fontIcon="mail"></mat-icon>{{email}}</small>
         </div>
       </div>
     </div>
     <div class="barre-second my-4"></div>
-    <div class="d-flex flex-wrap justify-content-center">
-      <mat-card class="m-2 w-25">
+    <div class="d-flex flex-wrap justify-content-center" *ngIf="isAdmin">
+      <mat-card class="m-2">
         <div class="barre-light"></div>
         <mat-card-header class="justify-content-between align-content-center">
           <mat-card-title><h4>Match</h4></mat-card-title>

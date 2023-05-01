@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardComponent } from './dashboard.component';
 import {MaterialModules} from "../shared/layout/material.modules";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -11,7 +12,7 @@ describe('DashboardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ DashboardComponent ],
       imports: [
-        MaterialModules
+        MaterialModules, HttpClientTestingModule
       ]
     })
     .compileComponents();

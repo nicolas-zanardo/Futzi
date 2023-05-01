@@ -1,1 +1,95 @@
-<p>inscription works!</p>
+<div class="d-flex full-page justify-content-center align-items-center p-5">
+
+  <mat-card>
+    <!--    HEADER-->
+    <div class="barre-light"></div>
+    <mat-card-title class="p-4 d-flex justify-content-between align-items-center"><h1>Inscription</h1><mat-icon fontIcon="person_add" class="mx-2"></mat-icon></mat-card-title>
+    <div class="barre-second"></div>
+
+    <mat-error *ngIf="errorSend" class="px-5 pt-3 w-100 d-flex justify-content-center border-1"><span>{{errorSend}}</span></mat-error>
+
+    <!--    FORM-->
+    <form class="form" [formGroup]="form" (submit)="submit()">
+
+      <!--      EMAIL-->
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email"
+               placeholder="pat@example.com">
+        <mat-icon matSuffix>mail</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('pattern')">
+          Veuillez entrez une email valide
+        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">
+          l'email est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!--      FIRSTNAME-->
+      <mat-form-field class="full-width">
+        <mat-label>Prénom</mat-label>
+        <input type="text" matInput formControlName="firstname">
+        <mat-error *ngIf="form.get('firstname')?.hasError('minlength')">
+          <strong>4 charatères</strong> minimum
+        </mat-error>
+        <mat-error *ngIf="form.get('firstname')?.hasError('required')">
+          le prénom est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!--      LASTNAME-->
+      <mat-form-field class="full-width">
+        <mat-label>Nom</mat-label>
+        <input type="text" matInput formControlName="lastname">
+        <mat-error *ngIf="form.get('lastname')?.hasError('minlength')">
+          <strong>4 charatères</strong> minimum
+        </mat-error>
+        <mat-error *ngIf="form.get('lastname')?.hasError('required')">
+          le nom est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!--      PASSWORD-->
+      <mat-form-field class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')!.hasError('minlength')">
+          <strong>8 charatères</strong> minimum
+        </mat-error>
+        <mat-error *ngIf="form.get('password')!.hasError('required')">
+          le mot de passe est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!--      CONFIRM-->
+      <mat-form-field class="full-width">
+        <mat-label>Confirmez</mat-label>
+        <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="passwordConfirm">
+        <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide confirm password'" [attr.aria-pressed]="hideConfirmPassword">
+          <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('passwordConfirm')?.hasError('matching')">
+          Les mot de passe ne sont pas identique
+        </mat-error>
+        <mat-error *ngIf="form.get('passwordConfirm')?.hasError('required') && !form.get('passwordConfirm')?.hasError('matching')">
+          le mot de passe est <strong>obligatoire</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!--      BTN SUBMIT-->
+      <div class="d-flex justify-content-around mt-4">
+        <button mat-button (click)="connection()">Connexion</button>
+        <button mat-raised-button color="accent" >Inscrivez-vous</button>
+      </div>
+
+    </form>
+
+  </mat-card>
+
+</div>
+
+
+

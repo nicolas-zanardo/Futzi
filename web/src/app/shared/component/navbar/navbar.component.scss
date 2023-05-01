@@ -1,4 +1,4 @@
-@import "src/scss/_queries.scss";
+@import "../../../../scss/queries";
 /***********************************************
  * NAVBAR - DESKTOP
  *  mixin MENU -> @mixin sm  #Landscape phone
@@ -45,8 +45,8 @@ nav {
   .user {
     flex: 1;
     display: flex;
-    justify-content: end;
     align-content: center;
+    justify-content: flex-end;
     .btn-user {
       display: flex;
       margin: 0;

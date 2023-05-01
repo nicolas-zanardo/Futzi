@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {AuthService} from "../../shared/services/auth/auth.service";
+import {Observable} from "rxjs";
+import {User} from "../../shared/interface/user.interface";
 
 @Component({
   selector: 'app-profile',
@@ -7,4 +10,7 @@ import { Component } from '@angular/core';
 })
 export class ProfileComponent {
 
+  public user$: Observable<User | null> = this.authService.currentUser$.asObservable();
+  constructor(private authService: AuthService) {
+  }
 }

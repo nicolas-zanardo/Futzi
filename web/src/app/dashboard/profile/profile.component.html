@@ -1,1 +1,10 @@
-<p>profile works!</p>
+<div class="container pt-5 pb-5">
+  <h1>Profil</h1>
+
+  <mat-card>
+    <mat-card-title>Profil</mat-card-title>
+    <mat-card-content>
+      <pre>{{user$ | async | json}}</pre>
+    </mat-card-content>
+  </mat-card>
+</div>

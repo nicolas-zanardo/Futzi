@@ -4,6 +4,8 @@ import { NavbarComponent } from './navbar.component';
 import {environment} from "../../../../environments/environement.dev";
 import {MaterialModules} from "../../layout/material.modules";
 import {RouterTestingModule} from "@angular/router/testing";
+import {AuthService} from "../../services/auth/auth.service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -11,7 +13,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MaterialModules, RouterTestingModule],
+      imports: [MaterialModules, RouterTestingModule, HttpClientTestingModule],
       declarations: [ NavbarComponent ]
     })
     .compileComponents();

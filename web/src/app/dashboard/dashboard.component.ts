@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../shared/services/auth/auth.service";
+import {Observable, switchMap, tap} from "rxjs";
+import {User} from "../shared/interface/user.interface";
+import {ROLE} from "../shared/enum/role";
 
 
 @Component({
@@ -7,10 +11,14 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit{
-  public firstName: string = "Nicolas";
-  public lastName: string = "Zanardo";
-  public email: string = "nicolas-zanardo@live.fr"
+  public firstName?: string = this.authService.currentUser$.value?.firstname;
+  public lastName?: string = this.authService.currentUser$.value?.lastname;
+  public email?: string = this.authService.currentUser$.value?.email;
   public seasonDate?: string;
+  public isAdmin: boolean = this.authService.findRoleUser(ROLE.ADMIN);
+
+  constructor(private authService : AuthService) {}
+
 
   ngOnInit(): void {
     this.seasonDate = this.seasonYear();

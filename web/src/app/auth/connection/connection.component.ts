@@ -1,20 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
+import {AuthService} from "../../shared/services/auth/auth.service";
 
 
 @Component({
-  selector: 'app-connexion',
-  templateUrl: './connexion.component.html',
-  styleUrls: ['./connexion.component.scss']
+  selector: 'app-connection',
+  templateUrl: './connection.component.html',
+  styleUrls: ['./connection.component.scss']
 })
-export class ConnexionComponent implements OnInit{
+export class ConnectionComponent implements OnInit{
 
   public form!: FormGroup;
   public hide = true;
+  public errorSend: string | undefined;
+
   constructor(
     private fb: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -34,10 +38,17 @@ export class ConnexionComponent implements OnInit{
   }
 
   submit() {
-    console.log(this.form.getRawValue())
+    if(this.form.valid) {
+      this.authService.login(this.form.getRawValue()).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/member').then()},
+        error: (err) => this.errorSend = err?.error,
+        complete: () => console.warn('INFO : CONNECTION USER ', new Date())
+      });
+    }
   }
 
   inscription() {
-    this.router.navigate(['/inscription'])
+    this.router.navigate(['/registration']);
   }
 }

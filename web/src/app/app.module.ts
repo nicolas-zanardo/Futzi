@@ -9,9 +9,13 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './shared/component/navbar/navbar.component';
 import {DashboardModule} from "./dashboard/dashboard.module";
 import {AppRoutingModule} from "./app-routing.module";
-import {ConnexionComponent} from './auth/connexion/connexion.component';
+
 import {ReactiveFormsModule} from "@angular/forms";
 import { InscriptionComponent } from './auth/inscription/inscription.component';
+import {HttpClientModule} from "@angular/common/http";
+import {ConnectionComponent} from "./auth/connection/connection.component";
+import {NgOptimizedImage} from "@angular/common";
+
 
 
 
@@ -19,19 +23,21 @@ import { InscriptionComponent } from './auth/inscription/inscription.component';
   declarations: [
     AppComponent,
     NavbarComponent,
-    ConnexionComponent,
+    ConnectionComponent,
     InscriptionComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MaterialModules,
-    RouterModule,
-    AppRoutingModule,
-    GlobalModule,
-    DashboardModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MaterialModules,
+        RouterModule,
+        AppRoutingModule,
+        GlobalModule,
+        DashboardModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NgOptimizedImage
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

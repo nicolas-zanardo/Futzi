@@ -1,18 +1,24 @@
 <nav class="d-flex">
   <div class="logo d-flex align-items-center" routerLink="/">
-    <img src="{{logo}}" alt="football club OSNY">
+    <img alt="football club OSNY" src="{{logo}}" >
   </div>
   <div class="menu">
-    <button mat-flat-button routerLink=""  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</button>
-    <button mat-flat-button routerLink="match"  routerLinkActive="active-link">Match</button>
-    <button mat-flat-button routerLink="entrainement"  routerLinkActive="active-link">Entraînement</button>
+    <button mat-flat-button routerLink="/"  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</button>
+    <button mat-flat-button routerLink="/match"  routerLinkActive="active-link">Match</button>
+    <button mat-flat-button routerLink="/entrainement"  routerLinkActive="active-link">Entraînement</button>
   </div>
-  <div class="user">
-    <button class="btn-user" routerLink="member/dashboard" routerLinkActive="active-user">
-      <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="person"></mat-icon>
-    </button>
-    <button class="btn-user" routerLink="connexion" routerLinkActive="active-user">
-      <mat-icon aria-hidden="false" aria-label="home icon" fontIcon="person"></mat-icon>
+  <div class="user me-2">
+    <div *ngIf="isLogged !== null">
+      <button *ngIf="isLogged && jwtToken?.isAuthenticated && !isDisplayBtn('/member')"  class="btn-user" routerLink="/member" routerLinkActive="active-user">
+        <mat-icon aria-hidden="false" aria-label="person icon" fontIcon="person"></mat-icon>
+      </button>
+      <button mat-stroked-button *ngIf="isLogged && isDisplayBtn('/member')" (click)="logout()">
+        <mat-icon aria-hidden="false" aria-label="logout icon" fontIcon="logout"></mat-icon>
+        <span class="small">Déconnexion</span>
+      </button>
+    </div>
+    <button *ngIf="!jwtToken?.isAuthenticated" class="btn-user" routerLink="/connection" routerLinkActive="active-user">
+      <mat-icon aria-hidden="false" aria-label="person icon" fontIcon="person"></mat-icon>
     </button>
   </div>
 </nav>

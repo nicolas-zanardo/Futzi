@@ -4,11 +4,13 @@ import { RouterOutlet } from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 import {NavbarComponent} from "./shared/component/navbar/navbar.component";
 import {MaterialModules} from "./shared/layout/material.modules";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule,
         MaterialModules
       ],
