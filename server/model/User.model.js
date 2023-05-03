@@ -2,11 +2,13 @@ class User {
     id;
     firstname;
     lastname;
+    phone_number;
     email;
+    old_email;
     password;
     ROLE;
-    isValidMail;
-    categoryID;
+    is_valid_email;
+    id_category;
 }
 
 module.exports = { User }

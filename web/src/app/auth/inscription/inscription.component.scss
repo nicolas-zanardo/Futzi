@@ -1,6 +1,6 @@
 .form {
   padding: 2rem;
-  width: 350px;
+  max-width: 768px;
 }
 
 .full-width {
@@ -14,4 +14,8 @@
 .full-page {
   height: 90vh;
   width: 100%;
+}
+
+.form-raw {
+  width: 300px;
 }

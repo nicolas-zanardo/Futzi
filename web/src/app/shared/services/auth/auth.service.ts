@@ -4,9 +4,10 @@ import {User} from "../../interface/user.interface";
 import {BehaviorSubject, Observable, of, ReplaySubject, Subscription, switchMap, tap, timer} from "rxjs";
 import {environment} from "../../../../environments/environement.dev";
 import jwt_decode from "jwt-decode";
-import {JwtToken} from "../../model/jwt-token.model";
+import {JwtToken} from "../../interface/jwt-token.interface";
 import {Router} from "@angular/router";
 import {ResponseLogin} from "../../interface/response-login";
+import {handleError} from "../handel-error";
 
 @Injectable({
   providedIn: 'root'
@@ -28,19 +29,6 @@ export class AuthService {
   ) {
     this.initToken();
     this.subscription = this.initTimer();
-  }
-
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`
-      ERROR : ${operation}
-      STATUS : ${error.status}
-      MESSAGE : ${error.message}
-      FULL TEXT : ${error}
-      `)
-      return of(result as T);
-    };
   }
 
   /**
@@ -69,17 +57,17 @@ export class AuthService {
               this.isLogged$.next(true);
             } else {
               this.isLogged$.next(false);
+              this.logout();
             }
           },
           error: (err) => {
             if(err.status === 423) {
-              this.handleError("[AUTH SERVICE] getCurrentUser : The TOKEN have been expired, Disconnect user logged");
-              this.isLogged$.next(false);
+              handleError("[AUTH SERVICE] getCurrentUser : The TOKEN have been expired, Disconnect user logged");
             } else {
-              this.handleError("[AUTH SERVICE] getCurrentUser : undefined");
-              this.isLogged$.next(false);
+              handleError("[AUTH SERVICE] getCurrentUser : undefined");
             }
-            return this.logout();
+            this.isLogged$.next(false);
+            this.logout();
           }
           }));
   }
@@ -109,8 +97,9 @@ export class AuthService {
    * * if(err) delete jwt
    */
   public initTimer() {
-    return timer(300000, 300000).pipe(
+    return timer(0, 300000).pipe(
       switchMap(() => {
+        console.warn(`${new Date()} : TIMER  300000`)
         if (localStorage.getItem('jwt')) {
           return this.http.post<string>(`${environment.apiURL}/auth/refresh-token`, this.jwtToken.value).pipe(
             tap({
@@ -120,9 +109,9 @@ export class AuthService {
               } ,
               error: (err) => {
                 if(err.status == 423) {
-                  this.handleError("[AUTH SERVICE] initTimer : The TOKEN have been expired, Disconnect user logged");
+                  handleError("[AUTH SERVICE] initTimer : The TOKEN have been expired, Disconnect user logged");
                 } else {
-                  this.handleError("[AUTH SERVICE] initTimer : undefined")
+                  handleError("[AUTH SERVICE] initTimer : undefined")
                 }
                 return this.logout();
               }
@@ -137,8 +126,7 @@ export class AuthService {
         this.resetToken();
         this.currentUser$.next( null);
         localStorage.removeItem('jwt');
-        this.router.navigate([`/connection`])
-          .then();
+        this.logout();
       }
     });
   }
@@ -156,6 +144,7 @@ export class AuthService {
     } else {
       this.currentUser$.next( null);
       this.resetToken();
+      this.logout();
     }
   }
 
@@ -187,11 +176,14 @@ export class AuthService {
     let user: User | null = this.currentUser$.value;
     let haveRole: boolean = false;
     if(user){
-      for (let role of JSON.parse(user!.ROLE)) {
-        if(ROLE_AUTH === role) {
-          haveRole = true;
+      if(user.ROLE) {
+        for (let role of JSON.parse(user.ROLE)) {
+          if(ROLE_AUTH === role) {
+            haveRole = true;
+          }
         }
       }
+
     }
     return haveRole;
   }

@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProfileComponent } from './profile/profile.component';
-import {DashboardRoutingModule} from "./dashboard-routing.module";
-import { DashboardComponent } from './dashboard.component';
 import {MaterialModules} from "../shared/layout/material.modules";
+import {CommonModule} from '@angular/common';
+
+import {DashboardRoutingModule} from "./dashboard-routing.module";
+
+import {ProfileComponent} from './profile/profile.component';
+import {DashboardComponent} from './dashboard.component';
+import {BanUserComponent} from './ban-user/ban-user.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -11,12 +15,15 @@ import {MaterialModules} from "../shared/layout/material.modules";
 @NgModule({
   declarations: [
     ProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    BanUserComponent
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    MaterialModules
+    MaterialModules,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

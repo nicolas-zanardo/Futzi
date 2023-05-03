@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth/auth.service";
+import {RegexUser} from "../../shared/enum/regex-user";
 
 
 @Component({
@@ -25,10 +26,10 @@ export class ConnectionComponent implements OnInit{
     this.createForm();
   }
 
-  public createForm() {
+  public createForm(): void {
     this.form = this.fb.group({
       email: new FormControl('', Validators.compose([
-        Validators.pattern('^([a-zA-Z0-9._-]+)@([a-zA-Z0-9._-]+)\\.([a-zA-Z]{2,6})$'),
+        Validators.pattern(RegexUser.email),
         Validators.required
       ])),
       password: new FormControl('', Validators.compose([
@@ -37,7 +38,7 @@ export class ConnectionComponent implements OnInit{
     })
   }
 
-  submit() {
+  submit(): void {
     if(this.form.valid) {
       this.authService.login(this.form.getRawValue()).subscribe({
         next: () => {
@@ -48,7 +49,7 @@ export class ConnectionComponent implements OnInit{
     }
   }
 
-  inscription() {
+  inscription(): void {
     this.router.navigate(['/registration']);
   }
 }

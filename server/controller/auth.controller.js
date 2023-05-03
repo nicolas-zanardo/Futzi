@@ -11,6 +11,13 @@ const RSA_PUB = fs.readFileSync('RSA/key.pub', 'utf8');
 const RSA_PRIVATE = fs.readFileSync('RSA/key', 'utf8');
 
 /**
+ * REGEX - TOKEN
+ * @type {RegExp}
+ */
+const REGEX_TOKEN = /^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/gm;
+
+
+/**
  * AUTH - login
  * @param req Request
  * @param res Response
@@ -28,9 +35,16 @@ exports.loginController = async(req, res) => {
  * @param res Response
  * @returns {Promise<void>}
  */
-exports.refreshTokenController = async (req, res) => {
-    let decoded = jwt_decode(req.body.token);
-    jsonWebToken.verify(req.body.token, RSA_PUB, (err, decode) => {
+exports.refreshTokenController = (req, res) => {
+    const token = req.body.token;
+    if(token.length <= 0) {
+        console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} NO TOKEN PROVIDE`);
+        return res.status(401).json("NO - TOKEN PROVIDE");}
+    if(!token.match(REGEX_TOKEN)) {
+        console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} FAKE TOKEN PROVIDE`);
+        return res.status(401).json("FAKE  - TOKEN PROVIDE");}
+    let decoded = jwt_decode(token);
+    jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
         if (err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} : Verify => ${err}`); return res.status(423).end()};
         jsonWebToken.sign({ROLE: decoded.ROLE, email: decoded.email,},
             RSA_PRIVATE,
@@ -55,19 +69,21 @@ exports.currentUserController = async(req, res) => {
     const token = req.body.token;
     if(token) {
         try{
+            if(!token.match(REGEX_TOKEN)) {
+                console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} FAKE TOKEN PROVIDE`);
+                return res.status(401).json("FAKE  - TOKEN PROVIDE");}
             await jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
-                if (err) {
-                    console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken Verify =>`, err);
-                    return res.status(200).end()};
+                if (err) { console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken Verify =>`, err);
+                    return res.status(200).json(err.message)};
                 if (decode) { return authFindUserByIdForTokenRepository(res, decode); }
-                else {
-                    console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken --DON'T HAVE A DECODE--`, err);
+                else { console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken --DON'T HAVE A DECODE--`, err);
                     return res.status(200).end();}
             })
-        } catch (err) {
-            console.log(`░▒▓ INFO : CURRENT USER - ERROR undefined ${new Date()} : jsonWebToken `, err);
+        } catch (err) { console.log(`░▒▓ INFO : CURRENT USER - ERROR undefined ${new Date()} : jsonWebToken `, err);
             res.status(200).end()}
-    } else {
-        console.log(`░▒▓ INFO : CURRENT USER DON'T HAVE A TOKEN`);
+    } else { console.log(`░▒▓ INFO : CURRENT USER DON'T HAVE A TOKEN`);
         res.status(200).end();}
 }
+
+
+

@@ -1,10 +1,144 @@
 <div class="container pt-5 pb-5">
   <h1>Profil</h1>
+  <div class="barre-title"></div>
 
-  <mat-card>
-    <mat-card-title>Profil</mat-card-title>
-    <mat-card-content>
-      <pre>{{user$ | async | json}}</pre>
-    </mat-card-content>
-  </mat-card>
+    <div class="d-flex m-3 mb-5 justify-content-between align-items-center flex-wrap">
+      <div class="pt-2">
+        <span>Bonjour, <strong>{{ user?.firstname }} {{ user?.lastname }}</strong></span>
+        <small class="d-flex align-items-center"><mat-icon fontIcon="mail"></mat-icon>{{ user?.email }}</small>
+      </div>
+      <div class="pt-2">
+        <div class="badge-user d-flex align-items-center justify-content-center" [style]="badgeColor">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="badge" class="text-white"></mat-icon>
+          <span class="mt-2 mx-2 text-white">{{isAdmin? 'Compte activé':'Compte non activé'}}</span>
+        </div>
+      </div>
+  </div>
+
+  <div class="mt-5 px-3">
+    <!--    ERROR RESPONSE-->
+    <mat-error *ngIf="errorUserFormResponse" class="px-5 pt-3 w-100 d-flex justify-content-center border-1">
+      <span>{{errorUserFormResponse}}</span>
+    </mat-error>
+
+    <!--    FORM USER-->
+    <form class="form" [formGroup]="userForm" (submit)="submitUserFormGroup()">
+
+      <div class="row p-3 d-flex flex-wrap">
+        <div class="col-12 col-lg-6">
+          <!--      FIRSTNAME-->
+          <mat-form-field class="full-width">
+            <mat-label>Prénom</mat-label>
+            <input type="text" matInput formControlName="firstname">
+            <mat-error *ngIf="userForm.get('firstname')?.hasError('minlength')">
+              <strong>4 charatères</strong> minimum
+            </mat-error>
+            <mat-error *ngIf="userForm.get('firstname')?.hasError('required')">
+              le prénom est <strong>obligatoire</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-lg-6">
+          <!--      LASTNAME-->
+          <mat-form-field class="full-width">
+            <mat-label>Nom</mat-label>
+            <input type="text" matInput formControlName="lastname">
+            <mat-error *ngIf="userForm.get('lastname')?.hasError('minlength')">
+              <strong>4 charatères</strong> minimum
+            </mat-error>
+            <mat-error *ngIf="userForm.get('lastname')?.hasError('required')">
+              le nom est <strong>obligatoire</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!--      SEPARATE-->
+      <div class="row p-3 d-flex flex-wrap">
+        <div class="col-12 col-lg-6">
+          <!--      PHONE-->
+          <mat-form-field class="full-width">
+            <mat-label>Téléphone</mat-label>
+            <input type="text" matInput formControlName="phone_number">
+            <mat-icon matSuffix>phone</mat-icon>
+            <mat-error *ngIf="userForm.get('phone_number')?.hasError('required')">
+              Un numéro de téléphone est <strong>obligatoire</strong>
+            </mat-error>
+            <mat-error *ngIf="userForm.get('phone_number')?.hasError('pattern')">
+              Veuillez entrez numéro de téléphone valide
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-lg-6">
+          <!--      EMAIL-->
+          <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email"
+                   placeholder="pat@example.com">
+            <mat-icon matSuffix>mail</mat-icon>
+            <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">
+              Veuillez entrez une email valide
+            </mat-error>
+            <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+              l'email est <strong>obligatoire</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button type="buton" mat-raised-button color="primary"><mat-icon matSuffix>done</mat-icon>Modifier</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="mt-5 p-3">
+    <hr>
+  </div>
+
+  <div class="mt-5 px-3">
+    <!--    ERROR RESPONSE-->
+    <mat-error *ngIf="errorUserCredentialFormResponse" class="px-5 pt-3 w-100 d-flex justify-content-center border-1">
+      <span>{{errorUserCredentialFormResponse}}</span>
+    </mat-error>
+
+    <!--    FORM CREDENTIAL-->
+    <form class="form" [formGroup]="userCredentialForm" #formDirective="ngForm" (submit)="submitUserCredentialFormGroup(formDirective)">
+      <div class="row p-3 d-flex flex-wrap">
+        <div class="col-12 col-lg-6">
+          <!--      HOLD-PASSWORD-->
+          <mat-form-field class="full-width">
+            <mat-label>Ancien mot de passe</mat-label>
+            <input matInput [type]="hideOldPassword ? 'password' : 'text'" matInput formControlName="old_password">
+            <button mat-icon-button matSuffix type="button" (click)="hideOldPassword = !hideOldPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideOldPassword">
+              <mat-icon>{{hideOldPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="userCredentialForm.get('old_password')?.hasError('required')">
+              Ce champ est <strong>obligatoire</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-lg-6">
+          <!--      NEW-PASSWORD-->
+          <mat-form-field class="full-width">
+            <mat-label>Nouveau mot de passe</mat-label>
+            <input matInput [type]="hideNewPassword ? 'password' : 'text'" matInput formControlName="password">
+            <button mat-icon-button matSuffix type="button" (click)="hideNewPassword = !hideNewPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
+              <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="userCredentialForm.get('password')?.hasError('minlength')">
+              <strong>8 charatères</strong> minimum
+            </mat-error>
+            <mat-error *ngIf="userCredentialForm.get('password')?.hasError('required')">
+              Ce champ est <strong>obligatoire</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="buton" mat-raised-button color="primary"><mat-icon matSuffix>done</mat-icon>Modifier</button>
+      </div>
+    </form>
+
+  </div>
+
 </div>

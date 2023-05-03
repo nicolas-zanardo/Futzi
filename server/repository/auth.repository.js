@@ -42,7 +42,7 @@ exports.authUserLoginRepository = (req, res) => {
         .then(([rows, fields]) => {
             const user = rows[0];
             if(user && bcrypt.compareSync(req.body.password, user.password)) {
-                return jsonWebToken.sign({ROLE: user.ROLE, email: user.email,},
+                return jsonWebToken.sign({ROLE: user.ROLE, email: user.email},
                     RSA_PRIVATE, {
                         algorithm: 'RS256',
                         subject : user.id.toString(),
@@ -50,10 +50,10 @@ exports.authUserLoginRepository = (req, res) => {
                     }, (err, token) => {
                         if(err) {
                             console.log(`✘ 🅴🆁🆁🅾🆁 ${new Date()} : Verify TOKEN => ${err}`);
-                            return res.status(419).end();
+                            return res.status(419).json(err.message);
                         };
                         console.log(`░▒▓ USER IS LOGIN - TOKEN CREATED AT : ${new Date()}`);
-                        res.status(201).json({user : user, token: token})});
+                        res.status(200).json({user : user, token: token})});
             } else {
                 console.log(`░▒▓ INFO : USER USE BAD CREDENTIAL : ${new Date()}`);
                 res.status(403).json('Mauvais email ou mot de passe');

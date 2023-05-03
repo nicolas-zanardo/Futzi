@@ -1,45 +1,53 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-
-import {AppComponent} from './app.component';
+import {ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModules} from "./shared/layout/material.modules";
-import {GlobalModule} from "./global/global.module";
-import { RouterModule } from '@angular/router';
-import { NavbarComponent } from './shared/component/navbar/navbar.component';
-import {DashboardModule} from "./dashboard/dashboard.module";
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterModule} from '@angular/router';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {NgOptimizedImage} from "@angular/common";
 import {AppRoutingModule} from "./app-routing.module";
 
-import {ReactiveFormsModule} from "@angular/forms";
-import { InscriptionComponent } from './auth/inscription/inscription.component';
-import {HttpClientModule} from "@angular/common/http";
-import {ConnectionComponent} from "./auth/connection/connection.component";
-import {NgOptimizedImage} from "@angular/common";
+import {MaterialModules} from "./shared/layout/material.modules";
 
+import {NavbarComponent} from './shared/component/navbar/navbar.component';
+
+import {AppComponent} from './app.component';
+import {InscriptionComponent} from './auth/inscription/inscription.component';
+import {ConnectionComponent} from "./auth/connection/connection.component";
+import {GlobalModule} from "./global/global.module";
+import {DashboardModule} from "./dashboard/dashboard.module";
+
+import {AuthInterceptor} from "./shared/interceptor/auth.interceptor";
 
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    ConnectionComponent,
-    InscriptionComponent,
-  ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        MaterialModules,
-        RouterModule,
-        AppRoutingModule,
-        GlobalModule,
-        DashboardModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        NgOptimizedImage
+    declarations: [
+        AppComponent,
+        NavbarComponent,
+        ConnectionComponent,
+        InscriptionComponent,
     ],
-  providers: [],
-  bootstrap: [AppComponent]
+    imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      MaterialModules,
+      RouterModule,
+      AppRoutingModule,
+      GlobalModule,
+      DashboardModule,
+      ReactiveFormsModule,
+      HttpClientModule,
+      NgOptimizedImage
+    ],
+    providers: [
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+      }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../shared/services/auth/auth.service";
-import {Observable, switchMap, tap} from "rxjs";
-import {User} from "../shared/interface/user.interface";
 import {ROLE} from "../shared/enum/role";
 
 

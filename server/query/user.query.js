@@ -4,7 +4,23 @@
  * @returns {string} INSERT INTO user (id, fisrtname, lastname, email, password, ROLE) VALUES (user)
  */
 exports.insertUser = () => {
-    return "INSERT INTO user (firstname, lastname, email, password, ROLE, is_valid_email) VALUES (?,?,?,?,?,?)";
+    return "INSERT INTO user (firstname, lastname, phone_number, email, password, ROLE, is_valid_email) VALUES (?,?,?,?,?,?,?)";
+}
+
+/**
+ * SQL - updateUserInfo
+ * @returns {string} UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?  WHERE id=?
+ */
+exports.updateUserInfo = () => {
+    return "UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?  WHERE id=?"
+}
+
+/**
+ * SQL - updateUserInfo
+ * @returns {string} UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?  WHERE id=?
+ */
+exports.updateUserCredential = () => {
+    return "UPDATE user SET password=? WHERE id=?"
 }
 
 /**
