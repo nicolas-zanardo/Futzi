@@ -25,8 +25,8 @@ exports.authFindUserByIdForTokenRepository = (res, decode) => {
             console.log(`░▒▓ INFO : FIND USER FOR SET TOKEN : ${new Date()}`);
             res.status(201).json(rows[0]);
         }).catch(err => {
-            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, STATUS : ${err.status}, MASSAGE : ${err.message}`);
-            res.status(err.status).json(err.message);
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err);
         }
     ).then(db.connection.end());
 }
@@ -59,7 +59,7 @@ exports.authUserLoginRepository = (req, res) => {
                 res.status(403).json('Mauvais email ou mot de passe');
             }
         }).catch(err => {
-            console.log(`✘ 🅴🆁🆁🅾🆁 ${new Date()} : Verify TOKEN => STATUS : ${err.status}, MASSAGE : ${err.message} `);
-            res.json(err)
+            console.log(`✘ 🅴🆁🆁🅾🆁 ${new Date()} : Verify TOKEN => ${err}`);
+            res.status(500).json(err)
     }).then(db.connection.end());
 }

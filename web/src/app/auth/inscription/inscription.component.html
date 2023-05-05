@@ -43,12 +43,12 @@
           <!--      PHONE-->
           <mat-form-field class="full-width">
             <mat-label>Téléphone</mat-label>
-            <input type="text" matInput formControlName="phone">
+            <input type="text" matInput formControlName="phone_number">
             <mat-icon matSuffix>phone</mat-icon>
-            <mat-error *ngIf="form.get('phone')?.hasError('required')">
+            <mat-error *ngIf="form.get('phone_number')?.hasError('required')">
               Un numéro de téléphone est <strong>obligatoire</strong>
             </mat-error>
-            <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+            <mat-error *ngIf="form.get('phone_number')?.hasError('pattern')">
               Veuillez entrez numéro de téléphone valide
             </mat-error>
           </mat-form-field>

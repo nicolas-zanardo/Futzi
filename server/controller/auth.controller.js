@@ -45,7 +45,7 @@ exports.refreshTokenController = (req, res) => {
         return res.status(401).json("FAKE  - TOKEN PROVIDE");}
     let decoded = jwt_decode(token);
     jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
-        if (err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} : Verify => ${err}`); return res.status(423).end()};
+        if (err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} : Verify => ${err}`); return res.status(498).end()};
         jsonWebToken.sign({ROLE: decoded.ROLE, email: decoded.email,},
             RSA_PRIVATE,
             {
@@ -53,7 +53,7 @@ exports.refreshTokenController = (req, res) => {
                 expiresIn: 60*15, // 15min
                 subject: decode.sub,
         }, (err, token) => {
-            if(err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} Verify after create TOKEN => ${err}`); return res.status(423).end()};
+            if(err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} Verify after create TOKEN => ${err}`); return res.status(498).end()};
             res.status(201).json(token);
         });
     })
@@ -71,7 +71,7 @@ exports.currentUserController = async(req, res) => {
         try{
             if(!token.match(REGEX_TOKEN)) {
                 console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} FAKE TOKEN PROVIDE`);
-                return res.status(401).json("FAKE  - TOKEN PROVIDE");}
+                return res.status(498).json("FAKE  - TOKEN PROVIDE");}
             await jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
                 if (err) { console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken Verify =>`, err);
                     return res.status(200).json(err.message)};

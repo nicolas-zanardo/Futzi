@@ -41,6 +41,8 @@ CREATE TABLE user(
         token_reset_password Varchar (255) ,
         token_valid_email    Varchar (255) ,
         token_time_validity  Date ,
+        createdAt            Date NOT NULL ,
+        updateAt             Date NOT NULL ,
         id_category          Int
 	,CONSTRAINT user_PK PRIMARY KEY (id)
 
@@ -156,7 +158,7 @@ CREATE TABLE resultat(
 #   password: aa123456789
 #------------------------------------------------------------
 
-INSERT INTO user (firstname, lastname, phone_number, email, password, ROLE, is_valid_email)
+INSERT INTO user (firstname, lastname, phone_number, email,  password, ROLE, is_valid_email, createdAt, updateAt)
 VALUES (
     "nicolas",
     "zanardo",
@@ -164,7 +166,9 @@ VALUES (
     "nicolas@zanardo.com",
     "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2",
     "[\"USER\", \"ADMIN\"]",
-    1
+    1,
+    NOW(),
+    NOW()
 );
 
 

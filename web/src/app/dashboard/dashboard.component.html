@@ -2,6 +2,7 @@
   <h1>Dashboard</h1>
   <div class="barre-light mb-4"></div>
   <div>
+<!--    EDIT PROFILE-->
     <div class="row m-3" class="d-flex align-items-center">
       <div class="col-lg-1 me-1">
         <button mat-raised-button color="primary" class="h-100 p-3 mx-3"  routerLink="/member/profile">
@@ -16,6 +17,7 @@
       </div>
     </div>
     <div class="barre-second my-4"></div>
+<!--    MATCH-->
     <div class="d-flex flex-wrap justify-content-center" *ngIf="isAdmin">
       <mat-card class="m-2">
         <div class="barre-light"></div>
@@ -41,6 +43,7 @@
           </div>
         </mat-card-content>
       </mat-card>
+<!--      ENTRAINEMENT-->
       <mat-card class="m-2">
         <div class="barre-light"></div>
         <mat-card-header class="justify-content-between align-content-center">
@@ -60,7 +63,8 @@
           </div>
         </mat-card-content>
       </mat-card>
-      <mat-card class="m-2">
+<!--      MEMBER-->
+      <mat-card class="m-2" routerLink="/member/manage-user">
         <div class="barre-light"></div>
         <mat-card-header class="justify-content-between align-content-center">
           <mat-card-title><h4>Membre</h4></mat-card-title>
@@ -69,12 +73,13 @@
         <mat-card-content>
           <hr>
           <div class="d-flex justify-content-between p-3">
-            <div class="me-4">Inscrit :</div><div>93</div>
+            <div class="me-4">Inscrit :</div><div>{{ listUsersRole.length }}</div>
           </div>
           <div class="flex-column  p-3">
-            <div class="d-flex me-4 justify-content-between"><b>Actif</b><div class="colorActif"><b>1</b></div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Inactif</b><div class="colorInactif"><b>2</b></div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Demande</b><div class="colorDemande"><b>3</b></div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Actif</b><div class="colorActif"><b>{{usersROLE_ADMIN.length}}</b></div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Ban</b><div class="colorInactif"><b>{{usersROLE_BAN.length}}</b></div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Demande</b><div class="colorDemande"><b>{{usersROLE_USER.length}}</b></div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Email non verifié</b><div class="colorDemande"><b>{{userInValidAccount.length}}</b></div></div>
           </div>
         </mat-card-content>
       </mat-card>

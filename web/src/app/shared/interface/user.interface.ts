@@ -8,6 +8,9 @@ export interface User {
   password?: string;
   old_password?: string;
   ROLE?: string;
+  info_status?: string;
   is_valid_email?: boolean;
   id_category?: number;
+  createdAt?: string;
+  updateAt?: string;
 }

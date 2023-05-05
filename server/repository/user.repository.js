@@ -20,8 +20,8 @@ exports.createUserRepository = (user, res) => {
             });
         })
         .catch(err => {
-            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err.message}`);
-            res.status(err.status).json(err.message)
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err)
         })
         .then(db.connection.end());
 }
@@ -43,27 +43,87 @@ exports.updateUserInfoRepository = (user, res) => {
             });
         })
         .catch(err => {
-                console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err.message}`);
-                res.status(err.status).json(err.message)
+                console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+                res.status(500).json(err)
         })
         .then(db.connection.end());
 }
 
-
-exports.updateUserCredentialRepository = (req, res, next) => {
+/**
+ * updateUserCredentialRepository
+ * @param req
+ * @param res
+ */
+exports.updateUserCredentialRepository = (req, res) => {
     const db = new Database();
     db.connection.promise().query(sql.updateUserCredential(), [
         bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(16)),
         req.body.id
     ])
-        .then(([rows]) => {
+        .then(() => {
             console.log(`░▒▓ INFO : USER PASSWORD HAS BEEN UPDATE : ${new Date()}`);
             res.status(201).json("Le mot de passe a bien était modifié");
         })
         .catch(err => {
-            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err.message}`);
-            res.status(err.status).json(err.message)
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err)
+        })
+        .then(db.connection.end());
+}
+
+/**
+ * getAllUserRepository
+ * @param req
+ * @param res
+ */
+exports.getAllUserRepository = (req, res) => {
+    const db = new Database();
+    db.connection.promise().query(sql.findAllUser())
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : GET ALL USER : ${new Date()}`);
+            return res.status(200).json(rows);
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err)
+        })
+        .then(db.connection.end());
+}
+
+/**
+ * updateRoleUserRepository
+ * @param req
+ * @param res
+ */
+exports.updateRoleUserRepository = (req, res) => {
+    const db = new Database();
+    db.connection.promise().query(sql.updateRoleUser(), [req.body.ROLE, req.body.id_user_update])
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : UPDATE ROLE USER : ${new Date()}`);
+            return res.status(200).json(rows);
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err)
         })
         .then(db.connection.end())
 }
 
+/**
+ * deleteUserRepository
+ * @param req
+ * @param res
+ */
+exports.deleteUserRepository = (req, res) => {
+    const db = new Database();
+    db.connection.promise().query(sql.deleteUser(), [req.params.id_user_update])
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : USER WAS BEEN DELETED : ${new Date()}`);
+            return res.status(200).json(rows);
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            res.status(500).json(err)
+        })
+        .then(db.connection.end())
+}

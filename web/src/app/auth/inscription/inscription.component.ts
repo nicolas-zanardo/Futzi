@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {
@@ -18,7 +18,7 @@ import {RegexUser} from "../../shared/enum/regex-user";
   templateUrl: './inscription.component.html',
   styleUrls: ['./inscription.component.scss']
 })
-export class InscriptionComponent {
+export class InscriptionComponent implements OnInit{
 
   public form: FormGroup = new FormGroup({});
   public hidePassword = true;
@@ -54,7 +54,7 @@ export class InscriptionComponent {
         Validators.minLength(4),
         Validators.required,
       ])),
-      phone: new FormControl('', Validators.compose([
+      phone_number: new FormControl('', Validators.compose([
         Validators.pattern(RegexUser.phone),
         Validators.required,
       ])),

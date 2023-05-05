@@ -8,6 +8,7 @@ import {JwtToken} from "../../interface/jwt-token.interface";
 import {Router} from "@angular/router";
 import {ResponseLogin} from "../../interface/response-login";
 import {handleError} from "../handel-error";
+import {SetROLE} from "../../enum/role";
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class AuthService {
             }
           },
           error: (err) => {
-            if(err.status === 423) {
+            if(err.status === 498) {
               handleError("[AUTH SERVICE] getCurrentUser : The TOKEN have been expired, Disconnect user logged");
             } else {
               handleError("[AUTH SERVICE] getCurrentUser : undefined");
@@ -108,7 +109,7 @@ export class AuthService {
                 localStorage.setItem('jwt', token);
               } ,
               error: (err) => {
-                if(err.status == 423) {
+                if(err.status == 498) {
                   handleError("[AUTH SERVICE] initTimer : The TOKEN have been expired, Disconnect user logged");
                 } else {
                   handleError("[AUTH SERVICE] initTimer : undefined")
@@ -172,6 +173,10 @@ export class AuthService {
     )
   }
 
+  /**
+   * findRoleUser
+   * @param ROLE_AUTH
+   */
   public findRoleUser(ROLE_AUTH: string): boolean {
     let user: User | null = this.currentUser$.value;
     let haveRole: boolean = false;
@@ -183,9 +188,38 @@ export class AuthService {
           }
         }
       }
-
     }
     return haveRole;
+  }
+
+  public setInfoStatueByRole(ROLE: string): string {
+    switch (ROLE) {
+      case SetROLE.BANNI:
+        return 'BANNI';
+        break;
+      case SetROLE.MEMBRE:
+        return 'MEMBRE';
+        break;
+      case SetROLE.DEMANDE:
+        return 'DEMANDE';
+        break;
+    }
+    return "DELETE";
+  }
+
+  public setRoleByInfoStatus(info_status: string): string {
+    switch (info_status) {
+      case 'BANNI':
+        return SetROLE.BANNI;
+        break;
+      case 'MEMBRE':
+        return SetROLE.MEMBRE;
+        break;
+      case 'DEMANDE':
+        return SetROLE.DEMANDE;
+        break;
+    }
+    return SetROLE.SUPPRIMER;
   }
 
   /**

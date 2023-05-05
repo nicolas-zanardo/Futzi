@@ -9,6 +9,8 @@ class User {
     ROLE;
     is_valid_email;
     id_category;
+    createdAt;
+    updateAt;
 }
 
 module.exports = { User }

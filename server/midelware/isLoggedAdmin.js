@@ -6,7 +6,7 @@ const sql = require("../query/user.query");
 const {findRoleUser} = require("../component/auth/role-user");
 const {ROLE} = require("../enum/ROLES");
 
-exports.isLogged = (req, res, next) => {
+exports.isLoggedAdmin = (req, res, next) => {
     const token = req.headers.authorization;
     if (token) {
         jsonWebToken.verify(token, RSA_PUB, (err , decoded ) => {
@@ -20,20 +20,21 @@ exports.isLogged = (req, res, next) => {
                 .then(([rows]) => {
                     if (!rows[0]) {
                         console.log('✘ 🅴🆁🆁🅾🆁 NO ROWS')
-                        return res.status(409).end();
-                    };
+                        return res.status(409).end()
+                    }
                     if(findRoleUser(ROLE.BAN, rows[0].ROLE)) {
                         console.log('✘ 🅴🆁🆁🅾🆁 USER BAN')
                         return res.status(401).end();
                     };
-                    if(findRoleUser(ROLE.USER, rows[0].ROLE)) {
+                    if(findRoleUser(ROLE.ADMIN, rows[0].ROLE)) {
                         req.user = rows[0];
                         next();
                     }
-            }).catch(err => {
-                console.log("✘ 🅴🆁🆁🅾🆁 SQL ERROR => ",err)
-                res.json(err)
-            }).then(db.connection.end());
+
+                }).catch(e => {
+                    console.log("✘ 🅴🆁🆁🅾🆁 SQL ERROR => ",err)
+                    res.json(e)
+                }).then(db.connection.end());
         })
     } else {
         console.log("✘ 🅴🆁🆁🅾🆁 MIDELWARE : isLoggedIn NO TOKEN (401)")

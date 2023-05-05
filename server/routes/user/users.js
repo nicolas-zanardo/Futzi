@@ -1,10 +1,14 @@
 const express = require('express');
 const {isLogged} = require("../../midelware/isLogged");
+const {isLoggedAdmin} = require("../../midelware/isLoggedAdmin");
 const users = express.Router();
 const {
     createUserController,
     updateUserInfoController,
-    updateUserCredentialController
+    updateUserCredentialController,
+    getAllUserController,
+    updateRoleUserController,
+    deleteUserController
 } = require("../../controller/user.controller");
 
 /**
@@ -12,6 +16,9 @@ const {
  */
 users.post("/create", createUserController);
 users.put("/edit-info", isLogged, updateUserInfoController);
-users.put("/edit-credential", isLogged, updateUserCredentialController)
+users.put("/edit-credential", isLogged, updateUserCredentialController);
+users.put("/edit-role", isLoggedAdmin, updateRoleUserController);
+users.get("/all-users", isLoggedAdmin, getAllUserController);
+users.delete("/delete/:id_user_update/:id_current_user", isLoggedAdmin, deleteUserController);
 
 module.exports = users;

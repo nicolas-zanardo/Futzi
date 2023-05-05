@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../shared/services/auth/auth.service";
 import {ROLE} from "../shared/enum/role";
+import {User} from "../shared/interface/user.interface";
+import {UserService} from "../shared/services/user/user.service";
+import {Observable, switchMap, tap} from "rxjs";
 
 
 @Component({
@@ -14,12 +17,91 @@ export class DashboardComponent implements OnInit{
   public email?: string = this.authService.currentUser$.value?.email;
   public seasonDate?: string;
   public isAdmin: boolean = this.authService.findRoleUser(ROLE.ADMIN);
+  public allUsers: User[] | [] = this.userService.allUsers$.value;
+  public listUsersRole: {ROLE: string[], isValidEmail: boolean }[]  = [];
+  public usersROLE_USER: any[] = [];
+  public usersROLE_ADMIN: any[] = [];
+  public usersROLE_BAN: any[] = [];
+  public userInValidAccount: any [] = [];
 
-  constructor(private authService : AuthService) {}
 
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
 
   ngOnInit(): void {
     this.seasonDate = this.seasonYear();
+    this.checkAllUsersIsProvide();
+    this.createListUsersRole();
+    this.createGroupROLE();
+  }
+
+  private checkAllUsersIsProvide(): void {
+    if(!this.allUsers.length) {
+      this.userService.getAllUsers().subscribe((users: User[]) => {
+        this.allUsers = users;
+        this.createListUsersRole();
+        this.createGroupROLE();
+      });
+
+    }
+  }
+
+  private createGroupROLE(): void {
+    if(this.isAdmin) {
+      this.getAllUserROLE_USER();
+      this.getAllUserROLE_ADMIN();
+      this.getAllUserROLE_BAN();
+      this.getAllUserInValidAccount()
+    }
+  }
+
+  private createListUsersRole(): void {
+    this.allUsers.forEach((user: User) => {
+      if(JSON.parse(user.ROLE!).length >= 1) {
+        this.listUsersRole.push({
+          ROLE: JSON.parse(user.ROLE!),
+          isValidEmail: user.is_valid_email!
+        })
+      }
+    })
+  }
+
+  private getAllUserInValidAccount(): void {
+    this.userInValidAccount = [];
+    this.listUsersRole.forEach((user: {ROLE: string[], isValidEmail: boolean }) => {
+      if(!user.ROLE.includes(ROLE.BAN) && !user.isValidEmail) {
+        this.userInValidAccount.push(user);
+      }
+    })
+  }
+
+  private getAllUserROLE_USER(): void {
+    this.usersROLE_USER = [];
+    this.listUsersRole.forEach((user: {ROLE: string[], isValidEmail: boolean }) => {
+      if(user.ROLE.length == 1 && user.isValidEmail) {
+        this.usersROLE_USER.push(user);
+      }
+    })
+  }
+
+  private getAllUserROLE_ADMIN(): void {
+    this.usersROLE_ADMIN = [];
+    this.listUsersRole.forEach((user: {ROLE: string[], isValidEmail: boolean }) => {
+      if(user.ROLE.includes(ROLE.ADMIN) && user.isValidEmail) {
+        this.usersROLE_ADMIN.push(user);
+      }
+    })
+  }
+
+  private getAllUserROLE_BAN(): void {
+    this.usersROLE_BAN = [];
+    this.listUsersRole.forEach((user: {ROLE: string[], isValidEmail: boolean }) => {
+      if(user.ROLE.includes(ROLE.BAN) && user.isValidEmail) {
+        this.usersROLE_BAN.push(user);
+      }
+    })
   }
 
   private seasonYear(): string {
