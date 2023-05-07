@@ -7,10 +7,6 @@ class User {
     old_email;
     password;
     ROLE;
-    is_valid_email;
-    id_category;
-    createdAt;
-    updateAt;
 }
 
-module.exports = { User }
+module.exports = { User };

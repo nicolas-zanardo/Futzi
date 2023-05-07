@@ -1,0 +1,18 @@
+<div class="p-4">
+  <div class="barre-light"></div>
+  <h1 mat-dialog-title>Supprimer l'entrainement</h1>
+  <div class="barre-second"></div>
+</div>
+
+
+<div mat-dialog-content>
+  <b>Voulez-vous vraiment supprimer cet entrainement ?</b>
+  <div class="d-flex justify-content-center align-items-center mt-3 border border-1 rounded p-3 bg-light">
+    <button class="btn btn-primary mx-2 p-2">{{data.category}}</button> <i>{{data.day}} {{data.hour_start}} | {{data.football_pitch}}</i>
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-stroked-button class="bg-danger text-white" [mat-dialog-close]="data"><mat-icon fontIcon="delete"></mat-icon> supprimer</button>
+  <button mat-stroked-button mat-dialog-close cdkFocusInitial [mat-dialog-close]="false"><mat-icon fontIcon="close"></mat-icon>Fermer</button>
+</div>
+

@@ -3,7 +3,9 @@ import {AuthService} from "../shared/services/auth/auth.service";
 import {ROLE} from "../shared/enum/role";
 import {User} from "../shared/interface/user.interface";
 import {UserService} from "../shared/services/user/user.service";
-import {Observable, switchMap, tap} from "rxjs";
+import {SoccerTraining} from "../shared/interface/soccer-training.interface";
+import {SoccerTrainingService} from "../shared/services/soccer-training/soccer-training.service";
+
 
 
 @Component({
@@ -12,9 +14,9 @@ import {Observable, switchMap, tap} from "rxjs";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit{
-  public firstName?: string = this.authService.currentUser$.value?.firstname;
-  public lastName?: string = this.authService.currentUser$.value?.lastname;
-  public email?: string = this.authService.currentUser$.value?.email;
+  public allTraining: SoccerTraining[] = this.trainingService.allSoccerTraining$.value;
+  public currentUser: User | null = this.authService.currentUser$.value;
+  public countTrainingByCategory : {category: string, number_training: number}[] = [];
   public seasonDate?: string;
   public isAdmin: boolean = this.authService.findRoleUser(ROLE.ADMIN);
   public allUsers: User[] | [] = this.userService.allUsers$.value;
@@ -28,13 +30,23 @@ export class DashboardComponent implements OnInit{
   constructor(
     private authService: AuthService,
     private userService: UserService,
-  ) {}
+    private trainingService: SoccerTrainingService
+  ) {
+    this.trainingService.countTrainingByCategory().subscribe((data: {category: string, number_training: number}[])=> {
+      this.countTrainingByCategory = data;
+    })
+  }
 
   ngOnInit(): void {
     this.seasonDate = this.seasonYear();
     this.checkAllUsersIsProvide();
     this.createListUsersRole();
     this.createGroupROLE();
+    this.trainingService.getAllSoccerTraining().subscribe((training: SoccerTraining[]) =>{
+      this.allTraining = training;
+    })
+
+
   }
 
   private checkAllUsersIsProvide(): void {

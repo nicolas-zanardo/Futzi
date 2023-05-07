@@ -39,7 +39,9 @@
     </div>
 
 
-    <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+    <table mat-table
+           [dataSource]="dataSource" multiTemplateDataRows matSort
+           class="mat-elevation-z8">
       <ng-container matColumnDef="{{item.column}}" *ngFor="let item of columnsToDisplay" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>{{item.name}}</b> </th>
         <td mat-cell *matCellDef="let element">{{element[item.column]}}</td>
@@ -52,7 +54,6 @@
               <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
               <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
             </span>
-
           </button>
         </td>
       </ng-container>

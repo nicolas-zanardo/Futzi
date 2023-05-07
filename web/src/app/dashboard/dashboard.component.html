@@ -11,8 +11,8 @@
       </div>
       <div class="col-lg-11 ml-2">
         <div class="row">
-          <span>Bonjour, <strong>{{firstName | uppercase}} {{lastName | uppercase}}</strong></span>
-          <small class="d-flex align-items-center"><mat-icon fontIcon="mail"></mat-icon>{{email}}</small>
+          <span>Bonjour, <strong>{{currentUser?.firstname | uppercase}} {{currentUser?.lastname | uppercase}}</strong></span>
+          <small class="d-flex align-items-center"><mat-icon fontIcon="mail"></mat-icon>{{currentUser?.email}}</small>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
         </mat-card-content>
       </mat-card>
 <!--      ENTRAINEMENT-->
-      <mat-card class="m-2">
+      <mat-card class="m-2" routerLink="/member/manage-training">
         <div class="barre-light"></div>
         <mat-card-header class="justify-content-between align-content-center">
           <mat-card-title><h4>Entrainement</h4></mat-card-title>
@@ -53,13 +53,12 @@
         <mat-card-content>
           <hr>
           <div class="d-flex justify-content-between p-3">
-            <div class="me-4">Nombre total d'entrainement</div><div>14/14</div>
+            <div class="me-4">Nombre total d'entrainement</div><div>{{allTraining.length}}</div>
           </div>
           <div class="flex-column  p-3">
-            <div class="d-flex me-4 justify-content-between"><b>Terrain</b><div>1</div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Terrain</b><div>2</div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Terrain</b><div>3</div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Terrain</b><div>4</div></div>
+            <div class="d-flex me-4 justify-content-between" *ngFor="let item of countTrainingByCategory">
+              <b>{{item.category}}</b><div>{{item.number_training}}</div>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>

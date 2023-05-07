@@ -1,0 +1,119 @@
+<div class="container pt-5 pb-5">
+  <h1>Entrainemant</h1>
+  <div class="barre-title"></div>
+
+
+  <div class="mx-4 mt-5"><h4>Ajouter un entrainement</h4></div>
+  <form class="d-flex m-2" class="d-flex flex-wrap" [formGroup]="formCreateTraining" (submit)="submit(formDirective)" #formDirective="ngForm">
+    <mat-form-field appearance="fill" class="mx-2">
+      <mat-label>Jour</mat-label>
+      <mat-select formControlName="day">
+        <mat-option *ngFor="let day of week" [value]="day.value">
+          {{day.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="mx-2">
+      <mat-label>Heure</mat-label>
+      <mat-select formControlName="hour_start">
+        <mat-option *ngFor="let hour of hours" [value]="hour.value">
+          {{hour.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill" class="mx-2">
+      <mat-label>Catégorie</mat-label>
+      <input type="text"
+             aria-label="Catégorie"
+             matInput
+             formControlName="category"
+             [matAutocomplete]="cat">
+      <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill" class="mx-2">
+      <mat-label>Terrain</mat-label>
+      <input type="text"
+             aria-label="Terrain"
+             matInput
+             formControlName="football_pitch"
+             [matAutocomplete]="FBpitch">
+      <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
+        <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name">
+          {{pitch.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="p-5 mt-0 mb-4 mx-2">Primary</button>
+  </form>
+
+<!--  MAT TABLE-->
+  <div class="mat-elevation-z8">
+
+    <div class="p-3">
+      <h4>Recherche</h4>
+      <mat-form-field class="w-100 pb-0 mb-0">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia">
+      </mat-form-field>
+    </div>
+
+
+    <table mat-table
+           [dataSource]="dataSource" multiTemplateDataRows matSort
+           class="mat-elevation-z8">
+      <ng-container matColumnDef="{{item.column}}" *ngFor="let item of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> <b>{{item.name}}</b> </th>
+        <td mat-cell *matCellDef="let element"> {{element[item.column]}} </td>
+      </ng-container>
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button class="btnSpawn" color="accent" aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+            {{element.category}}
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div
+            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="element-description">
+              <div class="d-flex align-items-center">
+                <mat-icon aria-hidden="false"  fontIcon="sports_soccer"></mat-icon>{{element.football_pitch}}
+              </div>
+              <div>
+                <button mat-fab extended class="bg-danger text-white" (click)="openDialog('300ms', '200ms', element)">
+                  <mat-icon>delete</mat-icon>
+                  supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+          class="element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users" class="pb-4"></mat-paginator>
+  </div>
+
+</div>

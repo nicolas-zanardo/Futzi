@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BanUserComponent } from './ban-user.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {MaterialModules} from "../../shared/layout/material.modules";
 
 describe('BanUserComponent', () => {
   let component: BanUserComponent;
@@ -8,6 +10,7 @@ describe('BanUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MaterialModules],
       declarations: [ BanUserComponent ]
     })
     .compileComponents();

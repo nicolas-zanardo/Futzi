@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {User} from "../../shared/interface/user.interface";
-import {Form, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {RegexUser} from "../../shared/enum/regex-user";
 import {ROLE} from "../../shared/enum/role";
 import {UserService} from "../../shared/services/user/user.service";

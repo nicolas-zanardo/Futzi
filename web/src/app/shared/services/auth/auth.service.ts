@@ -6,7 +6,7 @@ import {environment} from "../../../../environments/environement.dev";
 import jwt_decode from "jwt-decode";
 import {JwtToken} from "../../interface/jwt-token.interface";
 import {Router} from "@angular/router";
-import {ResponseLogin} from "../../interface/response-login";
+import {ResponseLogin} from "../../interface/response.login";
 import {handleError} from "../handel-error";
 import {SetROLE} from "../../enum/role";
 
@@ -229,13 +229,13 @@ export class AuthService {
    *  - reset TOKEN
    *  - Redirect route
    */
-  public logout(): void {
+  public logout() {
     localStorage.removeItem('jwt');
     this.resetToken();
     this.currentUser$.next( null);
-    this.router.navigate(['/connection']).then();
     this.initTimer();
     console.warn(`INFO : USER IS LOGGED ${new Date()}`)
+    this.router.navigateByUrl('/connection').then();
   }
 
 }

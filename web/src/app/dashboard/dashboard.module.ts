@@ -10,6 +10,13 @@ import {DashboardComponent} from './dashboard.component';
 import {BanUserComponent} from './ban-user/ban-user.component';
 import {MemberComponent} from './member/member.component';
 import {RoleUserPipe} from "../shared/pipe/role-user.pipe";
+import { SoccerTrainingComponent } from './soccer-training/soccer-training.component';
+import { CategoryComponent } from './category/category.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { FootballPitchComponent } from './football-pitch/football-pitch.component';
+import {
+  DialogDeleteSoccerTrainingComponent
+} from "./soccer-training/dialog-delete-soccer-training/dialog-delete-soccer-training.component";
 
 
 @NgModule({
@@ -18,7 +25,11 @@ import {RoleUserPipe} from "../shared/pipe/role-user.pipe";
     DashboardComponent,
     BanUserComponent,
     MemberComponent,
-    RoleUserPipe
+    RoleUserPipe,
+    SoccerTrainingComponent,
+    CategoryComponent,
+    FootballPitchComponent,
+    DialogDeleteSoccerTrainingComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +37,7 @@ import {RoleUserPipe} from "../shared/pipe/role-user.pipe";
     MaterialModules,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   exports: [
     RoleUserPipe

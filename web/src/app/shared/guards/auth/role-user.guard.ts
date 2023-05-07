@@ -9,16 +9,15 @@ import {ROLE} from "../../enum/role";
 })
 export class RoleUserGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
+
   canActivate(): Observable<boolean> {
     return this.authService.isLogged$.pipe(
       first(),
       tap((isLogged: boolean) => {
         if (isLogged && this.authService.currentUser$.value?.ROLE) {
-          for (const ROLE_TOKEN of JSON.parse(this.authService.currentUser$.value.ROLE)) {
-            if (ROLE_TOKEN === ROLE.BAN) {
-              this.router.navigateByUrl('/member/ban').then();
-              return false;
-            }
+          if(this.authService.findRoleUser(ROLE.BAN)) {
+            this.router.navigateByUrl('/member/ban').then();
+            return false;
           }
           for (const ROLE_TOKEN of JSON.parse(this.authService.currentUser$.value.ROLE)) {
             if (ROLE_TOKEN === (ROLE.USER || ROLE.ADMIN) ) {
