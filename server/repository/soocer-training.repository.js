@@ -25,7 +25,8 @@ exports.createTrainingRepository = async(res, soccerTraining, isResponseJSON = t
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -45,7 +46,8 @@ exports.getAllTrainingRepository = async(req, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -65,7 +67,8 @@ exports.deleteTrainingRepository = async(id, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -79,7 +82,8 @@ exports.countTrainingByCategoryRepository = async(req, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

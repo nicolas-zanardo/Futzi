@@ -1,6 +1,4 @@
-const {
-    findTeamRepository, updateTeamContactTeamRepository
-} = require("../repository/team.repository");
+const {findTeamRepository, updateTeamContactTeamRepository} = require("../repository/team.repository");
 
 /**
  * findTeamController
@@ -10,7 +8,7 @@ const {
  */
 exports.findTeamController = async(req, res, next) => {
     try {
-        let teamName = req.params.currentTeam.toLowerCase();
+        let teamName = req.params.currentTeam.toLowerCase().trim();
         if(!req.params.currentTeam) {
             teamName = "osny";
         }

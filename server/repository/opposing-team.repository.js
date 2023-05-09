@@ -7,16 +7,17 @@ const {createCategory} = require("../query/category.query");
  * @param req
  * @param res
  */
-exports.getAllOpposingTeamRepository = (req, res) => {
+exports.getAllOpposingTeamRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(getAllOpposingTeam())
+    return await db.connection.promise().query(getAllOpposingTeam())
         .then(([rows]) => {
             console.log(`░▒▓ INFO :GET ALL OPPOSING TEAM : ${new Date()}`);
             return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL getAllOpposingTeam: ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -40,7 +41,8 @@ exports.findOpposingByNameRepository = async(req, res, isResponseJSON = true) =>
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -58,7 +60,8 @@ exports.createOpposingTeamRepository = async(req, res, isResponseJSON = true) =>
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

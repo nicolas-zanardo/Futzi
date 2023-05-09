@@ -1,17 +1,13 @@
-const {findOpposingByNameRepository, createOpposingTeamRepository} = require("../repository/opposing-team.repository");
-const {MatchPlay} = require("../model/MatchPlay.model");
 const {haveKeyNotDefined} = require("../component/object/object-strict-required");
 const {findTeamRepository} = require("../repository/team.repository");
-const {
-    findFootballPitchByNameRepository,
-    createFootballPitchRepository} = require("../repository/football-pitch.repository");
-const {
-    findCategoryByNameRepository,
-    createCategoryRepository} = require("../repository/category.repository");
-const {
-    createMatchPlayRepository,
-    getAllMatchPlayRepository, deleteMatchRepository, checkIsAlreadySetMatchInThisDayRepository
+const {checkIsAlreadySetMatchInThisDayRepository, createMatchPlayRepository, getAllMatchPlayRepository,
+    deleteMatchRepository
 } = require("../repository/match-play.repository");
+const {findOpposingByNameRepository, createOpposingTeamRepository} = require("../repository/opposing-team.repository");
+const {findFootballPitchByNameRepository, createFootballPitchRepository} = require("../repository/football-pitch.repository");
+const {findCategoryByNameRepository, createCategoryRepository} = require("../repository/category.repository");
+const {MatchPlay} = require("../model/MatchPlay.model");
+
 
 
 exports.createMatchPlayController = async(req, res, next) => {

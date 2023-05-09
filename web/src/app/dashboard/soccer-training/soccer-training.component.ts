@@ -171,7 +171,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
   /**
    * CREATE New soccer training
    */
-  public submit(formDirective: FormGroupDirective) {
+  public submit() {
     if(this.formCreateTraining.valid) {
       this.trainingService.createSoccerTraining(this.formCreateTraining.getRawValue()).subscribe({
         next: (createSoccer: SoccerTraining) => {
@@ -189,9 +189,9 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
               this.dataCategory = categories;
             })
           }
-          formDirective.resetForm();
-          formDirective.control.get('category')?.setValue('')
-          formDirective.control.get('football_pitch')?.setValue('')
+          this.formCreateTraining.reset();
+          this.formCreateTraining.get('category')?.setValue('')
+          this.formCreateTraining.get('football_pitch')?.setValue('')
         },
         error: (err) => {
           console.log(err?.error)
