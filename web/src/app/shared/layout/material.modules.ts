@@ -11,7 +11,10 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatDialogModule} from '@angular/material/dialog';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
 
 const MODULE = [
   MatIconModule,
@@ -24,7 +27,11 @@ const MODULE = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatCheckboxModule,
+  MatRadioModule
 ];
 
 @NgModule({
@@ -35,7 +42,10 @@ const MODULE = [
   exports: [
     MODULE
   ],
-  declarations: []
+  declarations: [],
+  providers: [
+    MatDatepickerModule,
+  ],
 })
 
 export class MaterialModules {}

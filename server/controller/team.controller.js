@@ -10,7 +10,11 @@ const {
  */
 exports.findTeamController = async(req, res, next) => {
     try {
-        return await findTeamRepository(req, res);
+        let teamName = req.params.currentTeam.toLowerCase();
+        if(!req.params.currentTeam) {
+            teamName = "osny";
+        }
+        return await findTeamRepository(teamName, res);
     } catch (e) {
         next(e);
     }

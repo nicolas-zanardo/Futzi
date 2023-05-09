@@ -15,36 +15,8 @@ export class SoccerTrainingService {
 
 
   public allSoccerTraining$: BehaviorSubject<SoccerTraining[]> = new BehaviorSubject<SoccerTraining[]>([]);
-  public allFootballPitch$: BehaviorSubject<FootballPitch[]> = new BehaviorSubject<FootballPitch[]>([]);
-  public allCategory$: BehaviorSubject<Category[]> = new BehaviorSubject<FootballPitch[]>([]);
 
   constructor(private http: HttpClient) { }
-
-  public getAllCategory(): Observable<Category[]> {
-    return this.http.get<Category[] | []>(`${environment.apiURL}/category/all`).pipe(
-      tap({
-        next: (categories: Category[] | []) => {
-          this.allCategory$.next(categories);
-        },
-        error: (err) => {
-          handleError("[SOCCER-TRAINING] getAllCategory", err);
-        }
-      })
-    );
-  }
-
-  public getAllFootballPitch(): Observable<FootballPitch[]> {
-    return this.http.get<Category[]>(`${environment.apiURL}/football-pitch/all`).pipe(
-      tap({
-        next: (footballPitch: FootballPitch[]) => {
-          this.allFootballPitch$.next(footballPitch)
-        },
-        error: (err) => {
-          handleError("[SOCCER-TRAINING] getAllFootballPitch", err);
-        }
-      })
-    )
-  }
 
   public createSoccerTraining(request : SoccerTraining): Observable<SoccerTraining> {
     return this.http.post<SoccerTraining>(`${environment.apiURL}/training/create`, request).pipe()

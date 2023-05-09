@@ -3,7 +3,7 @@
  * @returns {string} "SELECT * FROM team"
  */
 exports.findTeam = () => {
-    return "SELECT * FROM team";
+    return "SELECT * FROM team where name_team=? LIMIT 1;";
 }
 
 /**

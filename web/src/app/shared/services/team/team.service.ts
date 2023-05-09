@@ -17,7 +17,7 @@ export class TeamService {
 
 
   public getTeam(): Observable<Team> {
-    return this.http.get<Team>(`${environment.apiURL}/team/osny`).pipe(
+    return this.http.get<Team>(`${environment.apiURL}/team/${environment.teamName}`).pipe(
       tap({
         next: (team: Team) => {
           this.currentTeam$.next(team);

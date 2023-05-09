@@ -73,6 +73,7 @@
               <div class="py-3 d-flex align-items-center" *ngIf="currentUser?.id != element.id ">
                 <div>
                   <h5>Statut de l'utilisateur</h5>
+
                   <mat-form-field appearance="fill" >
                     <mat-select [compareWith]="selectedStatus" [value]="element.ROLE" #input>
                       <mat-option *ngFor="let status of objStatus" [value]="status.ROLE">

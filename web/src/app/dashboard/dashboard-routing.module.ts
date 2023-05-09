@@ -9,12 +9,14 @@ import {RoleBanGuard} from "../shared/guards/auth/role-ban.guard";
 import {MemberComponent} from "./member/member.component";
 import {SoccerTrainingComponent} from "./soccer-training/soccer-training.component";
 import {RoleAdminGuard} from "../shared/guards/auth/role-admin.guard";
+import {MatchPlayComponent} from "./match-play/match-play.component";
 
 const routes: Routes = [ // CLI imports router
   { path: "", canActivate: [DataUserGuard, RoleUserGuard], component: DashboardComponent},
   { path: "profile", canActivate: [DataUserGuard, RoleUserGuard], component: ProfileComponent},
   { path: "manage-user", canActivate: [DataUserGuard, RoleAdminGuard], component: MemberComponent},
   { path: "manage-training", canActivate: [DataUserGuard, RoleAdminGuard], component: SoccerTrainingComponent},
+  { path: "manage-match", canActivate: [DataUserGuard, RoleAdminGuard], component: MatchPlayComponent},
   { path: "ban", canActivate: [DataUserGuard, RoleBanGuard], component: BanUserComponent}
 ]; // sets up routes constant where you define your routes
 

@@ -10,6 +10,7 @@
 CREATE TABLE football_pitch(
         id   Int  Auto_increment  NOT NULL ,
         name Varchar (255) NOT NULL
+	,CONSTRAINT football_pitch_AK UNIQUE (name)
 	,CONSTRAINT football_pitch_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
@@ -21,6 +22,7 @@ CREATE TABLE football_pitch(
 CREATE TABLE category(
         id   Int  Auto_increment  NOT NULL ,
         name Varchar (255) NOT NULL
+	,CONSTRAINT category_AK UNIQUE (name)
 	,CONSTRAINT category_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
@@ -34,7 +36,6 @@ CREATE TABLE user(
         firstname            Varchar (255) NOT NULL ,
         lastname             Varchar (255) NOT NULL ,
         phone_number         Varchar (50) NOT NULL ,
-        email                Varchar (255) NOT NULL ,
         password             Varchar (255) NOT NULL ,
         ROLE                 Longtext NOT NULL ,
         is_valid_email       Bool NOT NULL ,
@@ -43,7 +44,9 @@ CREATE TABLE user(
         token_time_validity  Datetime ,
         createdAt            Datetime NOT NULL ,
         updateAt             Datetime NOT NULL ,
+        email                Varchar (255) NOT NULL ,
         id_category          Int
+	,CONSTRAINT user_AK UNIQUE (email)
 	,CONSTRAINT user_PK PRIMARY KEY (id)
 
 	,CONSTRAINT user_category_FK FOREIGN KEY (id_category) REFERENCES category(id)
@@ -55,8 +58,9 @@ CREATE TABLE user(
 #------------------------------------------------------------
 
 CREATE TABLE team_opposing(
-        id  Int  Auto_increment  NOT NULL ,
-        nom Varchar (255) NOT NULL
+        id   Int  Auto_increment  NOT NULL ,
+        name Varchar (255) NOT NULL
+	,CONSTRAINT team_opposing_AK UNIQUE (name)
 	,CONSTRAINT team_opposing_PK PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
@@ -84,12 +88,13 @@ CREATE TABLE soccer_training(
 
 CREATE TABLE team(
         id           Int  Auto_increment  NOT NULL ,
-        name_team    Varchar (255) ,
-        name_address Varchar (255) ,
-        address      Varchar (255) ,
-        code_zip     Varchar (20) ,
-        city         Varchar (255) ,
+        name_address Varchar (255) NOT NULL ,
+        address      Varchar (255) NOT NULL ,
+        code_zip     Varchar (20) NOT NULL ,
+        city         Varchar (255) NOT NULL ,
+        name_team    Varchar (255) NOT NULL ,
         id_user      Int NOT NULL
+	,CONSTRAINT team_AK0 UNIQUE (name_team)
 	,CONSTRAINT team_PK PRIMARY KEY (id)
 
 	,CONSTRAINT team_user_FK FOREIGN KEY (id_user) REFERENCES user(id)
@@ -103,9 +108,11 @@ CREATE TABLE team(
 
 CREATE TABLE match_play(
         id                Int  Auto_increment  NOT NULL ,
-        date              Datetime NOT NULL ,
-        local             Bool NOT NULL ,
-        id_football_pitch Int NOT NULL ,
+        date              Date NOT NULL ,
+        is_local          Bool NOT NULL ,
+        hour_start        Varchar (50) NOT NULL ,
+        match_of_the_day  Bool NOT NULL ,
+        id_football_pitch Int ,
         id_category       Int NOT NULL ,
         id_team_opposing  Int NOT NULL ,
         id_team           Int NOT NULL
@@ -119,32 +126,27 @@ CREATE TABLE match_play(
 
 
 #------------------------------------------------------------
-# Table: resultat
+# Table: result
 #------------------------------------------------------------
 
-CREATE TABLE resultat(
+CREATE TABLE result(
         id                  Int  Auto_increment  NOT NULL ,
-        opposing_team       Varchar (255) NOT NULL ,
         opposing_team_score Int NOT NULL ,
-        date                Datetime NOT NULL ,
         team_score          Int NOT NULL ,
-        local               Bool NOT NULL ,
-        category            Varchar (255) NOT NULL ,
         id_team_opposing    Int NOT NULL ,
         id_match_play       Int NOT NULL ,
         id_category         Int NOT NULL
-	,CONSTRAINT resultat_PK PRIMARY KEY (id)
+	,CONSTRAINT result_PK PRIMARY KEY (id)
 
-	,CONSTRAINT resultat_team_opposing_FK FOREIGN KEY (id_team_opposing) REFERENCES team_opposing(id)
-	,CONSTRAINT resultat_match_play0_FK FOREIGN KEY (id_match_play) REFERENCES match_play(id)
-	,CONSTRAINT resultat_category1_FK FOREIGN KEY (id_category) REFERENCES category(id)
+	,CONSTRAINT result_team_opposing_FK FOREIGN KEY (id_team_opposing) REFERENCES team_opposing(id)
+	,CONSTRAINT result_match_play0_FK FOREIGN KEY (id_match_play) REFERENCES match_play(id)
+	,CONSTRAINT result_category1_FK FOREIGN KEY (id_category) REFERENCES category(id)
 )ENGINE=InnoDB;
 
 
 #############################################################
-#
 #                   - INIT DATABASE -
-#
+#                     REQUIRED DATA
 #############################################################
 
 #------------------------------------------------------------
@@ -156,54 +158,15 @@ CREATE TABLE resultat(
 #------------------------------------------------------------
 
 
-
 INSERT INTO user
-(firstname, lastname, phone_number,  email, password, ROLE, is_valid_email, createdAt, updateAt)
+(id, firstname, lastname, phone_number,  email, password, ROLE, is_valid_email, createdAt, updateAt)
 VALUES
-("nicolas" , "zanardo"    ,"0612345678", "nicolas@zanardo.com"             , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]",1,  NOW(), NOW()),
-("Pat"     , "Thettick"   ,"0612345678", "samantha55@ernser.info"         , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Karen"   , "Onnabit"    ,"0612345678", "bennie04@gmail.com"             , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Greg"    , "Arias"      ,"0612345678", "marlee.rowe@littel.info"        , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Ann"     , "Chovey"     ,"0612345678", "jabari.purdy@hotmail.com"       , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 0,  NOW(), NOW()),
-("Barry"   , "Cuda"       ,"0612345678", "hodkiewicz.jana@reilly.info"    , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Hazel"   , "Nutt"       ,"0612345678", "bennie04@gmail.com"             , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"BAN\"]"  , 0,  NOW(), NOW()),
-("Pete"    , "Tsa"        ,"0612345678", "kertzmann.soledad@boyer.info"   , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Lois"    , "Lane"       ,"0612345678", "michaela.bortell@schneider.net" , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"BAN\"]"  , 1,  NOW(), NOW()),
-("Clark"   , "Kent"       ,"0612345678", "michaela.bartella@schneider.net", "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Joseph"  , "Arimathea"  ,"0612345678", "nbotsford@kessler.com"          , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\"]"           , 1,  NOW(), NOW()),
-("Dixie"   , "Normous"    ,"0612345678", "godfrey.beatty@hotmail.com"     , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Ann"     , "Chovey"     ,"0612345678", "jabari.purdy@hotmail.com"       , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 0,  NOW(), NOW()),
-("Barry"   , "Cuda"       ,"0612345678", "hodkiewicz.jana@reilly.info"    , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Hazel"   , "Nutt"       ,"0612345678", "bennie04@gmail.com"             , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"BAN\"]"  , 0,  NOW(), NOW()),
-("Pete"    , "Tsa"        ,"0612345678", "kertzmann.soledad@boyer.info"   , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Lois"    , "Lane"       ,"0612345678", "michaela.bartelli@schneider.net", "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"BAN\"]"  , 1,  NOW(), NOW()),
-("Clark"   , "Kent"       ,"0612345678", "michaela.bartell@schneider.net" , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Joseph"  , "Arimathea"  ,"0612345678", "nbotsford@kessler.com"          , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\"]"           , 1,  NOW(), NOW()),
-("Dixie"   , "Normous"    ,"0612345678", "godfrey.beatty@hotmail.com"     , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW()),
-("Dustin"  , "Trailblazer","0612345678", "runte.raegan@yahoo.com"         , "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]", 1,  NOW(), NOW());
+(1,"nicolas","zanardo","0612345678","nicolas@zanardo.com", "$2b$16$.6DGMsHQv2G5GRePXEGn.eUD5mLFuPy4tfcgZn7fz6GocxE0wbLb2","[\"USER\", \"ADMIN\"]",1,  NOW(), NOW());
 
 
 #------------------------------------------------------------
 # INSERT: TEAM
 #------------------------------------------------------------
 
-INSERT INTO team (name_team, name_address, address, code_zip, city, id_user)
-VALUES ("OSNY","OSNY Football Club","Rue du stade","95520","Osny",1);
-
-
-#------------------------------------------------------------
-# INSERT: CATEGORY
-#------------------------------------------------------------
-INSERT INTO category (name) VALUES
-("SENIOR"),
-("BENJAMIN"),
-("POUSSIN");
-
-
-#------------------------------------------------------------
-# INSERT: TERRAIN
-#------------------------------------------------------------
-INSERT INTO football_pitch (name) VALUES
-("TERRAIN - 1"),
-("TERRAIN - 2"),
-("TERRAIN - 3");
+INSERT INTO team (id, name_team, name_address, address, code_zip, city, id_user)
+VALUES (1,"osny","OSNY Football Club","Rue du stade","95520","Osny",1);

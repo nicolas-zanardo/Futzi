@@ -10,7 +10,7 @@ const {createTraining, getAllTraining, deleteTraining, countTrainingByCategory} 
 exports.createTrainingRepository = async(res, soccerTraining, isResponseJSON = true) => {
     const db = new Database();
     return await db.connection.promise().query(createTraining(), [
-        soccerTraining.day,
+        soccerTraining.day.toLowerCase(),
         soccerTraining.hour_start,
         soccerTraining.id_football_pitch,
         soccerTraining.id_category

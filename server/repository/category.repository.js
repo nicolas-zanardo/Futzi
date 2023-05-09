@@ -45,7 +45,7 @@ exports.findCategoryByNameRepository = async(req, res, isResponseJSON = true) =>
 }
 
 /**
- *
+ * createCategoryRepository
  * @param req
  * @param res
  * @param isResponseJSON boolean default true

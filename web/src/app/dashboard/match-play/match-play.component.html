@@ -1,0 +1,81 @@
+<div class="container pt-5 pb-5">
+  <h1>Match</h1>
+  <div class="barre-title"></div>
+
+  <div class="mx-4 mt-5"><h4>Ajouter un match</h4></div>
+  <form [formGroup]="formCreateMatch" (submit)="submit()">
+
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Date du match</mat-label>
+        <input matInput [matDatepicker]="dp3" formControlName="date" required>
+        <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-radio-group aria-label="Select an option" formControlName="is_local" (change)="isLocalMatch()">
+        <mat-radio-button value="1">Local</mat-radio-button>
+        <mat-radio-button value="2" >Exterieur</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-checkbox formControlName="match_of_the_day">Match du jours</mat-checkbox>
+    </div>
+
+    <div>
+
+
+      <mat-form-field appearance="fill" class="mx-2">
+        <mat-label>Heure</mat-label>
+        <mat-select formControlName="hour_start" required>
+          <mat-option *ngFor="let hour of hours" [value]="hour.value">
+            {{hour.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill" class="mx-2">
+        <mat-label>Catégorie</mat-label>
+        <input type="text"
+               aria-label="Catégorie"
+               matInput
+               formControlName="category"
+               [matAutocomplete]="cat" required>
+        <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill" class="mx-2">
+        <mat-label>Terrain</mat-label>
+        <input type="text"
+               aria-label="Terrain"
+               matInput
+               formControlName="football_pitch"
+               [matAutocomplete]="FBpitch" required>
+        <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
+          <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name">
+            {{pitch.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill" class="mx-2">
+        <mat-label>Equipe adverse</mat-label>
+        <input type="text"
+               aria-label="équipe adverse"
+               matInput
+               formControlName="team_opposing"
+               [matAutocomplete]="ot" required>
+        <mat-autocomplete autoActiveFirstOption #ot="matAutocomplete">
+          <mat-option *ngFor="let team of filteredOptionsOpposingTeam | async" [value]="team.name">
+            {{team.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="p-5 mt-0 mb-4 mx-2">Ajouter</button>
+    </div>
+  </form>
+</div>

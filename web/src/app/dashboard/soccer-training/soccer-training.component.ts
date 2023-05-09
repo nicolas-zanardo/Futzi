@@ -15,6 +15,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {
   DialogDeleteSoccerTrainingComponent
 } from "./dialog-delete-soccer-training/dialog-delete-soccer-training.component";
+import {CategoryService} from "../../shared/services/category/category.service";
+import {FootballPitchService} from "../../shared/services/football-pitch/football-pitch.service";
 
 
 @Component({
@@ -33,9 +35,9 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
 
   private date: DateComponent = new DateComponent()
   // SEARCH CATEGORY
-  public filteredOptionsCategory: Observable<Category[]> = this.trainingService.allCategory$.asObservable();
+  public filteredOptionsCategory: Observable<Category[]> = this.categoryService.allCategory$.asObservable();
   // SEARCH FOOTBALL PITCH
-  public filteredOptionsFootballPitch: Observable<FootballPitch[]> = this.trainingService.allFootballPitch$.asObservable();
+  public filteredOptionsFootballPitch: Observable<FootballPitch[]> = this.footballPitchServcie.allFootballPitch$.asObservable();
   //DATA
   public allSoccerFootball: SoccerTraining[] = this.trainingService.allSoccerTraining$.value;
   public dataCategory: Category[] = [];
@@ -59,6 +61,8 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
   constructor(
     private fb: FormBuilder,
     private trainingService: SoccerTrainingService,
+    private categoryService: CategoryService,
+    private footballPitchServcie: FootballPitchService,
     public dialog: MatDialog
   ) {
     this.hours = this.date.setHours();
@@ -77,10 +81,10 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
       startWith(''),
       map((value: string) => this._filterFootballPitch(value || ''))
     );
-    this.trainingService.getAllCategory().subscribe((categories: Category[]) => {
+    this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
       this.dataCategory = categories;
     })
-    this.trainingService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
+    this.footballPitchServcie.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
       this.dataFootballPitch = pitch;
     })
 
@@ -114,7 +118,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
       ])),
       category: new FormControl('',Validators.compose([
         Validators.required,
-        Validators.minLength(1)
+        Validators.minLength(3)
       ])),
       football_pitch: new FormControl('', Validators.compose([
         Validators.required
@@ -174,13 +178,13 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
           this.dataSource.data = this.allSoccerFootball;
           // ADD data input football_pitch
           if(createSoccer.id_football_pitch) {
-            this.trainingService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
+            this.footballPitchServcie.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
               this.dataFootballPitch = pitch;
             })
           }
           // ADD data input category
           if(createSoccer.id_category) {
-            this.trainingService.getAllCategory().subscribe((categories: Category[]) => {
+            this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
               this.dataCategory = categories;
             })
           }

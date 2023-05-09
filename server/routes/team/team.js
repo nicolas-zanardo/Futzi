@@ -5,7 +5,7 @@ const {findTeamController, updateTeamController} = require("../../controller/tea
 const team = express.Router();
 
 
-team.get("/osny", isLoggedAdmin, findTeamController);
+team.get("/:currentTeam", isLoggedAdmin, findTeamController);
 team.put("/update-osny", isLoggedAdmin, updateTeamController);
 
 module.exports = team;

@@ -69,6 +69,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
     this.checkAllUserIsProvide();
     this.createListContact();
     this.selected = this.team?.id_user;
+
     // FORM
     this.createFormContact();
     this.createFormStatusUser();
@@ -76,7 +77,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource!.paginator = this.paginator!;
     this.dataSource!.sort = this.sort!;
-
+    this.checkIsTeamIsProvide();
   }
 
   //#################### PROVIDER #############################
@@ -87,6 +88,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
         this.selected = this.team?.id_user;
       })
     }
+
   }
   private checkAllUserIsProvide(): void {
     if(!this.allUsers.length) {

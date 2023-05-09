@@ -17,6 +17,7 @@ import { FootballPitchComponent } from './football-pitch/football-pitch.componen
 import {
   DialogDeleteSoccerTrainingComponent
 } from "./soccer-training/dialog-delete-soccer-training/dialog-delete-soccer-training.component";
+import {MatchPlayComponent} from "./match-play/match-play.component";
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import {
     CategoryComponent,
     FootballPitchComponent,
     DialogDeleteSoccerTrainingComponent,
+    MatchPlayComponent,
   ],
   imports: [
     CommonModule,
