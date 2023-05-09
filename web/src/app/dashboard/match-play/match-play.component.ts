@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DateComponent} from "../../shared/component/date/date.component";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {DataPredicate} from "../../shared/interface/element-form-html.inteface";
 import {map, Observable, startWith} from "rxjs";
@@ -48,6 +48,15 @@ export class MatchPlayComponent implements OnInit{
 
   ngOnInit() {
     this.createForm();
+    this.opposingTeamService.getAllOpposingTeam().subscribe((opposingTeam: OpposingTeam[]) => {
+      this.dataOpposingTeam = opposingTeam;
+    });
+    this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
+      this.dataCategory = categories;
+    });
+    this.footballPitchService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
+      this.dataFootballPitch = pitch;
+    });
     this.filteredOptionsCategory = this.formCreateMatch.valueChanges.pipe(
       startWith(''),
       map((value: string) => this._filterCategory(value || '')),
@@ -60,15 +69,6 @@ export class MatchPlayComponent implements OnInit{
       startWith(''),
       map((value: string) => this._filterOpposingTeam( value ||''))
     );
-    this.opposingTeamService.getAllOpposingTeam().subscribe((opposingTeam: OpposingTeam[]) => {
-      this.dataOpposingTeam = opposingTeam;
-    });
-    this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
-      this.dataCategory = categories;
-    });
-    this.footballPitchService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
-      this.dataFootballPitch = pitch;
-    });
   }
 
   //####################### FORM ###############################
@@ -125,37 +125,35 @@ export class MatchPlayComponent implements OnInit{
 
   //####################### SUBMIT ###############################
   public submit(): void {
+    console.log(this.formCreateMatch.getRawValue())
     if(this.formCreateMatch.valid) {
-      console.log(this.formCreateMatch.getRawValue())
       // FORMAT DATA
       let dateObj = this.formCreateMatch.get("date")?.value;
       this.formCreateMatch.get("date")?.setValue(`${dateObj.getFullYear()}-${dateObj.getMonth()+1}-${dateObj.getDate()}`);
       this.formCreateMatch.get("is_local")?.setValue(parseInt(this.formCreateMatch.get('is_local')?.value));
-      if(!this.formCreateMatch.get('match_ok_the_day')?.value) {
 
-      }
       // REQUEST HTTP
       this.matchService.createSoccerMatch(this.formCreateMatch.getRawValue()).subscribe({
         next: (match: MatchPlay) => {
           console.log(match)
-          if(match.team_opposing) {
-            this.opposingTeamService.getAllOpposingTeam().subscribe((team) => {
-              this.dataOpposingTeam = team;
-            })
-          }
-          if(match.football_pitch) {
-            this.footballPitchService.getAllFootballPitch().subscribe((fp) => {
-              this.dataFootballPitch = fp;
-            })
-          }
-          if(match.category) {
-            this.categoryService.getAllCategory().subscribe((cat) => {
-              this.dataCategory = cat;
-            })
-          }
-          this.formCreateMatch.reset();
+          this.opposingTeamService.getAllOpposingTeam().subscribe((team) => {
+            this.dataOpposingTeam = team;
+          })
 
+          this.footballPitchService.getAllFootballPitch().subscribe((fp) => {
+            this.dataFootballPitch = fp;
+          })
+
+          this.categoryService.getAllCategory().subscribe((cat) => {
+            this.dataCategory = cat;
+          })
+          this.formCreateMatch.reset();
           this.formCreateMatch.get('is_local')?.setValue("1");
+          this.formCreateMatch.get('category')?.setValue('');
+          this.formCreateMatch.get('football_pitch')?.setValue('');
+          this.formCreateMatch.get('team_opposing')?.setValue('');
+          this.formCreateMatch.get('match_of_the_day')?.setValue(false);
+          this.formCreateMatch.get('team')?.setValue(environment.teamName)
         },
         error: (err) => {
           console.log(err?.error)

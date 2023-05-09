@@ -28,7 +28,7 @@ exports.createMatchPlayController = async(req, res, next) => {
         match.category = req.body.category;
         match.match_of_the_day = req.body.match_of_the_day;
 
-        if(match.match_of_the_day == 1) {
+        if(match.match_of_the_day) {
             const [matchOfDay] = await checkIsAlreadySetMatchInThisDayRepository(req, res, false);
             if(matchOfDay) {
                 return res.status(406).json("Un Match est déjà selectionné pour cette journée")
@@ -75,7 +75,7 @@ exports.createMatchPlayController = async(req, res, next) => {
         }
         console.log(match)
         // Test Response isValid
-        let isStrictObj = haveKeyNotDefined(match, ['id_football_pitch', 'football_pitch']);
+        let isStrictObj = haveKeyNotDefined(match, ['id_football_pitch', 'football_pitch', 'match_of_the_day']);
         if(isStrictObj.findIt) {
             return res.status(400).json(`Erreur lors de la requête, les elements suivant ne sont pas pris en compte ou de valeur null : [ ${isStrictObj.value.toString()} ]`);
         }

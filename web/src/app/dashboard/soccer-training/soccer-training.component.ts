@@ -37,7 +37,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
   // SEARCH CATEGORY
   public filteredOptionsCategory: Observable<Category[]> = this.categoryService.allCategory$.asObservable();
   // SEARCH FOOTBALL PITCH
-  public filteredOptionsFootballPitch: Observable<FootballPitch[]> = this.footballPitchServcie.allFootballPitch$.asObservable();
+  public filteredOptionsFootballPitch: Observable<FootballPitch[]> = this.footballPitchService.allFootballPitch$.asObservable();
   //DATA
   public allSoccerFootball: SoccerTraining[] = this.trainingService.allSoccerTraining$.value;
   public dataCategory: Category[] = [];
@@ -62,7 +62,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     private fb: FormBuilder,
     private trainingService: SoccerTrainingService,
     private categoryService: CategoryService,
-    private footballPitchServcie: FootballPitchService,
+    private footballPitchService: FootballPitchService,
     public dialog: MatDialog
   ) {
     this.hours = this.date.setHours();
@@ -72,7 +72,15 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
 
 
   ngOnInit(): void {
+    this.soccerTrainingIsProvide();
     this.createForm();
+    this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
+      this.dataCategory = categories;
+    })
+    this.footballPitchService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
+      this.dataFootballPitch = pitch;
+    })
+
     this.filteredOptionsCategory = this.formCreateTraining.valueChanges.pipe(
       startWith(''),
       map((value: string) => this._filterCategory(value || '')),
@@ -81,12 +89,6 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
       startWith(''),
       map((value: string) => this._filterFootballPitch(value || ''))
     );
-    this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
-      this.dataCategory = categories;
-    })
-    this.footballPitchServcie.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
-      this.dataFootballPitch = pitch;
-    })
 
     this.soccerTrainingIsProvide();
   }
@@ -173,12 +175,11 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     if(this.formCreateTraining.valid) {
       this.trainingService.createSoccerTraining(this.formCreateTraining.getRawValue()).subscribe({
         next: (createSoccer: SoccerTraining) => {
-          formDirective.resetForm();
           this.allSoccerFootball.unshift(this.formCreateTraining.getRawValue());
           this.dataSource.data = this.allSoccerFootball;
           // ADD data input football_pitch
           if(createSoccer.id_football_pitch) {
-            this.footballPitchServcie.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
+            this.footballPitchService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
               this.dataFootballPitch = pitch;
             })
           }
@@ -188,6 +189,9 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
               this.dataCategory = categories;
             })
           }
+          formDirective.resetForm();
+          formDirective.control.get('category')?.setValue('')
+          formDirective.control.get('football_pitch')?.setValue('')
         },
         error: (err) => {
           console.log(err?.error)

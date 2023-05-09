@@ -8,7 +8,7 @@
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Date du match</mat-label>
-        <input matInput [matDatepicker]="dp3" formControlName="date" required>
+        <input matInput [matDatepicker]="dp3" formControlName="date">
         <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -26,7 +26,7 @@
 
       <mat-form-field appearance="fill" class="mx-2">
         <mat-label>Heure</mat-label>
-        <mat-select formControlName="hour_start" required>
+        <mat-select formControlName="hour_start">
           <mat-option *ngFor="let hour of hours" [value]="hour.value">
             {{hour.viewValue}}
           </mat-option>
@@ -39,7 +39,7 @@
                aria-label="Catégorie"
                matInput
                formControlName="category"
-               [matAutocomplete]="cat" required>
+               [matAutocomplete]="cat">
         <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
           <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name">
             {{option.name}}
@@ -53,7 +53,7 @@
                aria-label="Terrain"
                matInput
                formControlName="football_pitch"
-               [matAutocomplete]="FBpitch" required>
+               [matAutocomplete]="FBpitch">
         <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
           <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name">
             {{pitch.name}}
@@ -67,7 +67,7 @@
                aria-label="équipe adverse"
                matInput
                formControlName="team_opposing"
-               [matAutocomplete]="ot" required>
+               [matAutocomplete]="ot">
         <mat-autocomplete autoActiveFirstOption #ot="matAutocomplete">
           <mat-option *ngFor="let team of filteredOptionsOpposingTeam | async" [value]="team.name">
             {{team.name}}
