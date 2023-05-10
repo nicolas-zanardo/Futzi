@@ -51,6 +51,13 @@ exports.createUserController = async(req, res, next) => {
     }
 }
 
+/**
+ * updateUserInfoController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
 exports.updateUserInfoController = async(req, res, next) => {
     try {
         const user = new User();
@@ -86,6 +93,13 @@ exports.updateUserInfoController = async(req, res, next) => {
     }
 }
 
+/**
+ * updateUserCredentialController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<unknown>}
+ */
 exports.updateUserCredentialController = async(req, res, next) => {
     try {
         const db = new Database();
@@ -146,7 +160,13 @@ exports.updateRoleUserController = async(req,res,next) => {
     }
 }
 
-
+/**
+ * deleteUserController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
 exports.deleteUserController = async(req, res, next) => {
     try {
         if(req.params.id_current_user != req.params.id_user_update) {

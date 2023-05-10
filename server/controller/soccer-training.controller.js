@@ -82,6 +82,13 @@ exports.deleteTrainingController = async(req, res, next) => {
     }
 }
 
+/**
+ * countTrainingByCategoryController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.countTrainingByCategoryController = async(req, res, next) => {
     try {
         return await countTrainingByCategoryRepository(req, res);

@@ -13,7 +13,13 @@ const {
     getAllMatchPlayRepository, deleteMatchRepository, checkIsAlreadySetMatchInThisDayRepository
 } = require("../repository/match-play.repository");
 
-
+/**
+ * createMatchPlayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.createMatchPlayController = async(req, res, next) => {
     try {
         const match = new MatchPlay();
@@ -86,6 +92,13 @@ exports.createMatchPlayController = async(req, res, next) => {
     }
 }
 
+/**
+ * getAllNextMatchPlayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.getAllNextMatchPlayController = async(req, res, next) => {
     try {
         return await getAllMatchPlayRepository(res, "WHERE date >= DATE( NOW() )");
@@ -94,6 +107,13 @@ exports.getAllNextMatchPlayController = async(req, res, next) => {
     }
 }
 
+/**
+ * getAllMatchPlayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.getAllMatchPlayController = async(req, res, next) => {
     try {
         return await getAllMatchPlayRepository(res);
@@ -102,6 +122,13 @@ exports.getAllMatchPlayController = async(req, res, next) => {
     }
 }
 
+/**
+ * deleteMatchController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.deleteMatchController = async(req,res,next) => {
     try{
         return await deleteMatchRepository(req,res);
@@ -110,6 +137,13 @@ exports.deleteMatchController = async(req,res,next) => {
     }
 }
 
+/**
+ * getAllNextMatchOfTheDayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.getAllNextMatchOfTheDayController = async(req, res, next) => {
     try {
         return await getAllMatchPlayRepository(res, "WHERE date >= DATE( NOW() ) AND match_of_the_day=1 LIMIT 1");

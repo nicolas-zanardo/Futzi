@@ -175,6 +175,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     if(this.formCreateTraining.valid) {
       this.trainingService.createSoccerTraining(this.formCreateTraining.getRawValue()).subscribe({
         next: (createSoccer: SoccerTraining) => {
+          console.log(createSoccer)
           this.allSoccerFootball.unshift(this.formCreateTraining.getRawValue());
           this.dataSource.data = this.allSoccerFootball;
           // ADD data input football_pitch
@@ -187,6 +188,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
           if(createSoccer.id_category) {
             this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
               this.dataCategory = categories;
+              this.filteredOptionsCategory = this.categoryService.allCategory$.asObservable();
             })
           }
           formDirective.resetForm();
