@@ -1,15 +1,11 @@
-const {
-    createUserRepository,
-    updateUserInfoRepository,
-    updateUserCredentialRepository,
-    getAllUserRepository,
-    getAllUsersWithRoleRepository, updateRoleUserRepository, deleteUserRepository
-} = require("../repository/user.repository");
 const {User} = require("../model/User.model");
 const {ROLE} = require("../enum/ROLES");
 const bcrypt = require("bcrypt");
 const {Database} = require("../Database/Database");
-const sql = require("../query/user.query");
+const {createUserRepository, updateUserInfoRepository, updateUserCredentialRepository, getAllUserRepository,
+    updateRoleUserRepository, deleteUserRepository
+} = require("../repository/user.repository");
+const {findUserByEmail, findUserById} = require("../query/user.query");
 
 /**
  * Create USER
@@ -31,7 +27,7 @@ exports.createUserController = async(req, res, next) => {
 
         const db = new Database();
         db.connection.promise().query(
-            sql.findUserByEmail(), [user.email])
+            findUserByEmail(), [user.email.toLowerCase()])
             .then(([rows]) => {
                 if (rows.length > 0) {
                     if(rows.length > 0) {
@@ -62,17 +58,17 @@ exports.updateUserInfoController = async(req, res, next) => {
     try {
         const user = new User();
         user.id = req.body.id;
-        user.email = req.body.email;
-        user.firstname = req.body.firstname;
-        user.lastname = req.body.lastname;
+        user.email = req.body.email.toLowerCase().trim();
+        user.firstname = req.body.firstname.toLowerCase().trim();
+        user.lastname = req.body.lastname.toLowerCase().trim();
         user.phone_number = req.body.phone_number;
-        user.old_email = req.body.old_email;
+        user.old_email = req.body.old_email.toLowerCase().trim();
 
         if(user.old_email === user.email) {
             return await updateUserInfoRepository(user,res);
         } else {
             const db = new Database();
-            db.connection.promise().query(sql.findUserByEmail(), [user.email])
+            db.connection.promise().query(findUserByEmail(), [user.email])
                 .then(([rows]) => {
                     if (rows.length > 0) {
                         if(rows.length > 0) {
@@ -80,7 +76,7 @@ exports.updateUserInfoController = async(req, res, next) => {
                             res.status(401).json("Un compte est déjà créé avec cet email");
                         }
                     } else {
-                        return em.updateUserInfoRepository(user,res);
+                        return updateUserInfoRepository(user,res);
                     }
                 })
                 .catch(err => {
@@ -103,7 +99,7 @@ exports.updateUserInfoController = async(req, res, next) => {
 exports.updateUserCredentialController = async(req, res, next) => {
     try {
         const db = new Database();
-        return await db.connection.promise().query(sql.findUserById(), [req.body.id])
+        return await db.connection.promise().query(findUserById(), [req.body.id])
             .then(([rows]) => {
                 let user = rows[0];
                 if(user) {
@@ -124,7 +120,6 @@ exports.updateUserCredentialController = async(req, res, next) => {
         next(e);
     }
 }
-
 
 /**
  * getAllUserController
@@ -172,7 +167,7 @@ exports.deleteUserController = async(req, res, next) => {
         if(req.params.id_current_user != req.params.id_user_update) {
             return await deleteUserRepository(req, res);
         } else {
-            res.status(401).json("Les ID sont identique vous n'avez pas l'authorisation");
+            return res.status(401).json("Les ID sont identique vous n'avez pas l'authorisation");
         }
     } catch (e) {
         next(e);

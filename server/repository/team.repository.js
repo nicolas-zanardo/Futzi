@@ -22,22 +22,24 @@ exports.findTeamRepository = async(team, res, isResponseJSON = true) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
 
-exports.updateTeamContactTeamRepository = (req, res) => {
+exports.updateTeamContactTeamRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(
+    return await db.connection.promise().query(
         sql.updateTeam(), [req.body.contact, req.body.id])
-        .then((r) => {
+        .then((rows) => {
             console.log(`░▒▓ INFO : UPDATE CONTACT TEAM : ${new Date()} `);
-            res.status(200).json(r);
+            return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

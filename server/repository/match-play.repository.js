@@ -25,7 +25,8 @@ exports.createMatchPlayRepository = async(res, match, isResponseJSON = true) => 
         return [rows];
     }).catch(err => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-        return res.status(500).json(err)
+        return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
     }).then(db.connection.end());
 }
 
@@ -38,7 +39,8 @@ exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "") => {
         return res.status(200).json(rows);
     }).catch(err => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-        return res.status(500).json(err)
+        return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
     }).then(db.connection.end());
 }
 
@@ -51,7 +53,8 @@ exports.deleteMatchRepository = async(req,res) => {
         return res.status(200).json(rows);
     }).catch(err => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-        return res.status(500).json(err)
+        return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
     }).then(db.connection.end());
 }
 
@@ -67,6 +70,7 @@ exports.checkIsAlreadySetMatchInThisDayRepository = async(req, res, responseJSON
         return rows;
     }).catch(err => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-        return res.status(500).json(err)
+        return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
     }).then(db.connection.end());
 }

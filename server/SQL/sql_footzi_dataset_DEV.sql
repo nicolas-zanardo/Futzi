@@ -43,18 +43,22 @@ VALUES
 # INSERT: CATEGORY
 #------------------------------------------------------------
 INSERT INTO category (name) VALUES
-("SENIOR"),
-("BENJAMIN"),
-("POUSSIN");
-
+("u6-u7/u8-U9"),
+("u15-u14"),
+("u17-u16"),
+("u19-u18"),
+("séniors"),
+("anciens"),
+('vétérans +45ans');
 
 #------------------------------------------------------------
 # INSERT: TERRAIN
 #------------------------------------------------------------
 INSERT INTO football_pitch (name) VALUES
-("TERRAIN - 1"),
-("TERRAIN - 2"),
-("TERRAIN - 3");
+("terrain - ouest"),
+("terrain - sud"),
+("terrain - est"),
+("terrain - nord");
 
 #------------------------------------------------------------
 # INSERT: TRAINING
@@ -69,4 +73,13 @@ VALUES
     ("lundi"   , "18:30", 1, 2),
     ("mardi"   , "18:00", 2, 3),
     ("samedi"  , "10:00", 1, 2);
+
+#------------------------------------------------------------
+# INSERT: OPPOSING TEAM
+#------------------------------------------------------------
+INSERT INTO team_opposing (name) VALUES
+("psg"),
+("marseille"),
+("lyon"),
+("toulouse");
 

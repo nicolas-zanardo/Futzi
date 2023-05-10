@@ -15,7 +15,8 @@ exports.getAllCategoriesRepository = async(req, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -29,17 +30,18 @@ exports.getAllCategoriesRepository = async(req, res) => {
  */
 exports.findCategoryByNameRepository = async(req, res, isResponseJSON = true) => {
     const db = new Database();
-    return await db.connection.promise().query(findCategoryByName(), [req.body.category.toUpperCase().trim()])
+    return await db.connection.promise().query(findCategoryByName(), [req.body.category.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : FIND BY NAME CATEGORY : ${new Date()}`);
             if(isResponseJSON){
-                return res.status(201).json(rows)
+                return res.status(201).json(rows);
             }
             return rows;
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -53,17 +55,18 @@ exports.findCategoryByNameRepository = async(req, res, isResponseJSON = true) =>
  */
 exports.createCategoryRepository = async(req, res, isResponseJSON = true) => {
     const db = new Database();
-    return await db.connection.promise().query(createCategory(), [req.body.category.toUpperCase().trim()])
+    return await db.connection.promise().query(createCategory(), [req.body.category.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : CREATE CATEGORY : ${new Date()}`);
             if(isResponseJSON) {
-                return res.status(201).json(rows)
+                return res.status(201).json(rows);
             }
             return [rows];
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

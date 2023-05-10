@@ -1,6 +1,6 @@
-const sql = require('../query/user.query')
-const {Database} = require("../Database/Database");
 const bcrypt = require("bcrypt");
+const {Database} = require("../Database/Database");
+const {insertUser, updateUserInfo, updateRoleUser, deleteUser, updateUserCredential, findAllUser} = require("../query/user.query");
 
 /**
  * createUserRepository
@@ -8,20 +8,23 @@ const bcrypt = require("bcrypt");
  * @param req
  * @returns {Promise<unknown>}
  */
-exports.createUserRepository = (user, res) => {
+exports.createUserRepository = async(user, res) => {
     const db = new Database();
-    return db.connection.promise().query(
-        sql.insertUser(), [user.firstname, user.lastname, user.phone_number, user.email, user.password, user.ROLE, user.isValidMail])
+    return await db.connection.promise().query(
+        insertUser(), [
+            user.firstname.toLowerCase().trim(),
+            user.lastname.toLowerCase().trim(),
+            user.phone_number.trim(),
+            user.email.toLowerCase().trim(),
+            user.password.trim(), user.ROLE, user.isValidMail])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : USER HAS BEEN CREATED : ${new Date()}`);
-            res.status(201).json({
-                message: "Le compte a bien été crée",
-                info: rows
-            });
+            return res.status(201).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -31,20 +34,26 @@ exports.createUserRepository = (user, res) => {
  * @param user User class
  * @param res Response
  */
-exports.updateUserInfoRepository = (user, res) => {
+exports.updateUserInfoRepository = async(user, res) => {
     const db = new Database();
-    db.connection.promise().query(
-        sql.updateUserInfo(), [user.firstname, user.lastname, user.phone_number, user.email, user.id])
+    return await db.connection.promise().query(
+        updateUserInfo(), [
+            user.firstname.toLowerCase().trim(),
+            user.lastname.toLowerCase().trim(),
+            user.phone_number,
+            user.email.toLowerCase().trim(),
+            user.id])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : USER HAS BEEN UPDATE : ${new Date()}`);
-            res.status(201).json({
+            return res.status(201).json({
                 message: "Le profil a bien était modifié",
                 info: rows
             });
         })
         .catch(err => {
                 console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-                res.status(500).json(err)
+                return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -54,19 +63,20 @@ exports.updateUserInfoRepository = (user, res) => {
  * @param req
  * @param res
  */
-exports.updateUserCredentialRepository = (req, res) => {
+exports.updateUserCredentialRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(sql.updateUserCredential(), [
+    return await db.connection.promise().query(updateUserCredential(), [
         bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(16)),
         req.body.id
     ])
         .then(() => {
             console.log(`░▒▓ INFO : USER PASSWORD HAS BEEN UPDATE : ${new Date()}`);
-            res.status(201).json("Le mot de passe a bien était modifié");
+            return res.status(201).json("Le mot de passe a bien était modifié");
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -76,16 +86,17 @@ exports.updateUserCredentialRepository = (req, res) => {
  * @param req
  * @param res
  */
-exports.getAllUserRepository = (req, res) => {
+exports.getAllUserRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(sql.findAllUser())
+    return await db.connection.promise().query(findAllUser())
         .then(([rows]) => {
             console.log(`░▒▓ INFO : GET ALL USER : ${new Date()}`);
             return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -95,16 +106,17 @@ exports.getAllUserRepository = (req, res) => {
  * @param req
  * @param res
  */
-exports.updateRoleUserRepository = (req, res) => {
+exports.updateRoleUserRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(sql.updateRoleUser(), [req.body.ROLE, req.body.id_user_update])
+    return await db.connection.promise().query(updateRoleUser(), [req.body.ROLE, req.body.id_user_update])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : UPDATE ROLE USER : ${new Date()}`);
             return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end())
 }
@@ -114,16 +126,17 @@ exports.updateRoleUserRepository = (req, res) => {
  * @param req
  * @param res
  */
-exports.deleteUserRepository = (req, res) => {
+exports.deleteUserRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(sql.deleteUser(), [req.params.id_user_update])
+    return await db.connection.promise().query(deleteUser(), [req.params.id_user_update])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : USER WAS BEEN DELETED : ${new Date()}`);
             return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end())
 }

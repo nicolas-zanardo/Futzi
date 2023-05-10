@@ -41,8 +41,8 @@
                formControlName="category"
                [matAutocomplete]="cat">
         <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name">
-            {{option.name}}
+          <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name | uppercase">
+            {{option.name | uppercase}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -55,8 +55,8 @@
                formControlName="football_pitch"
                [matAutocomplete]="FBpitch">
         <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
-          <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name">
-            {{pitch.name}}
+          <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name | uppercase">
+            {{pitch.name | uppercase}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -69,8 +69,8 @@
                formControlName="team_opposing"
                [matAutocomplete]="ot">
         <mat-autocomplete autoActiveFirstOption #ot="matAutocomplete">
-          <mat-option *ngFor="let team of filteredOptionsOpposingTeam | async" [value]="team.name">
-            {{team.name}}
+          <mat-option *ngFor="let team of filteredOptionsOpposingTeam | async" [value]="team.name | titlecase">
+            {{team.name | titlecase}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

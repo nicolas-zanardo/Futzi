@@ -6,16 +6,17 @@ const {getAllFootballPitch, getFootballPitchByName, createFootballPitch} = requi
  * @param req
  * @param res
  */
-exports.getAllFootballPitchRepository = (req, res) => {
+exports.getAllFootballPitchRepository = async(req, res) => {
     const db = new Database();
-    db.connection.promise().query(getAllFootballPitch())
+    return await db.connection.promise().query(getAllFootballPitch())
         .then(([rows]) => {
             console.log(`░▒▓ INFO : GET ALL FOOTBALL PITCH : ${new Date()}`);
-            res.status(200).json(rows);
+            return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -29,17 +30,18 @@ exports.getAllFootballPitchRepository = (req, res) => {
  */
 exports.findFootballPitchByNameRepository = async(req, res, isResponseJSON = true) => {
     const db = new Database();
-    return await db.connection.promise().query(getFootballPitchByName(), [req.body.football_pitch.toUpperCase().trim()])
+    return await db.connection.promise().query(getFootballPitchByName(), [req.body.football_pitch.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : GET ALL FOOTBALL PITCH : ${new Date()}`);
             if(isResponseJSON) {
-                res.status(200).json(rows);
+                return res.status(200).json(rows);
             }
             return rows
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -53,17 +55,18 @@ exports.findFootballPitchByNameRepository = async(req, res, isResponseJSON = tru
  */
 exports.createFootballPitchRepository = async(req, res, isResponseJSON = true) => {
     const db = new Database();
-    return await db.connection.promise().query(createFootballPitch(), [req.body.football_pitch.toUpperCase().trim()])
+    return await db.connection.promise().query(createFootballPitch(), [req.body.football_pitch.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : CREATE FOOTBALL PITCH : ${new Date()}`);
             if(isResponseJSON) {
-                res.status(200).json(rows);
+                return res.status(200).json(rows);
             }
             return [rows];
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            res.status(500).json(err)
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
