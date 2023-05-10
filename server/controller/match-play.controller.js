@@ -171,7 +171,7 @@ exports.getMatchOfTheDayController = async(req, res, next) => {
  * @param next
  * @returns {Promise<*>}
  */
-exports.getMatchOfTheDayController = async(req, res, next) => {
+exports.getTehTenLastMatchController = async(req, res, next) => {
     try {
         return  await getAllMatchPlayRepository(res, "WHERE date >= DATE( NOW() ) ORDER BY match_play.date ASC LIMIT 10");
     } catch (e) {
