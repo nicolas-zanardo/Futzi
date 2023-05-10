@@ -19,10 +19,13 @@ exports.createTrainingController = async(req, res, next) => {
         const insertData = new SoccerTraining();
         training.day = req.body.day;
         training.hour_start = req.body.hour_start;
+        training.football_pitch = req.body.football_pitch;
+        training.category = req.body.category;
+
         // -- PREPARE PITCH -- //
-        const [pitch] = await findFootballPitchByNameRepository(req, res, false);
+        const [pitch] = await findFootballPitchByNameRepository(training.football_pitch, res, false);
         if(!pitch) {
-            const [creatPitch] = await createFootballPitchRepository(req, res, false);
+            const [creatPitch] = await createFootballPitchRepository(training.football_pitch, res, false);
             training.id_football_pitch = parseInt(creatPitch.insertId);
             insertData.id_football_pitch = true;
         } else {
@@ -30,9 +33,9 @@ exports.createTrainingController = async(req, res, next) => {
             insertData.id_football_pitch = false;
         }
         // -- PREPARE CATEGORY -- //
-        const [category] = await findCategoryByNameRepository(req, res, false);
+        const [category] = await findCategoryByNameRepository(training.category, res, false);
         if(!category) {
-            const [createCategory] = await createCategoryRepository(req, res, false);
+            const [createCategory] = await createCategoryRepository(training.category, res, false);
             training.id_category = parseInt(createCategory.insertId);
             insertData.id_category = true;
         } else {

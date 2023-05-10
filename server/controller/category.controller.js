@@ -1,4 +1,5 @@
-const {getAllCategoriesRepository} = require("../repository/category.repository");
+const {getAllCategoriesRepository, updateCategoryRepository, deleteCategoryRepository} = require("../repository/category.repository");
+const {Category} = require("../model/Category");
 
 
 /**
@@ -8,9 +9,9 @@ const {getAllCategoriesRepository} = require("../repository/category.repository"
  * @param next
  * @returns {Promise<*>}
  */
-exports.getAllCategoriesController = async(req,res,next) => {
+exports.getAllCategoriesController = async(req,res, next) => {
     try {
-        return await getAllCategoriesRepository(req, res)
+        return await getAllCategoriesRepository(res)
     } catch (e) {
         next(e);
     }
@@ -25,7 +26,10 @@ exports.getAllCategoriesController = async(req,res,next) => {
  */
 exports.updateCategoryController = async(req, res, next) => {
     try {
-        //TODO
+        let update = new Category();
+        update.id = req.body.id;
+        update.name = req.body.name;
+        return await updateCategoryRepository(update, res);
     } catch (e) {
         next(e);
     }
@@ -40,7 +44,9 @@ exports.updateCategoryController = async(req, res, next) => {
  */
 exports.deleteCategoryController = async(req, res, next) => {
     try {
-// TODO
+        let category = new Category();
+        category.id = req.params.id;
+        return await deleteCategoryRepository(category.id, res);
     } catch (e) {
         next(e);
     }

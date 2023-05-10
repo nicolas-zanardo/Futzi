@@ -1,4 +1,4 @@
-const {getAllOpposingTeamRepository} = require("../repository/opposing-team.repository");
+const {getAllOpposingTeamRepository, updateOpposingTeamRepository, deleteOpposingTeamRepository} = require("../repository/opposing-team.repository");
 
 /**
  * getAllOpposingTeamController
@@ -24,7 +24,7 @@ exports.getAllOpposingTeamController = async(req, res, next) => {
  */
 exports.updateOpposingTeamController = async(req, res, next) => {
     try {
-        // TODO
+        return await updateOpposingTeamRepository(req.body.name, res);
     } catch (e) {
         next(e)
     }
@@ -37,9 +37,9 @@ exports.updateOpposingTeamController = async(req, res, next) => {
  * @param next
  * @returns {Promise<void>}
  */
-exports.deleteOpposingTeamController = async(req, req, next) => {
+exports.deleteOpposingTeamController = async(req, res, next) => {
     try {
-//TODO
+        return await deleteOpposingTeamRepository(req.body.id, res);
     } catch (e) {
         next(e);
     }

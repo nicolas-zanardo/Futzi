@@ -20,7 +20,7 @@ exports.createMatchPlayController = async(req, res, next) => {
     try {
         const match = new MatchPlay();
         const insertData = new MatchPlay();
-        console.log(req.body)
+
         // SET VALUE BODY
         match.date = req.body.date;
         match.hour_start = req.body.hour_start;
@@ -29,6 +29,7 @@ exports.createMatchPlayController = async(req, res, next) => {
         match.team_opposing = req.body.team_opposing;
         match.category = req.body.category;
         match.match_of_the_day = req.body.match_of_the_day;
+        match.team = req.body.team
 
         if(match.match_of_the_day) {
             const [matchOfDay] = await checkIsAlreadySetMatchInThisDayRepository(req, res, false);
@@ -38,12 +39,12 @@ exports.createMatchPlayController = async(req, res, next) => {
         }
 
         // PREPARE TEAM
-        const [team] = await findTeamRepository(req.body.team, res, false);
+        const [team] = await findTeamRepository(match.team, res, false);
         match.id_team = team.id;
         // PREPARE OPPOSING TEAM
-        const [op_team] = await findOpposingByNameRepository(req, res, false);
+        const [op_team] = await findOpposingByNameRepository(match.team_opposing, res, false);
         if(!op_team) {
-            const [createOpTeam] = await createOpposingTeamRepository(req, res, false);
+            const [createOpTeam] = await createOpposingTeamRepository(match.team_opposing, res, false);
             match.id_team_opposing = parseInt(createOpTeam.insertId);
             insertData.team_opposing = true;
         } else {
@@ -52,9 +53,9 @@ exports.createMatchPlayController = async(req, res, next) => {
         }
         // -- PREPARE PITCH -- //
         if(req.body.football_pitch) {
-            const [pitch] = await findFootballPitchByNameRepository(req, res, false);
+            const [pitch] = await findFootballPitchByNameRepository(match.football_pitch, res, false);
             if(!pitch) {
-                const [creatPitch] = await createFootballPitchRepository(req, res, false);
+                const [creatPitch] = await createFootballPitchRepository(match.football_pitch, res, false);
                 match.id_football_pitch = parseInt(creatPitch.insertId);
                 insertData.football_pitch = true;
             } else {
@@ -66,9 +67,9 @@ exports.createMatchPlayController = async(req, res, next) => {
             insertData.football_pitch = false;
         }
         // -- PREPARE CATEGORY -- //
-        const [category] = await findCategoryByNameRepository(req, res, false);
+        const [category] = await findCategoryByNameRepository(match.category, res, false);
         if(!category) {
-            const [createCategory] = await createCategoryRepository(req, res, false);
+            const [createCategory] = await createCategoryRepository(match.category, res, false);
             match.id_category = parseInt(createCategory.insertId);
             insertData.category = true;
         } else {
@@ -127,7 +128,7 @@ exports.getAllMatchPlayController = async(req, res, next) => {
  */
 exports.deleteMatchController = async(req,res,next) => {
     try{
-        return await deleteMatchRepository(req,res);
+        return await deleteMatchRepository(req.params.id,res);
     } catch (e) {
         next(e);
     }
@@ -147,3 +148,33 @@ exports.getAllNextMatchOfTheDayController = async(req, res, next) => {
         next(e);
     }
 }
+
+/**
+ * getMatchOfTheDayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
+exports.getMatchOfTheDayController = async(req, res, next) => {
+    try {
+        return  await getAllMatchPlayRepository(res, "WHERE match_of_the_day = 1 AND date >= DATE( NOW() ) ORDER BY match_play.date ASC LIMIT 1");
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * getMatchOfTheDayController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
+exports.getMatchOfTheDayController = async(req, res, next) => {
+    try {
+        return  await getAllMatchPlayRepository(res, "WHERE date >= DATE( NOW() ) ORDER BY match_play.date ASC LIMIT 10");
+    } catch (e) {
+        next(e);
+    }
+};

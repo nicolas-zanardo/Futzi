@@ -1,4 +1,5 @@
-const {getAllFootballPitchRepository} = require("../repository/football-pitch.repository");
+const {getAllFootballPitchRepository, updateFootballPitchRepository, deleteFootballPitchRepository} = require("../repository/football-pitch.repository");
+const {FootballPitch} = require("../model/FootballPitch");
 
 /**
  * getAllFootballPitchController
@@ -9,7 +10,7 @@ const {getAllFootballPitchRepository} = require("../repository/football-pitch.re
  */
 exports.getAllFootballPitchController = async(req, res, next) => {
     try{
-        return await getAllFootballPitchRepository(req, res);
+        return await getAllFootballPitchRepository(res);
     } catch (e) {
         next(e);
     }
@@ -24,7 +25,11 @@ exports.getAllFootballPitchController = async(req, res, next) => {
  */
 exports.updateFootballController = async(req, res, next) => {
     try{
-        //TODO
+        const footballPitch = new FootballPitch();
+        footballPitch.id = req.body.id;
+        footballPitch.name = req.body.name;
+
+        return await updateFootballPitchRepository(footballPitch, res);
     } catch (e) {
         next(e);
     }
@@ -39,7 +44,7 @@ exports.updateFootballController = async(req, res, next) => {
  */
 exports.deleteFootballController = async(req, res, next) => {
     try {
-       // TODO
+       return  await deleteFootballPitchRepository(req.params.id, res);
     } catch (e) {
         next(e)
     }

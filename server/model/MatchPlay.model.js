@@ -10,6 +10,7 @@ class MatchPlay {
     id_team_opposing;
     team_opposing;
     id_team;
+    team;
 }
 
 module.exports = { MatchPlay };

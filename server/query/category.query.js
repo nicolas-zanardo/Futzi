@@ -14,6 +14,26 @@ exports.findCategoryByName = () => {
     return "SELECT * FROM category WHERE name=?";
 }
 
+/**
+ * createCategory
+ * @returns {string} "INSERT INTO category (name) VALUES (?)";
+ */
 exports.createCategory = () => {
     return "INSERT INTO category (name) VALUES (?)";
+}
+
+/**
+ * updateCategory
+ * @returns {string}
+ */
+exports.updateCategory = () => {
+    return "UPDATE category set name=? WHERE id=?"
+}
+
+/**
+ * deleteCategory
+ * @returns {string} "DELETE FROM category WHERE id=?"
+ */
+exports.deleteCategory = () => {
+    return "DELETE FROM category WHERE id=?"
 }

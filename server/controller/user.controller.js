@@ -58,11 +58,11 @@ exports.updateUserInfoController = async(req, res, next) => {
     try {
         const user = new User();
         user.id = req.body.id;
-        user.email = req.body.email.toLowerCase().trim();
-        user.firstname = req.body.firstname.toLowerCase().trim();
-        user.lastname = req.body.lastname.toLowerCase().trim();
+        user.email = req.body.email
+        user.firstname = req.body.firstname
+        user.lastname = req.body.lastname
         user.phone_number = req.body.phone_number;
-        user.old_email = req.body.old_email.toLowerCase().trim();
+        user.old_email = req.body.old_email;
 
         if(user.old_email === user.email) {
             return await updateUserInfoRepository(user,res);

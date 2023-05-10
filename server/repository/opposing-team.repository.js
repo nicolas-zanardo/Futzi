@@ -1,5 +1,5 @@
 const {Database} = require("../Database/Database");
-const {getAllOpposingTeam, findOpposingTeamByName, createOpposingTeam} = require("../query/opposing-team.query");
+const {getAllOpposingTeam, findOpposingTeamByName, createOpposingTeam, updateOpposingTeam, deleteOpposingTeam} = require("../query/opposing-team.query");
 const {createCategory} = require("../query/category.query");
 
 /**
@@ -29,9 +29,9 @@ exports.getAllOpposingTeamRepository = async(req, res) => {
  * @param isResponseJSON boolean default true
  * @returns {Promise<unknown>} if boolean isResponseJSON return response Express JSON else return only an Object
  */
-exports.findOpposingByNameRepository = async(req, res, isResponseJSON = true) => {
+exports.findOpposingByNameRepository = async(name, res, isResponseJSON = true) => {
     const db = new Database();
-    return await db.connection.promise().query(findOpposingTeamByName(), [req.body.team_opposing.toLowerCase().trim()])
+    return await db.connection.promise().query(findOpposingTeamByName(), [name.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : FIND BY NAME OPPOSING TEAM : ${new Date()}`);
             if(isResponseJSON){
@@ -47,16 +47,58 @@ exports.findOpposingByNameRepository = async(req, res, isResponseJSON = true) =>
         .then(db.connection.end());
 }
 
-exports.createOpposingTeamRepository = async(req, res, isResponseJSON = true) => {
+/**
+ * createOpposingTeamRepository
+ * @param name string
+ * @param res
+ * @param isResponseJSON
+ * @returns {Promise<unknown>}
+ */
+exports.createOpposingTeamRepository = async(name, res, isResponseJSON = true) => {
     const db = new Database();
-
-    return await db.connection.promise().query(createOpposingTeam(), [req.body.team_opposing.toLowerCase().trim()])
+    return await db.connection.promise().query(createOpposingTeam(), [name.toLowerCase().trim()])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : CREATE OPPOSING TEAM : ${new Date()}`);
             if(isResponseJSON) {
                 return res.status(201).json(rows)
             }
             return [rows];
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
+        })
+        .then(db.connection.end());
+}
+
+/**
+ * updateOpposingTeamRepository
+ * @param name string
+ * @param res
+ * @returns {Promise<unknown>}
+ */
+exports.updateOpposingTeamRepository = async(name, res) => {
+    const db = new Database();
+    return await db.connection.promise().query(updateOpposingTeam(), [name.toLowerCase().trim()])
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : UPDATE OPPOSING TEAM : ${new Date()}`);
+            return res.status(201).json(rows)
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
+        })
+        .then(db.connection.end());
+}
+
+exports.deleteOpposingTeamRepository = async(id, res) => {
+    const db = new Database();
+    return await db.connection.promise().query(deleteOpposingTeam(), [id])
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : DELETE OPPOSING TEAM : ${new Date()}`);
+            return res.status(201).json(rows)
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);

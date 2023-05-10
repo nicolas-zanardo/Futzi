@@ -30,6 +30,12 @@ exports.createMatchPlayRepository = async(res, match, isResponseJSON = true) => 
     }).then(db.connection.end());
 }
 
+/**
+ * getAllMatchPlayRepository
+ * @param res
+ * @param CONDITION_SQL string
+ * @returns {Promise<unknown>}
+ */
 exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "") => {
     const db = new Database()
     return await db.connection.promise().query(
@@ -44,10 +50,16 @@ exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "") => {
     }).then(db.connection.end());
 }
 
-exports.deleteMatchRepository = async(req,res) => {
+/**
+ * deleteMatchRepository
+ * @param id
+ * @param res
+ * @returns {Promise<unknown>}
+ */
+exports.deleteMatchRepository = async(id,res) => {
     const db = new Database()
     return await db.connection.promise().query(
-        deleteMatch(), [req.params.id]
+        deleteMatch(), [id]
     ).then(([rows]) => {
         console.log(`░▒▓ INFO :CREATE MATCH : ${new Date()}`);
         return res.status(200).json(rows);
@@ -58,6 +70,13 @@ exports.deleteMatchRepository = async(req,res) => {
     }).then(db.connection.end());
 }
 
+/**
+ * checkIsAlreadySetMatchInThisDayRepository
+ * @param req
+ * @param res
+ * @param responseJSON
+ * @returns {Promise<unknown>}
+ */
 exports.checkIsAlreadySetMatchInThisDayRepository = async(req, res, responseJSON = true) => {
     const db = new Database()
     return await db.connection.promise().query(

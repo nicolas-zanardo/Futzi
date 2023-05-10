@@ -11,7 +11,7 @@ const training = express.Router();
 
 
 training.post('/create', isLoggedAdmin, createTrainingController);
-training.get('/all', isLoggedAdmin, getAllTrainingController);
+training.get('/all', getAllTrainingController);
 training.delete('/delete/:id', isLoggedAdmin, deleteTrainingController)
 training.get('/count-training-by-category', isLoggedAdmin, countTrainingByCategoryController)
 

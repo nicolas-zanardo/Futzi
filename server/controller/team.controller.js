@@ -40,9 +40,9 @@ exports.updateTeamController = async(req, res, next) => {
  * @param nnext
  * @returns {Promise<void>}
  */
-exports.deleteTeamController = async(req, res, nnext) => {
+exports.deleteTeamController = async(req, res, next) => {
     try{
-        // TODO
+        return
     } catch (e) {
         next(e)
     }

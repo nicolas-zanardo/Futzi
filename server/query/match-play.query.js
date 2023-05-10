@@ -16,6 +16,7 @@ exports.getAllMatch = (WHERE_SQL_CONDITION = "") => {
                 match_play.date, 
                 match_play.is_local, 
                 match_play.hour_start, 
+                match_play.match_of_the_day,
                 football_pitch.name as football_pitch,
                 category.name as category, 
                 team_opposing.name as team_opposing, 
