@@ -98,7 +98,7 @@ exports.deleteOpposingTeamRepository = async(id, res) => {
     return await db.connection.promise().query(deleteOpposingTeam(), [id])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : DELETE OPPOSING TEAM : ${new Date()}`);
-            return res.status(201).json(rows)
+            return res.status(200).json(rows)
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);

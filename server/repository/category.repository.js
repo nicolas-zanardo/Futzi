@@ -83,7 +83,7 @@ exports.updateCategoryRepository = async(category, res) => {
        [category.name.toLowerCase().trim(), category.id])
        .then(([rows]) => {
            console.log(`░▒▓ INFO : UPDATE CATEGORY : ${new Date()}`);
-           return res.status(201).json(rows);
+           return res.status(200).json(rows);
        })
        .catch(err => {
            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
@@ -104,7 +104,7 @@ exports.deleteCategoryRepository = async(id, res) => {
     return await db.connection.promise().query(deleteCategory(), [id])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : DELETE CATEGORY : ${new Date()}`);
-            return res.status(201).json(rows);
+            return res.status(200).json(rows);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
