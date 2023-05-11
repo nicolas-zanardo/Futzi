@@ -27,7 +27,7 @@ exports.createCategory = () => {
  * @returns {string}
  */
 exports.updateCategory = () => {
-    return "UPDATE category set name=? WHERE id=?"
+    return "UPDATE category SET name=? WHERE id=?"
 }
 
 /**

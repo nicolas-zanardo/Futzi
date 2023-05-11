@@ -1,5 +1,5 @@
 const {Database} = require("../Database/Database");
-const {getAllCategories, findCategoryByName, createCategory, updateCategory} = require("../query/category.query");
+const {getAllCategories, findCategoryByName, createCategory, updateCategory, deleteCategory} = require("../query/category.query");
 
 /**
  * getAllCategoriesRepository
@@ -79,8 +79,8 @@ exports.createCategoryRepository = async(name, res, isResponseJSON = true) => {
  */
 exports.updateCategoryRepository = async(category, res) => {
    const db = new Database();
-   return await db.connection.promise().query(updateCategory(), [
-       category.name.toLowerCase().trim(), category.id]).query()
+   return await db.connection.promise().query(updateCategory(),
+       [category.name.toLowerCase().trim(), category.id])
        .then(([rows]) => {
            console.log(`░▒▓ INFO : UPDATE CATEGORY : ${new Date()}`);
            return res.status(201).json(rows);
@@ -101,7 +101,7 @@ exports.updateCategoryRepository = async(category, res) => {
  */
 exports.deleteCategoryRepository = async(id, res) => {
     const db = new Database();
-    return await db.connection.promise().query()
+    return await db.connection.promise().query(deleteCategory(), [id])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : DELETE CATEGORY : ${new Date()}`);
             return res.status(201).json(rows);

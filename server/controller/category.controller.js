@@ -29,6 +29,7 @@ exports.updateCategoryController = async(req, res, next) => {
         let update = new Category();
         update.id = req.body.id;
         update.name = req.body.name;
+        console.log(update)
         return await updateCategoryRepository(update, res);
     } catch (e) {
         next(e);
