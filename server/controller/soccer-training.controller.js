@@ -48,9 +48,8 @@ exports.createTrainingController = async(req, res, next) => {
            return res.status(400).json(`Erreur lors de la requête, les elements suivant ne sont pas pris en compte ou de valeur null : [ ${isStrictObj.value.toString()} ]`);
         }
         // CREATE SOCCER TRAINING
-        const [createMatch] = await createTrainingRepository(res, training, false);
-        console.log(createMatch)
-        training.id = createMatch.insertId;
+        const [createTraining] = await createTrainingRepository(res, training, false);
+        training.id = createTraining.insertId;
         return res.status(201).json(training)
     } catch (e) {
         next(e);

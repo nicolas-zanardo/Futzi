@@ -1,4 +1,5 @@
 class MatchPlay {
+    id;
     date;
     is_local;
     hour_start;

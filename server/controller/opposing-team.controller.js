@@ -39,7 +39,7 @@ exports.updateOpposingTeamController = async(req, res, next) => {
  */
 exports.deleteOpposingTeamController = async(req, res, next) => {
     try {
-        return await deleteOpposingTeamRepository(req.body.id, res);
+       return await deleteOpposingTeamRepository(req.params.id, res);
     } catch (e) {
         next(e);
     }

@@ -19,7 +19,6 @@ const {MatchPlay} = require("../model/MatchPlay.model");
 exports.createMatchPlayController = async(req, res, next) => {
     try {
         const match = new MatchPlay();
-        const insertData = new MatchPlay();
 
         // SET VALUE BODY
         match.date = req.body.date;
@@ -40,50 +39,56 @@ exports.createMatchPlayController = async(req, res, next) => {
 
         // PREPARE TEAM
         const [team] = await findTeamRepository(match.team, res, false);
+        console.log(team)
         match.id_team = team.id;
         // PREPARE OPPOSING TEAM
         const [op_team] = await findOpposingByNameRepository(match.team_opposing, res, false);
+
         if(!op_team) {
             const [createOpTeam] = await createOpposingTeamRepository(match.team_opposing, res, false);
             match.id_team_opposing = parseInt(createOpTeam.insertId);
-            insertData.team_opposing = true;
+            match.team_opposing = true;
         } else {
             match.id_team_opposing = parseInt(op_team.id);
-            insertData.team_opposing = false;
+            match.team_opposing = false;
         }
+
         // -- PREPARE PITCH -- //
         if(req.body.football_pitch) {
             const [pitch] = await findFootballPitchByNameRepository(match.football_pitch, res, false);
             if(!pitch) {
                 const [creatPitch] = await createFootballPitchRepository(match.football_pitch, res, false);
                 match.id_football_pitch = parseInt(creatPitch.insertId);
-                insertData.football_pitch = true;
+                match.football_pitch = true;
             } else {
                 match.id_football_pitch = parseInt(pitch.id);
-                insertData.football_pitch = false;
+                match.football_pitch = false;
             }
         } else {
             match.id_football_pitch = null;
-            insertData.football_pitch = false;
+            match.football_pitch = false;
         }
         // -- PREPARE CATEGORY -- //
         const [category] = await findCategoryByNameRepository(match.category, res, false);
+
         if(!category) {
             const [createCategory] = await createCategoryRepository(match.category, res, false);
             match.id_category = parseInt(createCategory.insertId);
-            insertData.category = true;
+            match.category = true;
         } else {
             match.id_category = parseInt(category.id);
-            insertData.category = false;
+            match.category = false;
         }
-        console.log(match)
+
         // Test Response isValid
-        let isStrictObj = haveKeyNotDefined(match, ['id_football_pitch', 'football_pitch', 'match_of_the_day']);
+        let isStrictObj = haveKeyNotDefined(match, ['id_football_pitch', 'football_pitch', 'match_of_the_day','id']);
         if(isStrictObj.findIt) {
             return res.status(400).json(`Erreur lors de la requête, les elements suivant ne sont pas pris en compte ou de valeur null : [ ${isStrictObj.value.toString()} ]`);
         }
-        await createMatchPlayRepository(res, match, false);
-        return res.status(200).json(insertData);
+        const [createMatch] = await createMatchPlayRepository(res, match, false);
+        match.id = createMatch.insertId;
+        console.log(match)
+        return res.status(201).json(match);
     }catch (e) {
         next(e);
     }

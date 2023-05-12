@@ -32,18 +32,3 @@ exports.updateTeamController = async(req, res, next) => {
         next(e);
     }
 }
-
-/**
- * deleteTeamController
- * @param req
- * @param res
- * @param nnext
- * @returns {Promise<void>}
- */
-exports.deleteTeamController = async(req, res, next) => {
-    try{
-        return
-    } catch (e) {
-        next(e)
-    }
-}
