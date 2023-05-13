@@ -3,7 +3,7 @@ import {DateComponent} from "../../shared/component/date/date.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {DataPredicate} from "../../shared/interface/element-form-html.inteface";
-import {map, Observable, startWith} from "rxjs";
+import {map, Observable, startWith, tap} from "rxjs";
 import {Category} from "../../shared/interface/category.interface";
 import {FootballPitch} from "../../shared/interface/football-pitch.interface";
 import {OpposingTeam} from "../../shared/interface/opposing-team.interface";
@@ -13,11 +13,19 @@ import {OpposingTeamService} from "../../shared/services/oppposing-team/opposing
 import {MatchPlayService} from "../../shared/services/match-play/match-play.service";
 import {MatchPlay} from "../../shared/interface/match-play.inteface";
 import {environment} from "../../../environments/environement.dev";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-match-play',
   templateUrl: './match-play.component.html',
-  styleUrls: ['./match-play.component.scss']
+  styleUrls: ['./match-play.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class MatchPlayComponent implements OnInit{
 
@@ -33,6 +41,9 @@ export class MatchPlayComponent implements OnInit{
   public dataCategory: Category[] = [];
   public dataFootballPitch: FootballPitch[] = [];
   public dataOpposingTeam: OpposingTeam[] = [];
+  columnsToDisplay = ['date', 'category'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  expandedElement?: MatchPlay | null;
   // FORM
   public formCreateMatch: FormGroup = new FormGroup({});
 
@@ -60,6 +71,9 @@ export class MatchPlayComponent implements OnInit{
       this.dataFootballPitch = pitch;
       this._initFilteredOptionsFootballPitch();
     });
+    // DATA MAT TAB
+    this.matchService.getAllMatchPlay().subscribe();
+
 
   }
 

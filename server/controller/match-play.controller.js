@@ -118,7 +118,7 @@ exports.getAllNextMatchPlayController = async(req, res, next) => {
  */
 exports.getAllMatchPlayController = async(req, res, next) => {
     try {
-        return await getAllMatchPlayRepository(res);
+        return await getAllMatchPlayRepository(res, " ORDER BY date ASC");
     } catch (e) {
         next(e);
     }
