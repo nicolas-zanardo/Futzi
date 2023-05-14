@@ -5,6 +5,10 @@ import {User} from "../shared/interface/user.interface";
 import {UserService} from "../shared/services/user/user.service";
 import {SoccerTraining} from "../shared/interface/soccer-training.interface";
 import {SoccerTrainingService} from "../shared/services/soccer-training/soccer-training.service";
+import {MatchPlayService} from "../shared/services/match-play/match-play.service";
+import {SeasonDate} from "../shared/interface/season-date";
+import {MatchPlay} from "../shared/interface/match-play.inteface";
+import {environment} from "../../environments/environement.dev";
 
 
 
@@ -15,49 +19,53 @@ import {SoccerTrainingService} from "../shared/services/soccer-training/soccer-t
 })
 export class DashboardComponent implements OnInit{
   public allTraining: SoccerTraining[] = this.trainingService.allSoccerTraining$.value;
+  public allMatchSeason: MatchPlay[] = this.matchPlayService.allMatchSeason$.value;
+  public allUsers: User[] | [] = this.userService.allUsers$.value;
   public currentUser: User | null = this.authService.currentUser$.value;
   public countTrainingByCategory : {category: string, number_training: number}[] = [];
-  public seasonDate?: string;
   public isAdmin: boolean = this.authService.findRoleUser(ROLE.ADMIN);
-  public allUsers: User[] | [] = this.userService.allUsers$.value;
+  public seasonDate: SeasonDate = {startDate: ' - ', endDate: ' - '};
   public listUsersRole: {ROLE: string[], isValidEmail: boolean }[]  = [];
   public usersROLE_USER: any[] = [];
   public usersROLE_ADMIN: any[] = [];
   public usersROLE_BAN: any[] = [];
   public userInValidAccount: any [] = [];
+  public allMatchPlayed: MatchPlay[] = [];
+  public matchOfTheDay?: MatchPlay;
+
 
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private trainingService: SoccerTrainingService
-  ) {
-    this.trainingService.countTrainingByCategory().subscribe((data: {category: string, number_training: number}[])=> {
-      this.countTrainingByCategory = data;
-    })
-  }
+    private trainingService: SoccerTrainingService,
+    private matchPlayService: MatchPlayService,
+  ) {}
 
   ngOnInit(): void {
     this.seasonDate = this.seasonYear();
-    this.checkAllUsersIsProvide();
-    this.createListUsersRole();
-    this.createGroupROLE();
+    this.trainingService.countTrainingByCategory().subscribe((data: {category: string, number_training: number}[])=> {
+      this.countTrainingByCategory = data;
+    })
+    this.userService.getAllUsers().subscribe((users: User[]) => {
+      this.allUsers = users;
+      this.createListUsersRole();
+      this.createGroupROLE();
+    });
     this.trainingService.getAllSoccerTraining().subscribe((training: SoccerTraining[]) =>{
       this.allTraining = training;
     })
-
-
+    this.matchPlayService.getAllMatchSeason(this.seasonDate).subscribe((allMatchesInSeason: MatchPlay[]) =>{
+      this.allMatchSeason = allMatchesInSeason;
+      this.allMatchPlayed = this.matchPlayed();
+    })
+    this.matchPlayService.getNextMatchOfTheDay().subscribe((match: MatchPlay[]) => {
+      this.matchOfTheDay = match[0];
+    })
   }
 
-  private checkAllUsersIsProvide(): void {
-    if(!this.allUsers.length) {
-      this.userService.getAllUsers().subscribe((users: User[]) => {
-        this.allUsers = users;
-        this.createListUsersRole();
-        this.createGroupROLE();
-      });
-
-    }
+  private matchPlayed(): MatchPlay[] {
+    return this.allMatchSeason.filter((match: MatchPlay) => new Date(match.date).getTime() <  Date.now())
   }
 
   private createGroupROLE(): void {
@@ -116,15 +124,18 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  private seasonYear(): string {
+  private seasonYear(): SeasonDate {
     let year = new Date().getFullYear();
     let month = new Date().getMonth();
-    let season: string;
     if(month >= 9) {
-      season = year+'/'+(year+1);
+      this.seasonDate.startDate = `${year}-09-01`;
+      this.seasonDate.endDate = `${year+1}-09-01`;
     } else {
-      season = (year-1)+'/'+year;
+      this.seasonDate.startDate = `${year-1}-09-01`;
+      this.seasonDate.endDate = `${year}-09-01`;
     }
-    return season;
+    return this.seasonDate;
   }
+
+  protected readonly environment = environment;
 }

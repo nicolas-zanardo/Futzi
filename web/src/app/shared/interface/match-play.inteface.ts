@@ -1,4 +1,5 @@
 export interface MatchPlay {
+  id: number,
   date: string,
   is_local: boolean,
   hour_start: string,

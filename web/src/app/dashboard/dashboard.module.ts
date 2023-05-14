@@ -18,6 +18,7 @@ import {
   DialogDeleteSoccerTrainingComponent
 } from "./soccer-training/dialog-delete-soccer-training/dialog-delete-soccer-training.component";
 import {MatchPlayComponent} from "./match-play/match-play.component";
+import { DialogDeleteMatchPlayComponent } from './match-play/dialog-delete-match-play/dialog-delete-match-play.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {MatchPlayComponent} from "./match-play/match-play.component";
     FootballPitchComponent,
     DialogDeleteSoccerTrainingComponent,
     MatchPlayComponent,
+    DialogDeleteMatchPlayComponent,
   ],
   imports: [
     CommonModule,

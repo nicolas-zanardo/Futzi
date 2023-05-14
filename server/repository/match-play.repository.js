@@ -1,5 +1,5 @@
 const {Database} = require("../Database/Database");
-const {createMatchPlay, getAllMatch, deleteMatch, findMatchOfTheDayInTheSameDate} = require("../query/match-play.query");
+const {createMatchPlay, getAllMatch, deleteMatch, findMatchOfTheDayInTheSameDate, countAllMatchInSeason} = require("../query/match-play.query");
 
 /**
  * createMatchPlayRepository
@@ -36,12 +36,12 @@ exports.createMatchPlayRepository = async(res, match, isResponseJSON = true) => 
  * @param CONDITION_SQL string
  * @returns {Promise<unknown>}
  */
-exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "") => {
+exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "", values = []) => {
     const db = new Database()
     return await db.connection.promise().query(
-        getAllMatch(CONDITION_SQL)
+        getAllMatch(CONDITION_SQL), values
     ).then(([rows]) => {
-        console.log(`░▒▓ INFO :CREATE MATCH : ${new Date()}`);
+        console.log(`░▒▓ INFO : GET ALL MATCH : ${new Date()}`);
         return res.status(200).json(rows);
     }).catch(err => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);

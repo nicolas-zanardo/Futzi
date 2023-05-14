@@ -175,7 +175,6 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     if(this.formCreateTraining.valid) {
       this.trainingService.createSoccerTraining(this.formCreateTraining.getRawValue()).subscribe({
         next: (createSoccer: SoccerTraining) => {
-          console.log(createSoccer)
           this.allSoccerFootball.unshift(this.formCreateTraining.getRawValue());
           this.dataSource.data = this.allSoccerFootball;
           // ADD data input football_pitch

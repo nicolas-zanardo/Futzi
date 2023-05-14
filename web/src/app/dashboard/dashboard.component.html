@@ -28,18 +28,26 @@
         <mat-card-content>
           <hr>
           <div class="d-flex justify-content-between p-3">
-            <div class="me-4">Saison :</div><div>{{ seasonDate }}</div>
+            <div class="me-4">Saison :</div><div>{{ seasonDate.startDate | date:'YYYY/MM' }} - {{ seasonDate.endDate | date: 'YYY/MM' }}</div>
           </div>
           <div class="flex-column  p-3">
-            <div class="d-flex me-4 justify-content-between"><b>Match Total :</b><div>20</div></div>
-            <div class="d-flex me-4 justify-content-between"><b>Match Jouer :</b><div>20</div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Match Total :</b><div>{{allMatchSeason.length}}</div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Match Jouer :</b><div>{{allMatchPlayed.length}}</div></div>
           </div>
           <div class="pt-3 px-3">
-            <h4>Prochain match</h4>
-            <div>à <span>Saint Germain-en-Laye</span></div>
+            <div class="d-flex align-items-center">
+              <h4>Prochain match :</h4>
+              <div class="ms-3 mb-1"><b>{{matchOfTheDay?.team_opposing | uppercase}}</b></div>
+            </div>
+            <div>à <b>{{(matchOfTheDay?.is_local)? (environment.teamName | uppercase): (matchOfTheDay?.team_opposing | uppercase)}}</b></div>
+            <div class="d-flex justify-content-start align-items-center">
+              <span class="me-3">Catégorie</span>
+              <button mat-button color="primary">{{matchOfTheDay?.category}}</button>
+            </div>
+
           </div>
           <div class="d-flex align-items-center px-3">
-            <div class="d-flex me-4"><b>date :</b></div><h5>20/12/2023</h5>
+            <div class="d-flex align-items-center me-4"><b>date: </b> <span>{{matchOfTheDay?.date | date: 'YYYY/MM/dd'}}</span></div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -75,7 +83,7 @@
             <div class="me-4">Inscrit :</div><div>{{ listUsersRole.length }}</div>
           </div>
           <div class="flex-column  p-3">
-            <div class="d-flex me-4 justify-content-between"><b>Actif</b><div class="colorActif"><b>{{usersROLE_ADMIN.length}}</b></div></div>
+            <div class="d-flex me-4 justify-content-between"><b>Membre</b><div class="colorActif"><b>{{usersROLE_ADMIN.length}}</b></div></div>
             <div class="d-flex me-4 justify-content-between"><b>Ban</b><div class="colorInactif"><b>{{usersROLE_BAN.length}}</b></div></div>
             <div class="d-flex me-4 justify-content-between"><b>Demande</b><div class="colorDemande"><b>{{usersROLE_USER.length}}</b></div></div>
             <div class="d-flex me-4 justify-content-between"><b>Email non verifié</b><div class="colorDemande"><b>{{userInValidAccount.length}}</b></div></div>

@@ -1,20 +1,21 @@
 table {
+  table-layout: fixed;
   width: 100%;
 }
 
-tr.example-detail-row {
+tr.detail-row {
   height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.element-row:not(.example-expanded-row):hover {
   background: whitesmoke;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.element-row:not(.example-expanded-row):active {
   background: #efefef;
 }
 
-.example-element-row td {
+.element-row td {
   border-bottom-width: 0;
 }
 
@@ -23,25 +24,31 @@ tr.example-element-row:not(.example-expanded-row):active {
   display: flex;
 }
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
-
-.example-element-symbol {
+.element-symbol {
   font-weight: bold;
   font-size: 40px;
   line-height: normal;
 }
 
-.example-element-description {
+.element-description {
   padding: 16px;
 }
 
-.example-element-description-attribution {
+
+.element-description {
+  padding: 15px 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.element-description-attribution {
   opacity: 0.5;
+}
+
+.word-mat {
+  word-wrap: break-word !important;         /* All browsers since IE 5.5+ */
+  overflow-wrap: break-word !important;     /* Renamed property in CSS3 draft spec */
+  width: 100% !important;
 }

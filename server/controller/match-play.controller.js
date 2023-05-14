@@ -118,7 +118,7 @@ exports.getAllNextMatchPlayController = async(req, res, next) => {
  */
 exports.getAllMatchPlayController = async(req, res, next) => {
     try {
-        return await getAllMatchPlayRepository(res, " ORDER BY date ASC");
+        return await getAllMatchPlayRepository(res, " ORDER BY date DESC");
     } catch (e) {
         next(e);
     }
@@ -176,10 +176,28 @@ exports.getMatchOfTheDayController = async(req, res, next) => {
  * @param next
  * @returns {Promise<*>}
  */
-exports.getTehTenLastMatchController = async(req, res, next) => {
+exports.getTenLastMatchController = async(req, res, next) => {
     try {
         return  await getAllMatchPlayRepository(res, "WHERE date >= DATE( NOW() ) ORDER BY match_play.date ASC LIMIT 10");
     } catch (e) {
         next(e);
     }
 };
+
+/**
+ * getCountTotalMatchSeason
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+exports.getCountAllMatchInSeasonController = async(req, res, next) => {
+    try {
+        return await getAllMatchPlayRepository(
+            res,
+            "WHERE date between ? and ?",
+            [req.body.startDate, req.body.endDate]);
+    } catch (e) {
+        next(e);
+    }
+}
