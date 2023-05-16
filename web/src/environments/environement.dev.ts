@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  images : "assets/images/",
   apiURL : "http://localhost:3000/api",
-  teamName: "osny"
+  imagesPUBLIC : "http://localhost:3000/api/images/public/",
+  teamName: "osny",
+
 };
 
 /*

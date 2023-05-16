@@ -13,9 +13,9 @@ export class SlideshowComponent implements OnInit {
 
 
   public imgSlide: { css: string }[] = [
-    {css: 'background-image: url('+environment.images+'slideshow/slide-1.jpg) !important; background-position: top'},
-    {css: 'background-image: url('+environment.images+'slideshow/slide-2.jpg) !important; background-position: top'},
-    {css: 'background-image: url('+environment.images+'slideshow/slide-3.jpg) !important; background-position: top'},
+    {css: 'background-image: url('+environment.imagesPUBLIC+'slideshow/slide-1.jpg) !important; background-position: top'},
+    {css: 'background-image: url('+environment.imagesPUBLIC+'slideshow/slide-2.jpg) !important; background-position: top'},
+    {css: 'background-image: url('+environment.imagesPUBLIC+'slideshow/slide-3.jpg) !important; background-position: top'},
   ]
 
   public ngOnInit(): void {

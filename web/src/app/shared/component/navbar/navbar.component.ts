@@ -15,7 +15,7 @@ import {ROLE} from "../../enum/role";
 export class NavbarComponent implements OnInit {
 
   @Input() public isLogged!: boolean | null ;
-  public logo: string = `${environment.images}LOGO_OSNY.png`;
+  public logo: string = `${environment.imagesPUBLIC}LOGO_OSNY.png`;
   public jwtToken?: JwtToken;
   public subscription?: Subscription;
   public isBanUser: boolean = true;
@@ -51,4 +51,6 @@ export class NavbarComponent implements OnInit {
     this.subscription?.unsubscribe();
     this.authService.logout();
   }
+
+    protected readonly environment = environment;
 }
