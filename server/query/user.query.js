@@ -2,8 +2,6 @@
  * SQL - insertUser
  * @returns {string} INSERT INTO user (id, fisrtname, lastname, email, password, ROLE) VALUES (user)
  */
-const {response} = require("express");
-
 exports.insertUser = () => {
     return "INSERT INTO user (firstname, lastname, phone_number, email, password, ROLE, is_valid_email, createdAt, updateAt) VALUES (?,?,?,?,?,?,?, NOW(), NOW())";
 }
@@ -29,7 +27,7 @@ exports.updateUserCredential = () => {
  * @returns {string} SELECT email FROM user where email=?
  */
 exports.findUserByEmail = () => {
-    return "SELECT * FROM user where email=?";
+    return "SELECT * FROM user WHERE email=?";
 }
 
 /**
@@ -56,6 +54,10 @@ exports.updateRoleUser = () => {
     return "UPDATE user SET ROLE=? WHERE id=?"
 }
 
+/**
+ * deleteUser
+ * @returns {string}
+ */
 exports.deleteUser = () => {
     return "DELETE FROM user WHERE id=?"
 }

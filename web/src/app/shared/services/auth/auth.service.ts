@@ -162,7 +162,7 @@ export class AuthService {
    * @return Observable<SigninModel | string | null>
    * @param credentials: object<string>
    */
-  public login(credentials: { login: string, password: string }): Observable<ResponseLogin | string | null> {
+  public  login(credentials: { login: string, password: string }): Observable<ResponseLogin | string | null> {
     return this.http.post<ResponseLogin>(`${environment.apiURL}/auth/login`, credentials).pipe(
       tap((resp) => {
         this.setValueToken(resp.token);

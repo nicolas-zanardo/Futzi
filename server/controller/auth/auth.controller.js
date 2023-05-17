@@ -1,7 +1,7 @@
 const jsonWebToken = require('jsonwebtoken');
 const jwt_decode = require("jwt-decode");
 const fs = require('fs');
-const {authUserLoginRepository, authFindUserByIdForTokenRepository} = require("../repository/auth.repository");
+const {authUserLoginRepository, authFindUserByIdForTokenRepository} = require("../../repository/auth.repository");
 
 /**
  * RSA
@@ -25,11 +25,9 @@ const REGEX_TOKEN = /^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)
  */
 exports.loginController = async(req, res, next) => {
     try {
-
         return await authUserLoginRepository(req, res)
     } catch (e) {
-        console.log(e)
-        next()
+        next(e)
     };
 }
 

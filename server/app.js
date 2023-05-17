@@ -1,17 +1,22 @@
 const createError = require('http-errors');
 const express = require('express');
+const session = require('express-session')
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
+const passport = require('passport');
+const {googleStrategy} = require("./strategy/google");
+require('dotenv').config();
+
 
 const indexRouter = require('./routes');
 
-const app = express();
 
+const app = express();
 // Cross-origin resource
 app.use(cors({
-  origin: "http://localhost:4200",
+  origin: process.env.CROSS_URL,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -28,6 +33,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// required for passport
+app.use(session({
+  secret: process.env.SECRET_SESSION,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true } })); // session secret
+app.use(passport.initialize(undefined));
+app.use(passport.session(undefined)); // persistent login sessions
+googleStrategy();
 
 app.use(indexRouter);
 
