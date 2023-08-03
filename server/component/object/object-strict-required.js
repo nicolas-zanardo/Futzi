@@ -9,11 +9,10 @@
 exports.haveKeyNotDefined = (obj, arrayKeyNotStrict = []) => {
     let keyNotDefined = {findIt:false, value:[]};
     for (const [key, value] of Object.entries(obj)) {
-        if(!value && value != false && !arrayKeyNotStrict.find(keyNotStrict => keyNotStrict == key)) {
+        if(!value && value !== false && !arrayKeyNotStrict.find(keyNotStrict => keyNotStrict === key)) {
             keyNotDefined.findIt = true;
             keyNotDefined.value.push(key);
         }
     }
-
     return keyNotDefined;
 };

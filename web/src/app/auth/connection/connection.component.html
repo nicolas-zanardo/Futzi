@@ -1,15 +1,24 @@
 <div class="d-flex full-page justify-content-center align-items-center p-5">
 
+
   <mat-card>
 <!--    HEADER-->
     <div class="barre-light"></div>
     <mat-card-title class="p-4 d-flex justify-content-between align-items-center"><h1>Connexion</h1><mat-icon fontIcon="lock" class="mx-2"></mat-icon></mat-card-title>
     <div class="barre-second"></div>
 
+    <div class="w-100 d-flex flex-column justify-content-center align-items-center p-5 spinner-with" *ngIf="isAuthAsk">
+      <div class="mb-2">
+        <mat-spinner></mat-spinner>
+      </div>
+      <h2>Connexion</h2>
+    </div>
+
+
     <mat-error *ngIf="errorSend" class="px-5 pt-3 w-100 d-flex justify-content-center border-1"><span>{{errorSend}}</span></mat-error>
 
 <!--    FORM-->
-    <form class="form" [formGroup]="form" (submit)="submit()">
+    <form class="form" [formGroup]="form" (submit)="submit()" *ngIf="!isAuthAsk">
 
 <!--      EMAIL-->
       <mat-form-field class="full-width">
@@ -37,8 +46,14 @@
         </mat-error>
       </mat-form-field>
 
+      <a [href]="googleAuth" class="border border-0 rounded rounded-5 shadow p-1 bg-dark-subtle w-100 d-flex justify-content-center align-items-center">
+        <div class="me-2"><img [src]="googleLogo" alt="google" width="30"></div>
+        <div>connexion</div>
+      </a>
+
+
 <!--      BTN SUBMIT-->
-      <div class="d-flex justify-content-around mt-4">
+      <div class="d-flex justify-content-around mt-5">
         <button mat-button (click)="inscription()">Inscription</button>
         <button mat-raised-button color="primary">Connectez-vous</button>
       </div>
@@ -48,5 +63,3 @@
   </mat-card>
 
 </div>
-
-

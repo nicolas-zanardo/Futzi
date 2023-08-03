@@ -4,13 +4,13 @@
 
 
   <h4>Contact Club</h4>
-  <form class="form" class="mb-5" [formGroup]="formContact" (submit)="submitFormUserContact()">
+  <form class="mb-5" [formGroup]="formContact" (submit)="submitFormUserContact()">
     <mat-form-field appearance="fill"  class="w-100">
       <mat-label>Nom du contact</mat-label>
       <mat-select required [(value)]="selected" formControlName="contact">
 
         <mat-form-field class="w-100 pt-3 px-3">
-          <mat-label>Recheche</mat-label>
+          <mat-label>Recherche</mat-label>
           <input matInput (keyup)="filterUserList()" formControlName="search">
         </mat-form-field>
 
@@ -20,7 +20,7 @@
       </mat-select>
     </mat-form-field>
     <div class="d-flex justify-content-end">
-      <button type="buton" class="" mat-raised-button color="primary"><mat-icon matSuffix>done</mat-icon>Modifier</button>
+      <button mat-raised-button color="primary"><mat-icon matSuffix>done</mat-icon>Modifier</button>
     </div>
   </form>
 

@@ -3,7 +3,7 @@
  * @returns {string} INSERT INTO user (id, fisrtname, lastname, email, password, ROLE) VALUES (user)
  */
 exports.insertUser = () => {
-    return "INSERT INTO user (firstname, lastname, phone_number, email, password, ROLE, is_valid_email, createdAt, updateAt) VALUES (?,?,?,?,?,?,?, NOW(), NOW())";
+    return "INSERT INTO user (firstname, lastname, phone_number, email, password, ROLE, is_valid_email, tokenURL, token_time_validity, createdAt, updateAt) VALUES (?,?,?,?,?,?,?,?,?,NOW(),NOW())";
 }
 
 /**
@@ -28,6 +28,14 @@ exports.updateUserCredential = () => {
  */
 exports.findUserByEmail = () => {
     return "SELECT * FROM user WHERE email=?";
+}
+
+/**
+ * findUserByTokenURL
+ * @returns {string}
+ */
+exports.findUserByTokenURL = () => {
+    return "SELECT * FROM user WHERE tokenURL=?"
 }
 
 /**

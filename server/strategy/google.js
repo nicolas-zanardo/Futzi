@@ -2,15 +2,11 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20');
 const {findUserByEmail} = require("../query/user.query");
 const {Database} = require("../Database/Database");
-const jsonWebToken = require("jsonwebtoken");
-const fs = require('fs');
+const {createUserStrategyRepository, updateUserAuthSocialTokenRepository} = require("../repository/user.repository");
+const {User} = require("../model/User.model");
+const bcrypt = require("bcrypt");
 
-/**
- * RSA
- * @type {string}
- */
-const RSA_PRIVATE = fs.readFileSync('RSA/key', 'utf8');
-
+const addTimeValidityToken = 1000*30;
 
 exports.googleStrategy = () => {
 
@@ -41,33 +37,36 @@ exports.googleStrategy = () => {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: process.env.GOOGLE_REDIRECT_URL,
-            scope: [ 'profile','email' ],
+            scope: [ 'profile','email'],
             passReqToCallback: false
         },
         async function verify(accessToken, refreshToken, profile, cb) {
             const db = new Database();
-            return await db.connection.promise().query(findUserByEmail(), ["nicolas@zanardo.com"]).then(([rows]) => {
-                const user = rows[0]
-                user.password = null;
-                if (rows.length > 0) {
-                    jsonWebToken.sign({ROLE: user.ROLE, email: user.email},
-                        RSA_PRIVATE, {
-                            algorithm: 'RS256',
-                            subject: user.id.toString(),
-                            expiresIn: 60 * 15// 15min
-                        }, (err, token) => {
-                            if (err) {
-                                console.log(`✘ 🅴🆁🆁🅾🆁 ${new Date()} : Verify TOKEN => ${err}`);
-                                user.token = null;
-                                return cb(err, user);
-                            };
-                            console.log(`░▒▓ USER IS LOGIN - TOKEN CREATED AT : ${new Date()}`);
-                            user.token = token;
-                            return cb(null, user);
-                        });
-
+            return await db.connection.promise().query(findUserByEmail(), [profile.emails[0].value]).then(([rows]) => {
+                let user = rows[0]
+                if (user) {
+                    user.tokenURL = accessToken;
+                    user.tokenTimeValidity = Date.now() + addTimeValidityToken;
+                    updateUserAuthSocialTokenRepository(accessToken, user.tokenTimeValidity, user.id);
+                    return cb(null, user);
+                } else {
+                    const newUser = new User;
+                    newUser.email = profile.emails[0].value;
+                    newUser.isValidMail = profile.emails[0].verified;
+                    newUser.lastname = profile.name.familyName;
+                    newUser.firstname = profile.name.givenName;
+                    newUser.phone_number = "VEUILLEZ RENSEIGNER VOTRE NUMERO DE TELEPHONE";
+                    newUser.ROLE = '["USER"]';
+                    newUser.tokenURL = accessToken;
+                    newUser.tokenTimeValidity = Date.now() + addTimeValidityToken;
+                    let PWD = "";
+                    for (let i = 0; i < 30; i++) {
+                        PWD += String.fromCharCode(Math.floor(Math.random() * 128));
+                    }
+                    newUser.password = bcrypt.hashSync(PWD, bcrypt.genSaltSync(16));
+                    createUserStrategyRepository(newUser);
+                    return cb(null, newUser);
                 }
-
             })
 
         })

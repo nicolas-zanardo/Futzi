@@ -40,8 +40,9 @@ CREATE TABLE user(
         ROLE                 Longtext NOT NULL ,
         is_valid_email       Bool NOT NULL ,
         token_reset_password Varchar (255) ,
+        tokenURL             Varchar (255) ,
         token_valid_email    Varchar (255) ,
-        token_time_validity  Datetime ,
+        token_time_validity  BigInt ,
         createdAt            Datetime NOT NULL ,
         updateAt             Datetime NOT NULL ,
         email                Varchar (255) NOT NULL ,
@@ -153,7 +154,7 @@ CREATE TABLE result(
 # INSERT: FIRST USER
 #
 # info CREDENTIAL :
-#   email : nicolas@zanardo.com,
+#   email : nicolas@zanardo.com
 #   password: aa123456789
 #------------------------------------------------------------
 

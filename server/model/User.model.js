@@ -4,6 +4,9 @@ class User {
     lastname;
     phone_number;
     email;
+    tokenURL;
+    tokenTimeValidity;
+    isValidMail;
     old_email;
     password;
     ROLE;

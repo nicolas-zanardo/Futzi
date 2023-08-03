@@ -14,9 +14,10 @@ const indexRouter = require('./routes');
 
 
 const app = express();
+
 // Cross-origin resource
 app.use(cors({
-  origin: process.env.CROSS_URL,
+  origin: process.env.CORS_URL,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

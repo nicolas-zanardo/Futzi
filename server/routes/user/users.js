@@ -8,13 +8,16 @@ const {
     updateUserCredentialController,
     getAllUserController,
     updateRoleUserController,
-    deleteUserController
+    deleteUserController,
+    findUserByTokenURLController
 } = require("../../controller/user.controller");
 
 /**
  * CRUD USER
  */
 users.post("/create", createUserController);
+users.get("/token-url/:token", findUserByTokenURLController);
+users.post("/social-auth", )
 users.put("/edit-info", isLogged, updateUserInfoController);
 users.put("/edit-credential", isLogged, updateUserCredentialController);
 users.put("/edit-role", isLoggedAdmin, updateRoleUserController);

@@ -18,9 +18,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {SoccerTraining} from "../../shared/interface/soccer-training.interface";
-import {
-  DialogDeleteSoccerTrainingComponent
-} from "../soccer-training/dialog-delete-soccer-training/dialog-delete-soccer-training.component";
 import {DialogDeleteMatchPlayComponent} from "./dialog-delete-match-play/dialog-delete-match-play.component";
 
 @Component({
@@ -77,6 +74,7 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
 
   ngOnInit() {
     this.createForm();
+    this.matchPlayIsProvider();
     // DATA OPTION INPUT
     this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
       this.dataCategory = categories;
@@ -90,13 +88,13 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
       this.dataFootballPitch = pitch;
       this._initFilteredOptionsFootballPitch();
     });
-    this.matchPlayIsProvider();
   }
 
   ngAfterViewInit() {
     this.dataSource!.paginator = this.paginator!;
     this.dataSource!.sort = this.sort!;
   }
+
   //###################### PROVIDER ##############################
   private matchPlayIsProvider() {
     this.matchService.getAllMatchPlay().subscribe((matchPlay: MatchPlay[]) => {
@@ -167,7 +165,6 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
       exitAnimationDuration,
       data: soccerTraining,
     });
-
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
         this.deleteMatchPlay(result)
@@ -179,7 +176,6 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -219,8 +215,8 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
       // FORMAT DATE
       let dateObj = this.formCreateMatch.get("date")?.value;
       this.formCreateMatch.get("date")?.setValue(`${dateObj.getFullYear()}-${dateObj.getMonth()+1}-${dateObj.getDate()}`);
-      // TRANSFORM VALUE STRING TO NUMBER
-      this.formCreateMatch.get("is_local")?.setValue(parseInt(this.formCreateMatch.get('is_local')?.value));
+      // TRANSFORM VALUE STRING TO BOOLEAN
+      this.formCreateMatch.get("is_local")?.setValue(this.formCreateMatch.get("is_local")?.value !== "0");
       // REQUEST HTTP
       this.matchService.createSoccerMatch(this.formCreateMatch.getRawValue()).subscribe({
         next: (match: MatchPlay) => {
@@ -232,7 +228,7 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
           if(match.team_opposing) {
             this.opposingTeamService.getAllOpposingTeam().subscribe((opposingTeam: OpposingTeam[]) => {
               this.dataOpposingTeam = opposingTeam;
-              this.filteredOptionsOpposingTeam = this.opposingTeamService.allOpposingTeam$.asObservable();
+              // this.filteredOptionsOpposingTeam = this.opposingTeamService.allOpposingTeam$.asObservable();
             });
             this._initFilteredOptionsOpposingTeam();
           }
@@ -240,7 +236,7 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
           if(match.football_pitch) {
             this.footballPitchService.getAllFootballPitch().subscribe((footballPitch: FootballPitch[]) => {
               this.dataFootballPitch = footballPitch;
-              this.filteredOptionsFootballPitch = this.opposingTeamService.allOpposingTeam$.asObservable();
+              // this.filteredOptionsFootballPitch = this.opposingTeamService.allOpposingTeam$.asObservable();
             });
             this._initFilteredOptionsFootballPitch();
           }
@@ -248,7 +244,7 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
           if(match.category) {
             this.categoryService.getAllCategory().subscribe((categories: Category[]) => {
               this.dataCategory = categories;
-              this.filteredOptionsCategory = this.categoryService.allCategory$.asObservable();
+              // this.filteredOptionsCategory = this.categoryService.allCategory$.asObservable();
             });
             this._initFilteredOptionsCategory();
           }
@@ -273,11 +269,10 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
   public deleteMatchPlay(result: MatchPlay) {
     if(result && result.id) {
       this.matchService.deleteMatchPlay(result.id).subscribe(()=> {
-        let newArrayMatchPlay: MatchPlay[] = this.dataMatch.filter((matchPaly: MatchPlay) => {
-          return matchPaly.id != result.id;
+        this.matchService.getAllMatchPlay().subscribe((matchPlay: MatchPlay[]) => {
+          this.dataMatch = matchPlay;
+          this.dataSource.data = this.dataMatch;
         })
-        this.dataMatch = newArrayMatchPlay;
-        this.dataSource.data = newArrayMatchPlay;
       })
     }
   }

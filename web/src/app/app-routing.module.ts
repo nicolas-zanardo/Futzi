@@ -4,14 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import {InscriptionComponent} from "./auth/inscription/inscription.component";
 import {ConnectionComponent} from "./auth/connection/connection.component";
 import {DataUserGuard} from "./shared/guards/user/data-user.guard";
+import {SocialComponent} from "./auth/social/social.component";
+import {HomeComponent} from "./global/home/home.component";
 
 
 
 const routes: Routes = [
   { path: "",  loadChildren : () => import('./global/global-routing.module').then(m=>m.GlobalRoutingModule) },
+  { path: "auth/:token", component: SocialComponent},
   { path: "member",  loadChildren : () => import('./dashboard/dashboard-routing.module').then(m=>m.DashboardRoutingModule) },
-  { path: "connection", canActivate: [DataUserGuard], component: ConnectionComponent },
-  { path: "registration", canActivate: [DataUserGuard], component: InscriptionComponent }
+  { path: "connexion", canActivate: [DataUserGuard], component: ConnectionComponent },
+  { path: "inscription", canActivate: [DataUserGuard], component: InscriptionComponent }
 
 ]; // sets up routes constant where you define your routes
 

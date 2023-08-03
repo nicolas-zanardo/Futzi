@@ -151,6 +151,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
    * @description Btn to delete soccer training
    * @param enterAnimationDuration
    * @param exitAnimationDuration
+   * @param soccerTraining
    */
   public openDialog(enterAnimationDuration: string, exitAnimationDuration: string, soccerTraining: SoccerTraining) {
     const dialogRef = this.dialog.open(DialogDeleteSoccerTrainingComponent, {
@@ -175,8 +176,7 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     if(this.formCreateTraining.valid) {
       this.trainingService.createSoccerTraining(this.formCreateTraining.getRawValue()).subscribe({
         next: (createSoccer: SoccerTraining) => {
-          this.allSoccerFootball.unshift(this.formCreateTraining.getRawValue());
-          this.dataSource.data = this.allSoccerFootball;
+          this.getAllTraining();
           // ADD data input football_pitch
           if(createSoccer.id_football_pitch) {
             this.footballPitchService.getAllFootballPitch().subscribe((pitch: FootballPitch[]) => {
@@ -198,20 +198,26 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
           console.log(err?.error)
         },
       })
-
     }
   }
 
   private deleteSoccerTraining(result: SoccerTraining) {
     if(result && result.id) {
-      this.trainingService.deleteSoccerTraining(result.id).subscribe(() => {
-        let newArraySoccerFootball: SoccerTraining[] = this.allSoccerFootball.filter((training: SoccerTraining) => {
-          return training.id != result.id;
-        })
-        this.allSoccerFootball = newArraySoccerFootball;
-        this.dataSource.data = newArraySoccerFootball;
+      this.trainingService.deleteSoccerTraining(result.id).subscribe({
+        next: () => {
+          this.getAllTraining();
+        }
       })
     }
+  }
+
+  private getAllTraining() {
+    this.trainingService.getAllSoccerTraining().subscribe({
+      next: (allSoccerTraining: SoccerTraining[]) => {
+        this.dataSource.data = allSoccerTraining;
+        this.allSoccerFootball = allSoccerTraining;
+      }
+    })
   }
 
 }

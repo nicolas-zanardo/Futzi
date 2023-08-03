@@ -5,3 +5,7 @@
 exports.authFindUserByIdForToken = () => {
     return "SELECT id, firstname, lastname, phone_number, email, ROLE, is_valid_email, id_category FROM user where id=?";
 }
+
+exports.authSocialTokenURl = () => {
+    return "UPDATE user SET tokenURL=?, token_time_validity=? WHERE id=?"
+}

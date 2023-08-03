@@ -8,7 +8,7 @@
 <div mat-dialog-content>
   <b>Voulez-vous vraiment supprimer ce match ?</b>
   <div class="d-flex justify-content-center align-items-center mt-3 border border-1 rounded p-3 bg-light">
-    <button class="btn btn-primary mx-2 p-2">{{data.category}}</button> <i>{{data.date | date:'yyyy/M/d'}} {{data.hour_start}} {{data.team_opposing}} | {{data.football_pitch}} </i>
+    <button class="btn btn-primary mx-2 p-2">{{data.category}}</button> <i>{{data.date | date:'yyyy/M/d'}} {{data.hour_start}} {{data.team_opposing}} | {{(data.football_pitch)?data.football_pitch:"extérieur"}} </i>
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-end">

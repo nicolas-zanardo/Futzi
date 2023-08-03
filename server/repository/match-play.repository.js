@@ -34,6 +34,7 @@ exports.createMatchPlayRepository = async(res, match, isResponseJSON = true) => 
  * getAllMatchPlayRepository
  * @param res
  * @param CONDITION_SQL string
+ * @param values
  * @returns {Promise<unknown>}
  */
 exports.getAllMatchPlayRepository = async(res, CONDITION_SQL = "", values = []) => {

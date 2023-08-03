@@ -3,6 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {RegexUser} from "../../shared/enum/regex-user";
+import {environment} from "../../../environments/environement.dev";
+import {MatDialog} from "@angular/material/dialog";
 
 
 @Component({
@@ -15,8 +17,12 @@ export class ConnectionComponent implements OnInit{
   public form!: FormGroup;
   public hide = true;
   public errorSend: string | undefined;
+  public googleLogo: string = `${environment.imagesPUBLIC}button/Google__G__Logo.png`;
+  public googleAuth : string = `${environment.apiURL}/auth/google`;
+  public isAuthAsk : boolean = false;
 
   constructor(
+    public dialog: MatDialog,
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService) {
@@ -38,18 +44,26 @@ export class ConnectionComponent implements OnInit{
     })
   }
 
+
   submit(): void {
     if(this.form.valid) {
+      this.isAuthAsk = true;
       this.authService.login(this.form.getRawValue()).subscribe({
         next: () => {
           this.router.navigateByUrl('/member').then()},
-        error: (err) => this.errorSend = err?.error,
-        complete: () => console.warn('INFO : CONNECTION USER ', new Date())
+        error: (err) => {
+          this.errorSend = err?.error;
+          this.isAuthAsk = false;
+        },
+        complete: () => {
+          console.warn('INFO : CONNECTION USER ', new Date());
+          this.isAuthAsk = false;
+        }
       });
     }
   }
 
   inscription(): void {
-    this.router.navigate(['/registration']);
+    this.router.navigate(['/inscription']);
   }
 }

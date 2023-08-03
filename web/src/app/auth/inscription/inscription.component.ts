@@ -91,7 +91,7 @@ export class InscriptionComponent implements OnInit{
   }
 
   public connection(): void {
-    this.router.navigate(['/connection']);
+    this.router.navigate(['/connexion']);
   }
 
 }
