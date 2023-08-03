@@ -1,7 +1,7 @@
 const jsonWebToken = require('jsonwebtoken');
 const jwt_decode = require("jwt-decode");
 const fs = require('fs');
-const {authUserLoginRepository, authFindUserByIdForTokenRepository} = require("../repository/auth.repository");
+const {authUserLoginRepository, authFindUserByIdForTokenRepository, authUserLoginSocialRepository} = require("../../repository/auth.repository");
 
 /**
  * RSA
@@ -21,16 +21,15 @@ const REGEX_TOKEN = /^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)
  * AUTH - login
  * @param req Request
  * @param res Response
+ * @param next
  * @returns {Promise<void>}
  */
 exports.loginController = async(req, res, next) => {
     try {
-
         return await authUserLoginRepository(req, res)
     } catch (e) {
-        console.log(e)
-        next()
-    };
+        next(e)
+    }
 }
 
 /**
@@ -78,7 +77,7 @@ exports.currentUserController = async(req, res) => {
                 return res.status(498).json("FAKE  - TOKEN PROVIDE");}
             await jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
                 if (err) { console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken Verify =>`, err);
-                    return res.status(200).json(err.message)};
+                    return res.status(200).json(err.message)}
                 if (decode) { return authFindUserByIdForTokenRepository(res, decode); }
                 else { console.log(`░▒▓ INFO : CURRENT USER ${new Date()} : jsonWebToken --DON'T HAVE A DECODE--`, err);
                     return res.status(200).end();}
@@ -89,5 +88,28 @@ exports.currentUserController = async(req, res) => {
         res.status(200).end();}
 }
 
+/**
+ * authSocialRedirectController
+ * @param req
+ * @param res
+ */
+exports.authSocialRedirectController = (req, res) => {
+    res.redirect("http://localhost:4200/auth/"+req.user.tokenURL)
+}
 
+/**
+ * authSocialValidTokenController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
+exports.authSocialValidTokenController = async (req, res, next) => {
+    try {
+        return await authUserLoginSocialRepository(req, res);
+    } catch (e) {
+        next(e);
+    }
+
+}
 

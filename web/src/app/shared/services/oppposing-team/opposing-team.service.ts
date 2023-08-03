@@ -3,16 +3,22 @@ import {BehaviorSubject, Observable, tap} from "rxjs";
 import {OpposingTeam} from "../../interface/opposing-team.interface";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environement.dev";
-import {handleError} from "../handel-error";
+import {Handel} from "../handel-error";
+import {MessageService} from "../../messages/MessageService";
 
 @Injectable({
   providedIn: 'root'
 })
 export class OpposingTeamService {
 
+  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
   public allOpposingTeam$: BehaviorSubject<OpposingTeam[]> = new BehaviorSubject<OpposingTeam[]>([])
   constructor(private http: HttpClient) { }
 
+  /**
+   * getAllOpposingTeam
+   * @return Observable<OpposingTeam[]>
+   */
   public getAllOpposingTeam(): Observable<OpposingTeam[]> {
     return this.http.get<OpposingTeam[]>(`${environment.apiURL}/opposing-team/all`).pipe(
       tap({
@@ -20,7 +26,8 @@ export class OpposingTeamService {
           this.allOpposingTeam$.next(opposingTeam)
         },
         error: (err) => {
-          handleError("[OPPOSING-TEAM] getAllOpposingTeam", err)
+          this.messageUser.next(MessageService.getDataError("équipe adverse"));
+          Handel.error("OpposingTeamService", "getAllOpposingTeam", this.messageUser.value, err);
         }
       })
     )

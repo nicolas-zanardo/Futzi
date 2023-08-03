@@ -7,7 +7,6 @@ export const environment = {
   apiURL : "http://localhost:3000/api",
   imagesPUBLIC : "http://localhost:3000/api/images/public/",
   teamName: "osny",
-
 };
 
 /*

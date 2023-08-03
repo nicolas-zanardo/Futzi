@@ -7,14 +7,17 @@ import jwt_decode from "jwt-decode";
 import {JwtToken} from "../../interface/jwt-token.interface";
 import {Router} from "@angular/router";
 import {ResponseLogin} from "../../interface/response.login.interface";
-import {handleError} from "../handel-error";
+import {Handel} from "../handel-error";
 import {SetROLE} from "../../enum/role";
+import {SocialCredentialInterface} from "../../interface/social-credential.interface";
+import {MessageService} from "../../messages/MessageService";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
   public isLogged$ : ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   public subscription: Subscription;
   public currentUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
@@ -24,10 +27,7 @@ export class AuthService {
     role: [],
   });
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     this.initToken();
     this.subscription = this.initTimer();
   }
@@ -35,8 +35,8 @@ export class AuthService {
   /**
    * setValueToken
    * -------------
-   * @param token: string
    * @private
+   * @param token
    */
   private setValueToken(token: string): void {
     // Decode JWT
@@ -48,9 +48,14 @@ export class AuthService {
     });
   }
 
+  /**
+   * getCurrentUser
+   * @return Observable<User | null>
+   */
   public getCurrentUser(): Observable<User | null> {
+    const url:string = `${environment.apiURL}/auth/current-user`;
     this.initToken();
-    return this.http.post<User>(`${environment.apiURL}/auth/current-user`, this.jwtToken.value).pipe(
+    return this.http.post<User>(url, this.jwtToken.value).pipe(
         tap({
           next : (user:User) => {
             this.currentUser$.next(user);
@@ -63,9 +68,11 @@ export class AuthService {
           },
           error: (err) => {
             if(err.status === 498) {
-              handleError("[AUTH SERVICE] getCurrentUser : The TOKEN have been expired, Disconnect user logged");
+              this.messageUser.next(MessageService.getDataError("Le token a expiré, veuillez vous reconnecter"))
+              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err)
             } else {
-              handleError("[AUTH SERVICE] getCurrentUser : undefined");
+              this.messageUser.next(MessageService.getDataError("Erreur inconnue, veuillez contacter l'administrateur"))
+              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err)
             }
             this.isLogged$.next(false);
             this.logout();
@@ -110,9 +117,11 @@ export class AuthService {
               } ,
               error: (err) => {
                 if(err.status == 498) {
-                  handleError("[AUTH SERVICE] initTimer : The TOKEN have been expired, Disconnect user logged");
+                  this.messageUser.next(MessageService.getTokenUnsuccessful("Votre session a expriré ,veuillez vous reconnecter"));
+                  Handel.error("AuthService", this.messageUser.value, "initTimer", err);
                 } else {
-                  handleError("[AUTH SERVICE] initTimer : undefined")
+                  this.messageUser.next(MessageService.getTokenUnsuccessful("Erreur inconnue, veuillez contacter l'administrateur"));
+                  Handel.error("AuthService", "initTimer", this.messageUser.value, err);
                 }
                 return this.logout();
               }
@@ -124,6 +133,7 @@ export class AuthService {
       })
     ).subscribe({
       error : ()=> {
+        this.messageUser.next(MessageService.getTokenUnsuccessful("Vous avez été déconnecté"))
         this.resetToken();
         this.currentUser$.next( null);
         localStorage.removeItem('jwt');
@@ -145,13 +155,27 @@ export class AuthService {
     } else {
       this.currentUser$.next( null);
       this.resetToken();
-      this.logout();
     }
   }
 
-  // Create a new user
+  /**
+   * createUser
+   * @param user
+   * @return Observable<User>
+   */
   public createUser(user: User): Observable<User> {
-    return this.http.post<User>(`${environment.apiURL}/user/create`, user).pipe( tap( ));
+    const msg:string = "L'utilisateur";
+    const url:string = `${environment.apiURL}/user/create`;
+    return this.http.post<User>(url, user).pipe(
+      tap({
+        next: () => {
+          this.messageUser.next(MessageService.createSuccessful(msg));
+        },
+        error: (err) => {
+          this.messageUser.next(MessageService.createUnsuccessful(msg));
+          Handel.error("AuthService", "createUser", this.messageUser.value, err)
+        }
+      }));
   }
 
   /**
@@ -160,15 +184,44 @@ export class AuthService {
    * - set value token
    * - set Jwt
    * @return Observable<SigninModel | string | null>
-   * @param credentials: object<string>
+   * @param credentials
    */
   public login(credentials: { login: string, password: string }): Observable<ResponseLogin | string | null> {
-    return this.http.post<ResponseLogin>(`${environment.apiURL}/auth/login`, credentials).pipe(
-      tap((resp) => {
-        this.setValueToken(resp.token);
-        localStorage.setItem('jwt', resp.token);
-        this.currentUser$.next(resp.user);
-        this.isLogged$.next(true);
+    const url:string = `${environment.apiURL}/auth/login`;
+    return this.http.post<ResponseLogin>(url, credentials).pipe(
+      tap({
+        next: (resp) => {
+          this.messageUser.next(MessageService.loginSuccessful);
+          this.createToken(resp);
+        },
+        error: (err) => {
+          this.messageUser.next(MessageService.loginUnsuccessful);
+        }
+      })
+    )
+  }
+
+
+  /**
+   * socialLogin
+   * @param socialCredential SocialCredentialModel
+   */
+  public socialLogin(socialCredential :SocialCredentialInterface): Observable<ResponseLogin | string | null> {
+    return this.http.post<ResponseLogin>(`${environment.apiURL}/auth/social-valid-token`, socialCredential).pipe(
+      tap({
+        next: (resp: ResponseLogin) => {
+          this.messageUser.next(MessageService.loginSuccessful);
+          this.createToken(resp);
+        },
+        error: (err) => {
+          if(err.status == 401) {
+            this.messageUser.next(MessageService.loginError("Vous n'avez pas les droit de connexion"));
+            Handel.error("AuthService", "socialLogin", this.messageUser.value, err);
+          } else {
+            this.messageUser.next(MessageService.loginError("contactez l'administrateur"));
+            Handel.error("AuthService", "socialLogin", this.messageUser.value, err)
+          }
+        }
       })
     )
   }
@@ -196,13 +249,10 @@ export class AuthService {
     switch (ROLE) {
       case SetROLE.BANNI:
         return 'BANNI';
-        break;
       case SetROLE.MEMBRE:
         return 'MEMBRE';
-        break;
       case SetROLE.DEMANDE:
         return 'DEMANDE';
-        break;
     }
     return "DELETE";
   }
@@ -211,13 +261,10 @@ export class AuthService {
     switch (info_status) {
       case 'BANNI':
         return SetROLE.BANNI;
-        break;
       case 'MEMBRE':
         return SetROLE.MEMBRE;
-        break;
       case 'DEMANDE':
         return SetROLE.DEMANDE;
-        break;
     }
     return SetROLE.SUPPRIMER;
   }
@@ -235,7 +282,14 @@ export class AuthService {
     this.currentUser$.next( null);
     this.initTimer();
     console.warn(`INFO : USER IS LOGGED ${new Date()}`)
-    this.router.navigateByUrl('/connection').then();
+    this.router.navigateByUrl('/connexion').then();
+  }
+
+  private createToken(resp: ResponseLogin) {
+    this.setValueToken(resp.token);
+    localStorage.setItem('jwt', resp.token);
+    this.currentUser$.next(resp.user);
+    this.isLogged$.next(true);
   }
 
 }

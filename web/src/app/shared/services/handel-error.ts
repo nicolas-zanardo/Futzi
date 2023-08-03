@@ -1,13 +1,29 @@
 import {Observable, of} from "rxjs";
 
-export const handleError =<T>(operation = 'operation', result?: T) => {
-  return (error: any): Observable<T> => {
-    console.error(`
-      ERROR : ${operation}
+export class Handel {
+
+  /**
+   * error
+   * @param classStr string
+   * @param methodeStr string
+   * @param massageUser
+   * @param result HandelError
+   */
+  static error<T>(classStr: string, methodeStr: string, massageUser: string, result?: T) {
+    const errorClass = Handel.operation(classStr, methodeStr)
+    return (error: any): Observable<T> => {
+      console.error(`
+      ERROR : ${errorClass}
       STATUS : ${error.status}
-      MESSAGE : ${error.message}
+      MESSAGE CODE : ${massageUser}
+      MESSAGE ERROR : ${error.message}
       FULL TEXT : ${error}
       `)
-    return of(result as T);
-  };
+      return of(result as T);
+    };
+  }
+
+  private static operation(strClass: string = 'operation' ,method: string): string {
+    return `[ ${strClass} ] - ${method} : `;
+  }
 }

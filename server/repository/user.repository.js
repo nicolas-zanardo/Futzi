@@ -1,11 +1,15 @@
 const bcrypt = require("bcrypt");
 const {Database} = require("../Database/Database");
-const {insertUser, updateUserInfo, updateRoleUser, deleteUser, updateUserCredential, findAllUser} = require("../query/user.query");
+const {insertUser, updateUserInfo, updateRoleUser, deleteUser, updateUserCredential, findAllUser, findUserById,
+    findUserByEmail, findUserByTokenURL
+} = require("../query/user.query");
+const {authSocialTokenURl} = require("../query/auth.query");
+const {User} = require("../model/User.model");
 
 /**
  * createUserRepository
- * @param user user.firstname, user.lastname, user.email, user.password, user.ROLE
- * @param req
+ * @param user User user.firstname, user.lastname, user.email, user.password, user.ROLE
+ * @param res
  * @returns {Promise<unknown>}
  */
 exports.createUserRepository = async(user, res) => {
@@ -16,7 +20,12 @@ exports.createUserRepository = async(user, res) => {
             user.lastname.toLowerCase().trim(),
             user.phone_number.trim(),
             user.email.toLowerCase().trim(),
-            user.password.trim(), user.ROLE, user.isValidMail])
+            user.password.trim(),
+            user.ROLE,
+            user.isValidMail,
+            user.tokenURL,
+            user.token_time_validity
+        ])
         .then(([rows]) => {
             console.log(`░▒▓ INFO : USER HAS BEEN CREATED : ${new Date()}`);
             return res.status(201).json(rows);
@@ -27,6 +36,84 @@ exports.createUserRepository = async(user, res) => {
             contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
+}
+
+/**
+ * createUserStrategyRepository
+ * @param user User
+ * @returns {Promise<unknown>}
+ */
+exports.createUserStrategyRepository = async (user) => {
+    const db = new Database();
+    return await db.connection.promise().query(
+        insertUser(), [
+            user.firstname.toLowerCase().trim(),
+            user.lastname.toLowerCase().trim(),
+            user.phone_number.trim(),
+            user.email.toLowerCase().trim(),
+            user.password.trim(),
+            user.ROLE,
+            user.isValidMail,
+            user.tokenURL,
+            user.tokenTimeValidity
+        ])
+        .then(() => {
+            console.log(`░▒▓ INFO : USER HAS BEEN CREATED : ${new Date()}`);
+            return db.connection.promise().query(findUserByEmail(), [user.email]).then(([rows]) => {
+                return rows[0];
+            }).catch(err => {
+                console.log(`✘ 🅴🆁🆁🅾🆁 SQL createUserStrategyRepository : ${new Date()}, ${err}`);
+                return err;
+            }).then(db.connection.end());
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL NOT INSERT createUserStrategyRepository : ${new Date()}, ${err}`);
+            return err;
+        })
+}
+
+/**
+ * updateUserAuthSocialToken
+ * @param token
+ * @param time
+ * @param id
+ * @returns {Promise<unknown>}
+ */
+exports.updateUserAuthSocialTokenRepository = async(token, time, id) => {
+    const db = new Database();
+    return await db.connection.promise().query(
+        authSocialTokenURl(), [
+            token,
+            time,
+            id
+        ])
+        .then(([row]) => {
+            console.log(`░▒▓ INFO : USER TOKEN HAS BEEN UPDATE : ${new Date()}`);
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+        })
+        .finally(db.connection.end());
+}
+
+/**
+ * findUserByTokenURLRepository
+ * @param token
+ * @param res
+ * @returns {Promise<void>}
+ */
+exports.findUserByTokenURLRepository = async(token, res) => {
+    const db = new Database();
+    return await db.connection.promise().query(
+        findUserByTokenURL(),
+        token
+    ).then(([row]) => {
+        const user = new User();
+        const statusCode = (row[0])?200:204;
+        user.tokenURL = (row[0])?row[0].tokenURL:"";
+        user.tokenTimeValidity = (row[0])?row[0].token_time_validity:"";
+        res.status(statusCode).json(user)
+    })
 }
 
 /**
@@ -51,9 +138,8 @@ exports.updateUserInfoRepository = async(user, res) => {
             });
         })
         .catch(err => {
-                console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-                return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
-            contacter l'administrateur 🤬`);
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

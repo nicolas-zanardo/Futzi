@@ -19,6 +19,7 @@ import {InscriptionComponent} from './auth/inscription/inscription.component';
 import {ConnectionComponent} from "./auth/connection/connection.component";
 import {AuthInterceptor} from "./shared/interceptor/auth.interceptor";
 import { DateComponent } from './shared/component/date/date.component';
+import { SocialComponent } from './auth/social/social.component';
 
 
 
@@ -29,6 +30,7 @@ import { DateComponent } from './shared/component/date/date.component';
     ConnectionComponent,
     InscriptionComponent,
     DateComponent,
+    SocialComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,24 +4,33 @@ import {Category} from "../../interface/category.interface";
 import {FootballPitch} from "../../interface/football-pitch.interface";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environement.dev";
-import {handleError} from "../handel-error";
+import {MessageService} from "../../messages/MessageService";
+import {Handel} from "../handel-error";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
+  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
   public allCategory$: BehaviorSubject<Category[]> = new BehaviorSubject<FootballPitch[]>([]);
+
   constructor(private http: HttpClient) { }
 
+  /**
+   * getAllCategory
+   * @return Observable<Category[]>
+   */
   public getAllCategory(): Observable<Category[]> {
-    return this.http.get<Category[] | []>(`${environment.apiURL}/category/all`).pipe(
+    const url:string = `${environment.apiURL}/category/all`;
+    return this.http.get<Category[] | []>(url).pipe(
       tap({
         next: (categories: Category[] | []) => {
           this.allCategory$.next(categories);
         },
         error: (err) => {
-          handleError("[SOCCER-TRAINING] getAllCategory", err);
+          this.messageUser.next(MessageService.getDataError("catégories"));
+          Handel.error("CategoryService", "getAllCategory", this.messageUser.value, err)
         }
       })
     );

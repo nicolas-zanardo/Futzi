@@ -15,6 +15,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 const MODULE = [
   MatIconModule,
@@ -31,7 +32,8 @@ const MODULE = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatCheckboxModule,
-  MatRadioModule
+  MatRadioModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

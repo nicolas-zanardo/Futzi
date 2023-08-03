@@ -11,6 +11,7 @@ import {MatSort} from "@angular/material/sort";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {RoleUserPipe} from "../../shared/pipe/role-user.pipe";
 import {AuthService} from "../../shared/services/auth/auth.service";
+import {BehaviorSubject, tap} from "rxjs";
 
 @Component({
   selector: 'app-member',
@@ -25,14 +26,15 @@ import {AuthService} from "../../shared/services/auth/auth.service";
   ],
   providers: [RoleUserPipe]
 })
-export class MemberComponent implements OnInit, AfterViewInit {
+export class MemberComponent implements OnInit, AfterViewInit  {
 
   // SERVICE
   public currentUser: User | null = this.authService.currentUser$.value;
   public allUsers: User[] | [] = this.userService.allUsers$.value;
-  public team: Team | null = this.teamService.currentTeam$.value;
+  public team: BehaviorSubject<Team | null> = this.teamService.currentTeam$;
   public listUsersContact: {value: number, user: User ,name: string}[] = [];
-  public selected?: number;
+  public contactTeam: BehaviorSubject<number> = this.teamService.contact$;
+  public selected?: number = this.contactTeam.value;
   // FORM
   public formContact: FormGroup = new FormGroup({});
   public formChangeStatus: FormGroup = new FormGroup({});
@@ -65,11 +67,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.checkIsTeamIsProvide();
-    this.checkAllUserIsProvide();
     this.createListContact();
-    this.selected = this.team?.id_user;
-
     // FORM
     this.createFormContact();
     this.createFormStatusUser();
@@ -77,30 +75,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource!.paginator = this.paginator!;
     this.dataSource!.sort = this.sort!;
-    this.checkIsTeamIsProvide();
-  }
-
-  //#################### PROVIDER #############################
-  private checkIsTeamIsProvide(): void {
-    if(!this.team) {
-      this.teamService.getTeam().subscribe((team: Team) => {
-        this.team = team;
-        this.selected = this.team?.id_user;
-      })
-    }
-
-  }
-  private checkAllUserIsProvide(): void {
-    if(!this.allUsers.length) {
-      this.userService.getAllUsers().subscribe((users: User[] | []) => {
-        this.allUsers = users;
-        this.dataSource = new MatTableDataSource(this.allUsers);
-        this.dataSource!.paginator = this.paginator!;
-        this.dataSource!.sort = this.sort!;
-        this.createFormContact();
-        this.createListContact();
-      })
-    }
+    this.createListContact()
   }
 
   //#################### STYLE CSS #############################
@@ -122,11 +97,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
     }
   }
   public filterUserList(): void {
-    this.listUsersContact = [];
-    this.createListContact();
-    console.log(this.formContact.get('search')?.value)
     if(this.formContact.get('search')?.value == "") {
-      this.listUsersContact = [];
       this.createListContact();
     }
     this.listUsersContact = this.listUsersContact.filter((elt: {value: number, user: User ,name: string}) =>
@@ -140,40 +111,53 @@ export class MemberComponent implements OnInit, AfterViewInit {
   //#################### [formContact] #############################
   public createFormContact(): void {
     this.formContact = this.fb.group({
-      id: new FormControl(this.team?.id, Validators.compose([
-        Validators.required
-      ])),
+      id: new FormControl("", Validators.compose([Validators.required])),
       contact: new FormControl(this.selected, Validators.compose([
         Validators.required
       ])),
       search: new FormControl('')
     })
   }
- public submitFormUserContact(): void {
+  public submitFormUserContact(): void {
+    this.formContact.get("id")?.setValue(this.teamService.currentTeam$.value?.id)
     if(this.formContact.valid) {
       this.teamService.updateTeamContact(this.formContact.getRawValue()).subscribe(() => {
         this.listUsersContact = [];
-        this.setValueTeam();
-        this.createListContact();
+        this.createListContact()
       })
     }
   }
   private createListContact(): void {
-    this.allUsers?.forEach((user: User): void => {
-      if(user.ROLE?.includes(ROLE.ADMIN) && user.is_valid_email) {
-        this.listUsersContact.push({value: user.id!, user: user, name: `➧ ${user.firstname} ${user.lastname}
+    this.teamService.getTeam().subscribe((team: Team) => {
+      if(team) {
+        this.team.next(team);
+        this.contactTeam.next(this.team.value!.id_user);
+        this.selected = this.contactTeam.value;
+
+        this.userService.getAllUsers().subscribe((users: User[] | []) => {
+
+          this.allUsers = users;
+          this.dataSource = new MatTableDataSource(this.allUsers);
+          this.dataSource!.paginator = this.paginator!;
+          this.dataSource!.sort = this.sort!;
+          this.contactTeam.next(this.team.value!.id_user);
+          this.selected = this.contactTeam.value;
+
+          this.listUsersContact = [];
+          this.allUsers?.forEach((user: User): void => {
+            if(user.ROLE?.includes(ROLE.ADMIN) && user.is_valid_email) {
+              this.listUsersContact.push({value: user.id!, user: user, name: `➧ ${user.firstname} ${user.lastname}
         ☎ tel: ${user.phone_number}
         ✉ email: ${user.email} ${(user.id === this.selected)? ' ✓ ':''}`})
+            }
+          })
+        })
       }
     })
-  }
-  public setValueTeam(): void {
-    this.teamService.getTeam().subscribe((team: Team | null)=> {
-      this.selected = team?.id_user;
-    });
+
   }
 
-  //#################### [formContact] #############################
+  //#################### [FormStatusUser] #############################
   public createFormStatusUser(): void {
     this.formChangeStatus = this.fb.group({
       id_user_update: new FormControl(null,Validators.compose([
@@ -241,8 +225,7 @@ export class MemberComponent implements OnInit, AfterViewInit {
         this.userService.allUsers$.subscribe({
           next: (users: User[] | []): void => {
             if(users.length) {
-              let newArrayUser = users.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
-              this.allUsers = newArrayUser;
+              this.allUsers = users.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
               this.dataSource.data = this.dataSource.data.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
             }
           }

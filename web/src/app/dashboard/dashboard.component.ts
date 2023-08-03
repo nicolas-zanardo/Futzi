@@ -6,7 +6,7 @@ import {UserService} from "../shared/services/user/user.service";
 import {SoccerTraining} from "../shared/interface/soccer-training.interface";
 import {SoccerTrainingService} from "../shared/services/soccer-training/soccer-training.service";
 import {MatchPlayService} from "../shared/services/match-play/match-play.service";
-import {SeasonDate} from "../shared/interface/season-date";
+import {SeasonDateInterface} from "../shared/interface/season-date.interface";
 import {MatchPlay} from "../shared/interface/match-play.inteface";
 import {environment} from "../../environments/environement.dev";
 
@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit{
   public currentUser: User | null = this.authService.currentUser$.value;
   public countTrainingByCategory : {category: string, number_training: number}[] = [];
   public isAdmin: boolean = this.authService.findRoleUser(ROLE.ADMIN);
-  public seasonDate: SeasonDate = {startDate: ' - ', endDate: ' - '};
+  public seasonDate: SeasonDateInterface = {startDate: ' - ', endDate: ' - '};
   public listUsersRole: {ROLE: string[], isValidEmail: boolean }[]  = [];
   public usersROLE_USER: any[] = [];
   public usersROLE_ADMIN: any[] = [];
@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  private seasonYear(): SeasonDate {
+  private seasonYear(): SeasonDateInterface {
     let year = new Date().getFullYear();
     let month = new Date().getMonth();
     if(month >= 9) {

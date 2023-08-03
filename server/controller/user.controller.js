@@ -3,9 +3,9 @@ const {ROLE} = require("../enum/ROLES");
 const bcrypt = require("bcrypt");
 const {Database} = require("../Database/Database");
 const {createUserRepository, updateUserInfoRepository, updateUserCredentialRepository, getAllUserRepository,
-    updateRoleUserRepository, deleteUserRepository
+    updateRoleUserRepository, deleteUserRepository, findUserByTokenURLRepository
 } = require("../repository/user.repository");
-const {findUserByEmail, findUserById} = require("../query/user.query");
+const {findUserByEmail, findUserById, findUserByTokenURL} = require("../query/user.query");
 
 /**
  * Create USER
@@ -24,7 +24,8 @@ exports.createUserController = async(req, res, next) => {
         user.phone_number = req.body.phone_number;
         user.ROLE = JSON.stringify([ROLE.USER]);
         user.isValidMail = false;
-
+        user.tokenURL = req.body.tokenURL;
+        user.token_time_validity = req.body.token_time_validity;
         const db = new Database();
         db.connection.promise().query(
             findUserByEmail(), [user.email.toLowerCase()])
@@ -41,7 +42,6 @@ exports.createUserController = async(req, res, next) => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()} : Verify => ${err}`)
             res.status(500).json(err)
         }).then(db.connection.end());
-
     } catch (e) {
         next(e);
     }
@@ -138,19 +138,34 @@ exports.getAllUserController = async(req, res, next) => {
 
 /**
  * updateRoleUserController
+ * @param req
  * @param res
- * @param raq
  * @param next
  * @returns {Promise<void>}
  */
 exports.updateRoleUserController = async(req,res,next) => {
     try{
-        if(req.body.id_current_user != req.body.id_user_update) {
+        if(req.body.id_current_user !== req.body.id_user_update) {
             return await updateRoleUserRepository(req, res);
         } else {
             res.status(401).json("Les ID sont identique vous n'avez pas l'authorisation");
         }
     } catch (e) {
+        next(e);
+    }
+}
+
+/**
+ * findUserByTokenURLController
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+exports.findUserByTokenURLController = async(req, res, next) => {
+    try{
+        return await findUserByTokenURLRepository(req.params.token, res);
+    }catch (e) {
         next(e);
     }
 }
@@ -164,7 +179,7 @@ exports.updateRoleUserController = async(req,res,next) => {
  */
 exports.deleteUserController = async(req, res, next) => {
     try {
-        if(req.params.id_current_user != req.params.id_user_update) {
+        if(req.params.id_current_user !== req.params.id_user_update) {
             return await deleteUserRepository(req, res);
         } else {
             return res.status(401).json("Les ID sont identique vous n'avez pas l'authorisation");

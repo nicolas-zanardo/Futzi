@@ -39,7 +39,6 @@ exports.createMatchPlayController = async(req, res, next) => {
 
         // PREPARE TEAM
         const [team] = await findTeamRepository(match.team, res, false);
-        console.log(team)
         match.id_team = team.id;
         // PREPARE OPPOSING TEAM
         const [op_team] = await findOpposingByNameRepository(match.team_opposing, res, false);
