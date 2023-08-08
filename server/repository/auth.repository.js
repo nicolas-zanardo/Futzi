@@ -62,12 +62,10 @@ exports.authUserLoginRepository = async(req, res) => {
  * @returns {Promise<any>}
  */
 exports.authUserLoginSocialRepository = async (req, res) => {
-    console.log(req.body)
     const db = new Database();
     return await db.connection.promise().query(findUserByTokenURL(), [req.body.tokenURL])
         .then(([row]) => {
             const user = row[0];
-            console.log(user.token_time_validity)
             if(user && user.token_time_validity >= Date.now()) {
                 setToken(user, res);
             } else {
@@ -95,6 +93,6 @@ async function setToken(user, res) {
                 return res.status(419).json(err);
             }
             console.log(`░▒▓ USER IS LOGIN - TOKEN CREATED AT : ${new Date()}`);
-            return res.status(200).json({user: user, token: token})
+            return res.status(200).json({user: user, token: token});
         });
 }

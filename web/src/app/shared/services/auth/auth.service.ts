@@ -98,7 +98,7 @@ export class AuthService {
    * initTimer
    * ---------
    * Refresh Token
-   * - VALUE_OF_TIMER Timer( EX: 5min pour la première observation puis 15min pour les prochaines)
+   * - VALUE_OF_TIMER Timer( EX: 5min )
    * - getToken in localstorage
    * * if(!jwt) return null
    * * if(jwt) return request and set value in token and in localstorage

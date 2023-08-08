@@ -48,7 +48,7 @@ exports.refreshTokenController = (req, res) => {
         return res.status(401).json("FAKE  - TOKEN PROVIDE");}
     let decoded = jwt_decode(token);
     jsonWebToken.verify(token, RSA_PUB, (err, decode) => {
-        if (err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} : Verify => ${err}`); return res.status(498).end()};
+        if (err) {console.log(`✘ 🅴🆁🆁🅾🆁 : ${new Date()} : Verify => ${err}`); return res.status(498).end()}
         jsonWebToken.sign({ROLE: decoded.ROLE, email: decoded.email,},
             RSA_PRIVATE,
             {
