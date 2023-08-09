@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {environment} from "../../../../environments/environement.dev";
-import {User} from "../../interface/user.interface";
 import {Router} from "@angular/router";
 import {JwtToken} from "../../interface/jwt-token.interface";
 import {Subscription} from "rxjs";
