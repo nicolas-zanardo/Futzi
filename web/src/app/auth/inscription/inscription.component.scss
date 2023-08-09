@@ -1,3 +1,4 @@
+@import "../../../scss/queries";
 .form {
   padding: 2rem;
   max-width: 768px;
@@ -12,8 +13,11 @@
 }
 
 .full-page {
-  height: 90vh;
+  min-height: 80vh;
   width: 100%;
+  @include sm {
+    min-height: 90vh;
+  }
 }
 
 .form-raw {

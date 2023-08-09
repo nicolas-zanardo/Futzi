@@ -20,6 +20,7 @@ import {ConnectionComponent} from "./auth/connection/connection.component";
 import {AuthInterceptor} from "./shared/interceptor/auth.interceptor";
 import { DateComponent } from './shared/component/date/date.component';
 import { SocialComponent } from './auth/social/social.component';
+import { MobileNavbarComponent } from './shared/component/mobile-navbar/mobile-navbar.component';
 
 
 
@@ -31,6 +32,7 @@ import { SocialComponent } from './auth/social/social.component';
     InscriptionComponent,
     DateComponent,
     SocialComponent,
+    MobileNavbarComponent,
   ],
   imports: [
     BrowserModule,

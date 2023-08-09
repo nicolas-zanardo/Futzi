@@ -2,8 +2,9 @@
   <app-navbar [isLogged]="isLogged$ | async"></app-navbar>
 </header>
 
-<div class="min-height">
+<div class="main-height">
   <router-outlet></router-outlet>
+  <app-mobile-navbar></app-mobile-navbar>
 </div>
 
 <footer>footer</footer>

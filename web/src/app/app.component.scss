@@ -1,13 +1,29 @@
+@import "../scss/queries";
+
 header {
   padding-bottom: 10vh;
 }
 
-.min-height {
-  min-height: 90vh;
+.main-height {
+  min-height: 100vh;
+}
+
+app-mobile-navbar {
+  display: block;
+  border-top: solid 0.6rem var(--light);
+  width: 100%;
+  height: 10vh;
+  background-color: white;
+  position: fixed;
+  top: 90vh;
+  z-index: 99999999;
+  @include sm {
+    display: none;
+  }
 }
 
 
 footer {
   background-color: #333333;
-  height: 30vh;
+  min-height: 30vh;
 }

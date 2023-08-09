@@ -1,4 +1,4 @@
-@import "src/scss/_queries.scss";
+@import "../../../../scss/queries";
 /***********************************************
  * SLIDESHOW HOME_PAGE
  * < @mixin sm height: 85vh
@@ -8,7 +8,7 @@
 .mySlides {
   display: none;
   max-width: 100vw;
-  height: 85vh;
+  height: 100%;
 }
 
 img {
@@ -21,7 +21,10 @@ img {
   overflow: hidden;
   position: relative;
   margin: auto;
-  height: 85vh;
+  height: 75vh;
+  @include sm {
+    height: 85vh;
+  }
 }
 
 /* Next & previous buttons */

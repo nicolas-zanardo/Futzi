@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SocialComponent } from './social.component';
+import {MaterialModules} from "../../shared/layout/material.modules";
+import {RouterTestingModule} from "@angular/router/testing";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('SocialComponent', () => {
   let component: SocialComponent;
@@ -8,6 +11,7 @@ describe('SocialComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [MaterialModules, RouterTestingModule, HttpClientTestingModule],
       declarations: [ SocialComponent ]
     })
     .compileComponents();

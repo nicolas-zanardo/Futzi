@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DialogDeleteMatchPlayComponent } from './dialog-delete-match-play.component';
+import {MaterialModules} from "../../../shared/layout/material.modules";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 describe('DialogDeleteMatchPlayComponent', () => {
   let component: DialogDeleteMatchPlayComponent;
@@ -8,7 +10,12 @@ describe('DialogDeleteMatchPlayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogDeleteMatchPlayComponent ]
+      imports: [MaterialModules],
+      declarations: [ DialogDeleteMatchPlayComponent ],
+      providers: [
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: { myData: {} } }
+      ]
     })
     .compileComponents();
 

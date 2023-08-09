@@ -5,6 +5,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {NavbarComponent} from "./shared/component/navbar/navbar.component";
 import {MaterialModules} from "./shared/layout/material.modules";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {MobileNavbarComponent} from "./shared/component/mobile-navbar/mobile-navbar.component";
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -12,11 +13,12 @@ describe('AppComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        MaterialModules
+        MaterialModules,
       ],
       declarations: [
         AppComponent,
-        NavbarComponent
+        NavbarComponent,
+        MobileNavbarComponent
       ],
       providers: [
         RouterOutlet,
