@@ -32,6 +32,7 @@ export class TeamService {
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("récuperation des équipes"));
           Handel.error("TeamService", "getTeam", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     );
@@ -49,10 +50,12 @@ export class TeamService {
       tap({
         next: () => {
           this.messageUser.next(MessageService.updateSuccessful(msg));
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           this.messageUser.next(MessageService.updateUnsuccessful(msg));
           Handel.error("TeamService", "updateTeamContact", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     );

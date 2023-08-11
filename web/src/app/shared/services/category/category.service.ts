@@ -30,7 +30,8 @@ export class CategoryService {
         },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("catégories"));
-          Handel.error("CategoryService", "getAllCategory", this.messageUser.value, err)
+          Handel.error("CategoryService", "getAllCategory", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     );

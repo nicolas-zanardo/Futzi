@@ -1,1 +1,107 @@
-<p>match works!</p>
+<!--####### MATCH OF THE DAY #######-->
+
+<div class="d-flex flex-column justify-content-around vh-40 shadow-bg" [style]="bgMatch()" *ngIf="matchOfTheDay.value">
+
+  <div class="d-flex justify-content-center p-3">
+    <div class="d-flex rounded-5 bg-info p-3 px-5 text-white font-size-info"><b>Match {{matchOfTheDay.value!.is_local?" à domicile":"à l'extérieur"}}</b></div>
+  </div>
+
+
+  <div class="d-flex justify-content-center align-items-center">
+    <!-- ********************************************************************************
+        MATCH LOCAL
+      ********************************************************************************-->
+    <!--  OSNY-->
+    <div class="d-flex justify-content-center align-items-center w-100 mx-3" *ngIf="matchOfTheDay.value!.is_local">
+      <div class="d-flex align-items-start flex-column shadow-lg bg-osny rounded-5 p-4">
+        <div class="mb-auto w-100 h-100">
+          <div class="w-100 h-100 d-flex justify-content-center align-items-center text-white">
+            <img src="{{logoOsny}}" alt="osny" class="img-fluid img-height">
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="rounded-5 bg-info px-3 text-white font-size-category"><b>{{matchOfTheDay.value!.category | uppercase}}</b></div>
+        </div>
+      </div>
+    </div>
+    <!-- EXTERIOR TEAM-->
+    <div class="d-flex flex-column justify-content-center align-items-center w-100 mx-3" *ngIf="!matchOfTheDay.value!.is_local">
+      <div class="d-flex align-items-start flex-column shadow-lg bg-opposing-team rounded-5 p-4">
+        <div class="mb-auto w-100 h-100">
+          <div class="w-100 h-100 d-flex justify-content-center align-items-center text-white">
+            <div class="text-opposing-team">{{matchOfTheDay.value!.team_opposing | titlecase}}</div>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="rounded-5 bg-info px-3 text-white font-size-category"><b>{{matchOfTheDay.value!.category | uppercase}}</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ********************************************************************************
+          MATCH DATE
+      ********************************************************************************-->
+    <div class="rounded-5 px-3 text-white vs"><b>VS</b></div>
+
+    <!-- ********************************************************************************
+          MATCH EXTERIOR
+      ********************************************************************************-->
+    <!-- EXTERIOR TEAM-->
+    <div class="d-flex justify-content-center align-items-center w-100 mx-3" *ngIf="matchOfTheDay.value!.is_local">
+      <div class="d-flex align-items-start flex-column shadow-lg bg-opposing-team rounded-5 h-150 p-4">
+        <div class="mb-auto w-100 h-100">
+          <div class="w-100 h-100 d-flex justify-content-center align-items-center text-white">
+            <div class="text-opposing-team w-70">{{matchOfTheDay.value!.team_opposing | titlecase}}</div>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="rounded-5 bg-info px-3 text-white font-size-category"><b>{{matchOfTheDay.value!.category | uppercase}}</b></div>
+        </div>
+      </div>
+    </div>
+    <!--  OSNY-->
+    <div class="d-flex justify-content-center align-items-center w-100 mx-3" *ngIf="!matchOfTheDay.value!.is_local">
+      <div class="d-flex align-items-start flex-column shadow-lg bg-osny rounded-5 p-4">
+        <div class="mb-auto w-100 h-100">
+          <div class="w-100 h-100 d-flex justify-content-center align-items-center text-white">
+            <img src="{{logoOsny}}" alt="osny" class="img-fluid img-height">
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="rounded-5 bg-info px-3 text-white font-size-category"><b>{{matchOfTheDay.value!.category | uppercase}}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center p-3">
+    <div class="rounded-5 bg-info px-5 py-3 text-white font-size-info"><b>{{matchOfTheDay.value!.date | date:'fullDate':'fr-FR': 'fr-FR' }} à {{matchOfTheDay.value!.hour_start}}</b></div>
+  </div>
+</div>
+
+<!--####### NEXT MATCH #######-->
+
+<div class="container mt-5 text-center">
+  <h1 class="mt-5 mb-3">Prochain match</h1>
+  <div class="barre-title mb-3"></div>
+  <div class="d-flex justify-content-center" *ngFor="let match of nextMatch.value">
+    <div class="d-flex justify-content-around align-items-center bg-next-match rounded-5 py-3 px-5 my-3 w-50">
+      <div class="w-25">
+        <img src="{{logoOsny}}" alt="osny" width="60" *ngIf="match.is_local">
+        <div *ngIf="!match.is_local"><b>{{match.team_opposing|titlecase}}</b></div>
+      </div>
+
+      <div class="vs-next-match flex-grow-0"><b>VS</b></div>
+
+      <div class="w-25">
+        <img src="{{logoOsny}}" alt="osny" width="50" *ngIf="!match.is_local">
+        <div *ngIf="match.is_local"><b>{{match.team_opposing|titlecase}}</b></div>
+      </div>
+
+      <div class="w-50">
+        <div class="text-primary"><b>{{match.date | date:'fullDate':'fr-FR': 'fr-FR' }} à {{match.hour_start}}</b></div>
+        <div class="d-flex justify-content-center"><b class="rounded-5 bg-info px-3 text-white">{{matchOfTheDay.value!.category | uppercase}}</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+

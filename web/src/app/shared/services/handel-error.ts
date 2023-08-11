@@ -1,4 +1,4 @@
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 
 export class Handel {
 
@@ -25,5 +25,11 @@ export class Handel {
 
   private static operation(strClass: string = 'operation' ,method: string): string {
     return `[ ${strClass} ] - ${method} : `;
+  }
+
+  static resetMessage(message: BehaviorSubject<string>):void {
+    setTimeout(()=> {
+      message.next("")
+    },2000)
   }
 }

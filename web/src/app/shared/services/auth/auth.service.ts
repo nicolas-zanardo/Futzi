@@ -68,11 +68,13 @@ export class AuthService {
           },
           error: (err) => {
             if(err.status === 498) {
-              this.messageUser.next(MessageService.getDataError("Le token a expiré, veuillez vous reconnecter"))
-              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err)
+              this.messageUser.next(MessageService.getDataError("Le token a expiré, veuillez vous reconnecter"));
+              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err);
+              Handel.resetMessage(this.messageUser);
             } else {
-              this.messageUser.next(MessageService.getDataError("Erreur inconnue, veuillez contacter l'administrateur"))
-              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err)
+              this.messageUser.next(MessageService.getDataError("Erreur inconnue, veuillez contacter l'administrateur"));
+              Handel.error("AuthService", "getCurrentUser", this.messageUser.value, err);
+              Handel.resetMessage(this.messageUser);
             }
             this.isLogged$.next(false);
             this.logout();
@@ -119,9 +121,11 @@ export class AuthService {
                 if(err.status == 498) {
                   this.messageUser.next(MessageService.getTokenUnsuccessful("Votre session a expriré ,veuillez vous reconnecter"));
                   Handel.error("AuthService", this.messageUser.value, "initTimer", err);
+                  Handel.resetMessage(this.messageUser);
                 } else {
                   this.messageUser.next(MessageService.getTokenUnsuccessful("Erreur inconnue, veuillez contacter l'administrateur"));
                   Handel.error("AuthService", "initTimer", this.messageUser.value, err);
+                  Handel.resetMessage(this.messageUser);
                 }
                 return this.logout();
               }
@@ -170,10 +174,12 @@ export class AuthService {
       tap({
         next: () => {
           this.messageUser.next(MessageService.createSuccessful(msg));
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           this.messageUser.next(MessageService.createUnsuccessful(msg));
-          Handel.error("AuthService", "createUser", this.messageUser.value, err)
+          Handel.error("AuthService", "createUser", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       }));
   }
@@ -193,9 +199,11 @@ export class AuthService {
         next: (resp) => {
           this.messageUser.next(MessageService.loginSuccessful);
           this.createToken(resp);
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           this.messageUser.next(MessageService.loginUnsuccessful);
+          Handel.resetMessage(this.messageUser);
         }
       })
     )
@@ -212,14 +220,17 @@ export class AuthService {
         next: (resp: ResponseLogin) => {
           this.messageUser.next(MessageService.loginSuccessful);
           this.createToken(resp);
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           if(err.status == 401) {
             this.messageUser.next(MessageService.loginError("Vous n'avez pas les droit de connexion"));
             Handel.error("AuthService", "socialLogin", this.messageUser.value, err);
+            Handel.resetMessage(this.messageUser);
           } else {
             this.messageUser.next(MessageService.loginError("contactez l'administrateur"));
             Handel.error("AuthService", "socialLogin", this.messageUser.value, err)
+            Handel.resetMessage(this.messageUser);
           }
         }
       })

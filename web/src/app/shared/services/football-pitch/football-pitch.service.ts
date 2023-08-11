@@ -29,7 +29,8 @@ export class FootballPitchService {
         },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("Terrain de foot"));
-          Handel.error("FootballPitchService", "getAllFootballPitch", this.messageUser.value, err)
+          Handel.error("FootballPitchService", "getAllFootballPitch", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     )

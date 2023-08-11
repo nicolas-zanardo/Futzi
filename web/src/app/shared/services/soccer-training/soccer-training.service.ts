@@ -29,10 +29,12 @@ export class SoccerTrainingService {
       tap({
         next: () => {
           this.messageUser.next(MessageService.createSuccessful(msg));
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           this.messageUser.next(MessageService.createUnsuccessful(msg));
           Handel.error("SoccerTrainingService", "createSoccerTraining", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     )
@@ -46,11 +48,12 @@ export class SoccerTrainingService {
     return this.http.get<SoccerTraining[]>(`${environment.apiURL}/training/all`).pipe(
       tap({
         next: (soccerTraining: SoccerTraining[]) => {
-          this.allSoccerTraining$.next(soccerTraining)
+          this.allSoccerTraining$.next(soccerTraining);
         },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("recupération des entrainements"))
           Handel.error("SoccerTrainingService", "getAllSoccerTraining", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     )
@@ -68,10 +71,12 @@ export class SoccerTrainingService {
       tap({
         next: () => {
           this.messageUser.next(MessageService.deleteSuccessful(msg));
+          Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
           this.messageUser.next(MessageService.deleteUnsuccessful(msg));
           Handel.error("SoccerTrainingService", "deleteSoccerTraining", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     );
@@ -87,6 +92,7 @@ export class SoccerTrainingService {
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("comptage du nombre de catégories"))
           Handel.error("SoccerTrainingService", "countTrainingByCategory", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     );

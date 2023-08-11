@@ -28,6 +28,7 @@ export class OpposingTeamService {
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("équipe adverse"));
           Handel.error("OpposingTeamService", "getAllOpposingTeam", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
         }
       })
     )
