@@ -31,9 +31,24 @@
 }
 
 /**
+  Shadow
+ */
+.shadow-bg {
+  border-bottom: solid 1px rgba(129, 129, 129, 0.52);
+  box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.27);
+}
+
+/**
   Height
  */
 .vh-40 {
   height: 40vh;
+}
+
+.vh-25 {
+  height: 25vh;
+}
+.vh-20 {
+  height: 20vh;
 }
 

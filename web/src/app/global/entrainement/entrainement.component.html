@@ -1,1 +1,17 @@
-<p>entrainement works!</p>
+<div [style]="bgTraining()" class="vh-25 shadow-bg mb-5">
+  <div class="d-flex justify-content-center align-items-center h-100">
+    <div class="rounded-5 bg-info p-3 px-5"><h1 class="text-white">Entrainment</h1></div>
+  </div>
+</div>
+
+
+<div class="container d-flex justify-content-around flex-wrap">
+  <div *ngFor="let elt of trainingByCat.value" class="card m-3 w-card p-2 shadow border-0">
+    <div class="bg-info text-white text-center p-1 rounded rounded-4 mb-3"><b>{{elt.category}}</b></div>
+    <div *ngFor="let training of elt.training" class="d-flex justify-content-between">
+      <div class="mx-2"><b>{{training.day}} {{training.hour_start}}</b></div>
+      <div class="mx-2">{{training.football_pitch}}</div>
+    </div>
+  </div>
+</div>
+

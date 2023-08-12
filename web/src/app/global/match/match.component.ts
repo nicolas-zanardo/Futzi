@@ -29,10 +29,6 @@ export class MatchComponent implements OnInit {
     return `background: no-repeat center/80% url(${environment.imagesPUBLIC}/terrain.jpg); background-size: cover;`;
   }
 
-  public insertLogo(): string {
-    return `<img src="${this.logoOsny}" alt="osny">`
-  }
-
 
 
 

@@ -1,7 +1,9 @@
 const {haveKeyNotDefined} = require("../component/object/object-strict-required");
 const {findFootballPitchByNameRepository, createFootballPitchRepository} = require("../repository/football-pitch.repository");
 const {findCategoryByNameRepository, createCategoryRepository} = require("../repository/category.repository");
-const {createTrainingRepository, getAllTrainingRepository, deleteTrainingRepository, countTrainingByCategoryRepository} = require("../repository/soocer-training.repository");
+const {createTrainingRepository, getAllTrainingRepository, deleteTrainingRepository, countTrainingByCategoryRepository,
+    trainingByCategoryRepository
+} = require("../repository/soocer-training.repository");
 const {SoccerTraining} = require("../model/SoccerTraining.model");
 
 
@@ -96,6 +98,14 @@ exports.deleteTrainingController = async(req, res, next) => {
 exports.countTrainingByCategoryController = async(req, res, next) => {
     try {
         return await countTrainingByCategoryRepository(req, res);
+    } catch (e) {
+        next(e);
+    }
+}
+
+exports.trainingByCategoryController = async(req, res, next) => {
+    try {
+        return await trainingByCategoryRepository(req, res);
     } catch (e) {
         next(e);
     }

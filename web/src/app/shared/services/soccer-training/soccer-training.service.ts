@@ -5,6 +5,7 @@ import {environment} from "../../../../environments/environement.dev";
 import {SoccerTraining} from "../../interface/soccer-training.interface";
 import {Handel} from "../handel-error";
 import {MessageService} from "../../messages/MessageService";
+import {TrainingByCategoryInterface} from "../../interface/training-by-category.interface";
 
 
 @Injectable({
@@ -14,6 +15,7 @@ export class SoccerTrainingService {
 
   public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
   public allSoccerTraining$: BehaviorSubject<SoccerTraining[]> = new BehaviorSubject<SoccerTraining[]>([]);
+  public trainingByCat$: BehaviorSubject<TrainingByCategoryInterface[]> = new BehaviorSubject<TrainingByCategoryInterface[]>([]);
 
   constructor(private http: HttpClient) { }
 
@@ -49,6 +51,7 @@ export class SoccerTrainingService {
       tap({
         next: (soccerTraining: SoccerTraining[]) => {
           this.allSoccerTraining$.next(soccerTraining);
+          console.log(this.allSoccerTraining$.value)
         },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("recupération des entrainements"))
@@ -90,12 +93,31 @@ export class SoccerTrainingService {
     return this.http.get<{category: string, number_training: number}[]>(`${environment.apiURL}/training/count-training-by-category`).pipe(
       tap({
         error: (err) => {
-          this.messageUser.next(MessageService.getDataError("comptage du nombre de catégories"))
+          this.messageUser.next(MessageService.getDataError("comptage du nombre de catégories"));
           Handel.error("SoccerTrainingService", "countTrainingByCategory", this.messageUser.value, err);
           Handel.resetMessage(this.messageUser);
         }
       })
     );
+  }
+
+  /**
+   * trainingByCategory
+   * @return Observable<TrainingByCategoryInterface|[]>
+   */
+  public trainingByCategory(): Observable<TrainingByCategoryInterface[]> {
+    return this.http.get<TrainingByCategoryInterface[]>(`${environment.apiURL}/training/training-by-category`).pipe(
+      tap({
+        next: (trainingByCat: TrainingByCategoryInterface[]) => {
+          this.trainingByCat$.next(trainingByCat);
+        },
+        error: (err) => {
+          this.messageUser.next(MessageService.getDataError("récuperation des entrainement par catégories"));
+          Handel.error("SoccerTrainingService", "trainingByCategory", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
+        }
+      })
+    )
   }
 
 }

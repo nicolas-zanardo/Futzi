@@ -16,7 +16,7 @@ export class DateComponent {
     {value: "jeudi", viewValue: "Jeudi"},
     {value: "vendredi", viewValue: "Vendredi"},
     {value: "samedi", viewValue: "Samedi"},
-    {value: "dimance", viewValue: "Dimanche"}
+    {value: "dimanche", viewValue: "Dimanche"}
   ]
 
   public setHours(): DataPredicate[] {
