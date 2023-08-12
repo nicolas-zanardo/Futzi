@@ -4,7 +4,8 @@ const {
     createTrainingController,
     getAllTrainingController,
     deleteTrainingController,
-    countTrainingByCategoryController
+    countTrainingByCategoryController,
+    trainingByCategoryController
 } = require("../../controller/soccer-training.controller");
 
 const training = express.Router();
@@ -12,8 +13,9 @@ const training = express.Router();
 
 training.post('/create', isLoggedAdmin, createTrainingController);
 training.get('/all', getAllTrainingController);
-training.delete('/delete/:id', isLoggedAdmin, deleteTrainingController)
-training.get('/count-training-by-category', isLoggedAdmin, countTrainingByCategoryController)
+training.delete('/delete/:id', isLoggedAdmin, deleteTrainingController);
+training.get('/count-training-by-category', isLoggedAdmin, countTrainingByCategoryController);
+training.get('/training-by-category', trainingByCategoryController)
 
 
 module.exports = training;

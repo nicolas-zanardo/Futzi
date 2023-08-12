@@ -1,5 +1,6 @@
 const {Database} = require("../Database/Database");
-const {createTraining, getAllTraining, deleteTraining, countTrainingByCategory} = require("../query/soccer-training.query");
+const {createTraining, getAllTraining, deleteTraining, countTrainingByCategory, trainingByCategory} = require("../query/soccer-training.query");
+const {sorterDay} = require("../component/date/sorter-day");
 
 /**
  *
@@ -73,12 +74,60 @@ exports.deleteTrainingRepository = async(id, res) => {
         .then(db.connection.end());
 }
 
+/**
+ * countTrainingByCategoryRepository
+ * @param req
+ * @param res
+ * @return {Promise<unknown>}
+ */
 exports.countTrainingByCategoryRepository = async(req, res) => {
     const db = new Database();
     return await db.connection.promise().query(countTrainingByCategory())
         .then(([rows]) => {
             console.log(`░▒▓ INFO : COUNT TRAINING BY CATEGORY : ${new Date()}`);
             return res.status(200).json(rows)
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+            contacter l'administrateur 🤬`);
+        })
+        .then(db.connection.end());
+}
+
+/**
+ * trainingByCategoryRepository
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+exports.trainingByCategoryRepository = async(req, res) => {
+    const db = new Database();
+    return await db.connection.promise().query(trainingByCategory())
+        .then(([row]) => {
+            // collect data by category
+            let arrTmp  = {};
+            row.forEach((elt, key) => {
+                if(arrTmp[elt.category] === undefined) arrTmp[elt.category] = [];
+                arrTmp[elt.category].push(elt);
+            })
+            // create object with best practice for angular
+            let arrResp = [];
+            for (const [key, value] of Object.entries(arrTmp)) {
+                let tmpArray = {};
+                tmpArray["category"] = key;
+                tmpArray["training"] = [];
+                value.forEach((cat) => {
+                    tmpArray["training"].push(cat)
+                })
+                tmpArray["training"].sort(function sortByDay(a, b) {
+                    let day1 = a.day.toLowerCase();
+                    let day2 = b.day.toLowerCase();
+                    return sorterDay[day1] - sorterDay[day2];
+                });
+                arrResp.push(tmpArray);
+            }
+            res.status(200).json(arrResp);
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
