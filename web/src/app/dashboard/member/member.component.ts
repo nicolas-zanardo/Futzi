@@ -11,7 +11,7 @@ import {MatSort} from "@angular/material/sort";
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {RoleUserPipe} from "../../shared/pipe/role-user.pipe";
 import {AuthService} from "../../shared/services/auth/auth.service";
-import {BehaviorSubject, tap} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-member',
@@ -33,8 +33,8 @@ export class MemberComponent implements OnInit, AfterViewInit  {
   public allUsers: User[] | [] = this.userService.allUsers$.value;
   public team: BehaviorSubject<Team | null> = this.teamService.currentTeam$;
   public listUsersContact: {value: number, user: User ,name: string}[] = [];
-  public contactTeam: BehaviorSubject<number> = this.teamService.contact$;
-  public selected?: number = this.contactTeam.value;
+  public contactByIdTeam: BehaviorSubject<number> = this.teamService.contactById$;
+  public selected?: number = this.contactByIdTeam.value;
   // FORM
   public formContact: FormGroup = new FormGroup({});
   public formChangeStatus: FormGroup = new FormGroup({});
@@ -131,8 +131,8 @@ export class MemberComponent implements OnInit, AfterViewInit  {
     this.teamService.getTeam().subscribe((team: Team) => {
       if(team) {
         this.team.next(team);
-        this.contactTeam.next(this.team.value!.id_user);
-        this.selected = this.contactTeam.value;
+        this.contactByIdTeam.next(this.team.value!.id_user);
+        this.selected = this.contactByIdTeam.value;
 
         this.userService.getAllUsers().subscribe((users: User[] | []) => {
 
@@ -140,8 +140,8 @@ export class MemberComponent implements OnInit, AfterViewInit  {
           this.dataSource = new MatTableDataSource(this.allUsers);
           this.dataSource!.paginator = this.paginator!;
           this.dataSource!.sort = this.sort!;
-          this.contactTeam.next(this.team.value!.id_user);
-          this.selected = this.contactTeam.value;
+          this.contactByIdTeam.next(this.team.value!.id_user);
+          this.selected = this.contactByIdTeam.value;
 
           this.listUsersContact = [];
           this.allUsers?.forEach((user: User): void => {
@@ -183,13 +183,11 @@ export class MemberComponent implements OnInit, AfterViewInit  {
     })
     if(this.formChangeStatus.valid && (id_user_update != id_current_user)) {
       let oldUser: User | undefined = this.allUsers.find((user:User) => {return user.id == id_user_update});
-
       if(oldUser) {
         if(ROLE != SetROLE.SUPPRIMER) {
           this.updateRoleUser(oldUser);
         } else {
-          console.log(this.formChangeStatus.getRawValue());
-          this.deleteUser(oldUser);
+          this.deleteUser();
         }
       } else {
         console.log("Not found user to send API request")
@@ -219,15 +217,12 @@ export class MemberComponent implements OnInit, AfterViewInit  {
     })
   }
 
-  private deleteUser(oldUser?: User): void {
+  private deleteUser(): void {
     this.userService.deleteUser(this.formChangeStatus.get('id_user_update')!.value, this.formChangeStatus.get('id_current_user')!.value).subscribe({
       next: () => {
         this.userService.allUsers$.subscribe({
           next: (users: User[] | []): void => {
-            if(users.length) {
-              this.allUsers = users.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
-              this.dataSource.data = this.dataSource.data.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
-            }
+            this.dataSource.data = this.dataSource.data.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
           }
         });
       },

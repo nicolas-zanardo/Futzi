@@ -7,7 +7,7 @@
     <button mat-flat-button routerLink="/match"  routerLinkActive="active-link"><span>Match</span></button>
     <button mat-flat-button routerLink="/entrainement"  routerLinkActive="active-link"><span>Entraînement</span></button>
   </div>
-  <div class="user me-2">
+  <div class="user mx-3">
     <div *ngIf="isLogged !== null">
       <button *ngIf="isLogged && jwtToken?.isAuthenticated && !isDisplayBtn('/member')" [disabled]="isBanUser" [class]="btnUserClass" routerLink="/member" routerLinkActive="active-user">
         <mat-icon aria-hidden="false" aria-label="person icon" fontIcon="person"></mat-icon>

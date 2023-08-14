@@ -89,7 +89,7 @@ export class MatchPlayService {
    * @return Observable<MatchPlay[]|[]>
    */
   public getNextMatch(): Observable<MatchPlay[]|[]> {
-    const url:string = `${environment.apiURL}/match-play/get-all-next-match-play`;
+    const url:string = `${environment.apiURL}/match-play/get-the-last-10-match`;
     return this.http.get< MatchPlay[]|[]>(url).pipe(
       tap({
         next: (match: MatchPlay[]|[]) => {

@@ -51,7 +51,6 @@ export class SoccerTrainingService {
       tap({
         next: (soccerTraining: SoccerTraining[]) => {
           this.allSoccerTraining$.next(soccerTraining);
-          console.log(this.allSoccerTraining$.value)
         },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("recupération des entrainements"))

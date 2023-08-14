@@ -1,0 +1,22 @@
+<div class="container-fluid w-100">
+  <div class="row w-100 d-flex justify-content-between text-white p-4">
+      <div class="col-12 col-lg-4 col-sm-6">
+        <div>ADRESSE</div>
+        <hr class="border-2">
+        <div class="font-title"><b>{{team.value?.name_address}}</b></div>
+        <div class="info">{{team.value?.address}}, {{team.value?.code_zip}} {{team.value?.city}}</div>
+      </div>
+      <div class="col-12 col-lg-2 col-sm-12 d-flex justify-content-center order-first order-lg-0 mb-4">
+        <div (click)="fbShare()"><i class="fa-brands fa-square-facebook fa-4x mx-3"></i></div>
+        <div (click)="twitXShare()"><i class="fa-brands fa-square-x-twitter fa-4x mx-3"></i></div>
+        <div (click)="linkedinShare()"><i class="fa-brands fa-linkedin fa-4x mx-3"></i></div>
+        <div (click)="mastodonShare()"><i class="fa-brands fa-mastodon fa-4x mx-3"></i></div>
+      </div>
+      <div class="col-12  col-lg-4 col-sm-6">
+        <div class="text-end">CONTACT</div>
+        <hr class="border-2">
+        <div class="font-title text-end"><b>{{contact.value?.lastname | titlecase}} {{contact.value?.firstname | titlecase}}</b></div>
+        <div class="text-end info">tel: {{contact.value?.phone_number}} Mail: {{contact.value?.email}}</div>
+      </div>
+  </div>
+</div>

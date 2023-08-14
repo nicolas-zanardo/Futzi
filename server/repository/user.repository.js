@@ -1,14 +1,42 @@
 const bcrypt = require("bcrypt");
 const {Database} = require("../Database/Database");
-const {insertUser, updateUserInfo, updateRoleUser, deleteUser, updateUserCredential, findAllUser, findUserById,
-    findUserByEmail, findUserByTokenURL
+const {
+    insertUser,
+    updateUserInfo,
+    updateRoleUser,
+    deleteUser,
+    updateUserCredential,
+    findAllUser,
+    findUserByEmail,
+    findUserByTokenURL, findLiteUserById
 } = require("../query/user.query");
 const {authSocialTokenURl} = require("../query/auth.query");
 const {User} = require("../model/User.model");
 
+
+/**
+ * findUserByIdRepository
+ * @param id
+ * @param res
+ * @return {Promise<User>}
+ */
+exports.findUserByIdRepository = async(id, res) => {
+    const db = new Database();
+    return await db.connection.promise().query(findLiteUserById(), [id])
+        .then(([row]) => {
+            console.log(`░▒▓ INFO : FIND USER BY ID : ${new Date()}`);
+            return res.status(200).json(row[0])
+        })
+        .catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, contacter l'administrateur 🤬`);
+        })
+        .then(db.connection.end());
+}
+
 /**
  * createUserRepository
- * @param user User user.firstname, user.lastname, user.email, user.password, user.ROLE
+ * @param user User firstname, lastname, email, password, ROLE
  * @param res
  * @returns {Promise<unknown>}
  */
@@ -32,8 +60,7 @@ exports.createUserRepository = async(user, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
-            contacter l'administrateur 🤬`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }
@@ -181,8 +208,7 @@ exports.getAllUserRepository = async(req, res) => {
         })
         .catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
-            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
-            contacter l'administrateur 🤬`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, contacter l'administrateur 🤬`);
         })
         .then(db.connection.end());
 }

@@ -5,6 +5,7 @@ import {environment} from "../../../../environments/environement.dev";
 import {Team} from "../../interface/team.interface";
 import {Handel} from "../handel-error";
 import {MessageService} from "../../messages/MessageService";
+import {User} from "../../interface/user.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,12 @@ export class TeamService {
 
   public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
   public currentTeam$: BehaviorSubject<Team | null> = new BehaviorSubject<Team | null>(null);
-  public contact$: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  public contactById$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public contact$: BehaviorSubject<User|null> = new BehaviorSubject<User|null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if(this.contact$.value === null) this.getTeam().subscribe();
+  }
 
   /**
    * getTeam
@@ -27,7 +31,8 @@ export class TeamService {
       tap({
         next: (team: Team) => {
           this.currentTeam$.next(team);
-          this.contact$.next(team.id_user);
+          this.contactById$.next(team.id_user);
+          this.getContactTeam(team.id_user).subscribe();
           },
         error: (err) => {
           this.messageUser.next(MessageService.getDataError("récuperation des équipes"));
@@ -50,6 +55,7 @@ export class TeamService {
       tap({
         next: () => {
           this.messageUser.next(MessageService.updateSuccessful(msg));
+          this.getContactTeam(team.contact).subscribe();
           Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
@@ -59,5 +65,25 @@ export class TeamService {
         }
       })
     );
+  }
+
+  /**
+   * getContactTeam
+   * @param id
+   */
+  public getContactTeam(id:number) : Observable<User|null> {
+    const url:string  =  `${environment.apiURL}/user/contact/${id}`;
+    return this.http.get<User|null>(url).pipe(
+      tap({
+        next: (user:User|null) => {
+          this.contact$.next(user);
+        },
+        error: (err) => {
+          this.messageUser.next(MessageService.updateUnsuccessful("impossible de récupérer l'utilisateur"));
+          Handel.error("TeamService", "getContactTeam", this.messageUser.value, err);
+          Handel.resetMessage(this.messageUser);
+        }
+      })
+    )
   }
 }

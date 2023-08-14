@@ -22,8 +22,11 @@ app-mobile-navbar {
   }
 }
 
-
 footer {
-  background-color: #333333;
-  min-height: 30vh;
+  max-width: 100%;
+  background-color: var(--primary);
+  min-height: 50vh;
+  @include sm {
+    min-height: 30vh;
+  }
 }

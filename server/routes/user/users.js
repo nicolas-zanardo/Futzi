@@ -9,7 +9,8 @@ const {
     getAllUserController,
     updateRoleUserController,
     deleteUserController,
-    findUserByTokenURLController
+    findUserByTokenURLController,
+    findUserByIdController,
 } = require("../../controller/user.controller");
 
 /**
@@ -21,6 +22,7 @@ users.put("/edit-info", isLogged, updateUserInfoController);
 users.put("/edit-credential", isLogged, updateUserCredentialController);
 users.put("/edit-role", isLoggedAdmin, updateRoleUserController);
 users.get("/all-users", isLoggedAdmin, getAllUserController);
+users.get("/contact/:id", findUserByIdController);
 users.delete("/delete/:id_user_update/:id_current_user", isLoggedAdmin, deleteUserController);
 
 module.exports = users;

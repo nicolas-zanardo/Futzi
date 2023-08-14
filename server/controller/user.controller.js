@@ -2,17 +2,40 @@ const {User} = require("../model/User.model");
 const {ROLE} = require("../enum/ROLES");
 const bcrypt = require("bcrypt");
 const {Database} = require("../Database/Database");
-const {createUserRepository, updateUserInfoRepository, updateUserCredentialRepository, getAllUserRepository,
-    updateRoleUserRepository, deleteUserRepository, findUserByTokenURLRepository
+const {
+    createUserRepository,
+    updateUserInfoRepository,
+    updateUserCredentialRepository,
+    getAllUserRepository,
+    updateRoleUserRepository,
+    deleteUserRepository,
+    findUserByTokenURLRepository,
+    findUserByIdRepository
 } = require("../repository/user.repository");
-const {findUserByEmail, findUserById, findUserByTokenURL} = require("../query/user.query");
+const {findUserByEmail, findUserById} = require("../query/user.query");
+
+
+/**
+ * findUserByIdController
+ * @param req
+ * @param res
+ * @param next
+ * @return {Promise<User>}
+ */
+exports.findUserByIdController = async(req,res,next) => {
+    try {
+        return await findUserByIdRepository(req.params.id, res);
+    } catch (e) {
+        next(e);
+    }
+}
 
 /**
  * Create USER
  * @param req
  * @param res
  * @param next
- * @returns {Promise<*>}
+ * @returns {Promise<User>}
  */
 exports.createUserController = async(req, res, next) => {
     try {
@@ -94,7 +117,7 @@ exports.updateUserInfoController = async(req, res, next) => {
  * @param req
  * @param res
  * @param next
- * @returns {Promise<unknown>}
+ * @returns {Promise<void>}
  */
 exports.updateUserCredentialController = async(req, res, next) => {
     try {

@@ -6,6 +6,7 @@ import {NavbarComponent} from "./shared/component/navbar/navbar.component";
 import {MaterialModules} from "./shared/layout/material.modules";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {MobileNavbarComponent} from "./shared/component/mobile-navbar/mobile-navbar.component";
+import {FooterComponent} from "./shared/component/footer/footer.component";
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -18,7 +19,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         NavbarComponent,
-        MobileNavbarComponent
+        MobileNavbarComponent,
+        FooterComponent
       ],
       providers: [
         RouterOutlet,

@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatchComponent } from './match.component';
+import { FooterComponent } from './footer.component';
+import {MaterialModules} from "../../layout/material.modules";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MaterialModules} from "../../shared/layout/material.modules";
 
-describe('MatchComponent', () => {
-  let component: MatchComponent;
-  let fixture: ComponentFixture<MatchComponent>;
+describe('FooterComponent', () => {
+  let component: FooterComponent;
+  let fixture: ComponentFixture<FooterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MaterialModules],
-      declarations: [ MatchComponent ]
+      imports: [MaterialModules, HttpClientTestingModule],
+      declarations: [ FooterComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MatchComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

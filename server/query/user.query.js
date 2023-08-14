@@ -1,4 +1,12 @@
 /**
+ * SQL - findLiteUserById
+ * @return {string}
+ */
+exports.findLiteUserById = () => {
+    return "SELECT id, firstname, lastname, phone_number, email, id_category FROM user WHERE id=?";
+}
+
+/**
  * SQL - insertUser
  * @returns {string} INSERT INTO user (id, fisrtname, lastname, email, password, ROLE) VALUES (user)
  */
@@ -11,7 +19,7 @@ exports.insertUser = () => {
  * @returns {string} UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?  WHERE id=?
  */
 exports.updateUserInfo = () => {
-    return "UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?, updateAt=NOW() WHERE id=?"
+    return "UPDATE user SET firstname=?, lastname=?, phone_number=?, email=?, updateAt=NOW() WHERE id=?";
 }
 
 /**
@@ -19,7 +27,7 @@ exports.updateUserInfo = () => {
  * @returns {string} UPDATE user SET password=? WHERE id=?
  */
 exports.updateUserCredential = () => {
-    return "UPDATE user SET password=?, updateAt=NOW() WHERE id=?"
+    return "UPDATE user SET password=?, updateAt=NOW() WHERE id=?";
 }
 
 /**
@@ -35,7 +43,7 @@ exports.findUserByEmail = () => {
  * @returns {string}
  */
 exports.findUserByTokenURL = () => {
-    return "SELECT * FROM user WHERE tokenURL=?"
+    return "SELECT * FROM user WHERE tokenURL=?";
 }
 
 /**
@@ -43,7 +51,7 @@ exports.findUserByTokenURL = () => {
  * @returns {string}
  */
 exports.findUserById = () => {
-    return "SELECT * FROM user where id=?";
+    return "SELECT * FROM user WHERE id=?";
 }
 
 /**
@@ -59,7 +67,7 @@ exports.findAllUser = () => {
  * @returns {string} "UPDATE user SET ROLE=? WHERE id=?"
  */
 exports.updateRoleUser = () => {
-    return "UPDATE user SET ROLE=? WHERE id=?"
+    return "UPDATE user SET ROLE=? WHERE id=?";
 }
 
 /**
@@ -67,5 +75,5 @@ exports.updateRoleUser = () => {
  * @returns {string}
  */
 exports.deleteUser = () => {
-    return "DELETE FROM user WHERE id=?"
+    return "DELETE FROM user WHERE id=?";
 }
