@@ -26,13 +26,18 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {
     this.teamService.getTeam().subscribe();
-    // FACEBOOK
+    // FACEBOOK AND COMMON
     this.metaService.addTags([
-      { property:'og:url',content: environment.domainName},
-      { property:'og:type',content: "website"},
-      { property:'og:title',content: environment.teamName},
-      { property:'og:description',content: "Club de football familial et convivial. Permettre aux enfants, aux jeunes et aux plus anciens de s'amuser" },
-      { property:'og:image', content: `${environment.imagesPUBLIC}/LOGO_OSNY.png`}
+      { name: 'url', property:'og:url',content: environment.domainName},
+      { name: 'type', property:'og:type',content: "website"},
+      { name: 'title', property:'og:title',content: environment.teamName},
+      { name: 'description', property:'og:description',content: "Club de football familial et convivial. Permettre aux enfants, aux jeunes et aux plus anciens de s'amuser" },
+      { name: 'image', property:'og:image', content: `${environment.imagesPUBLIC}/LOGO_OSNY.png`}
+    ]);
+    // TWITTER
+    this.metaService.addTags([
+      { name: "twitter:card", content: "Club de football familial et convivial. Permettre aux enfants, aux jeunes et aux plus anciens de s'amuser"  },
+      { name: "twitter:site", content: environment.twitterXShareAccount }
     ]);
   }
 

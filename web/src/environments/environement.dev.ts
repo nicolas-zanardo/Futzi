@@ -8,6 +8,7 @@ export const environment = {
   imagesPUBLIC : "http://localhost:3000/api/images/public/",
   teamName: "osny",
   domainName: "https://www.osnyfc.fr",
+  twitterXShareAccount: "@osny.com"
 };
 
 /*
