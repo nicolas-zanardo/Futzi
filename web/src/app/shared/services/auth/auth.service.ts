@@ -7,7 +7,7 @@ import jwt_decode from "jwt-decode";
 import {JwtToken} from "../../interface/jwt-token.interface";
 import {Router} from "@angular/router";
 import {ResponseLogin} from "../../interface/response.login.interface";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 import {SetROLE} from "../../enum/role";
 import {SocialCredentialInterface} from "../../interface/social-credential.interface";
 import {MessageService} from "../../messages/MessageService";
@@ -17,7 +17,7 @@ import {MessageService} from "../../messages/MessageService";
 })
 export class AuthService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public isLogged$ : ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   public subscription: Subscription;
   public currentUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
@@ -120,7 +120,7 @@ export class AuthService {
               error: (err) => {
                 if(err.status == 498) {
                   this.messageUser.next(MessageService.getTokenUnsuccessful("Votre session a expriré ,veuillez vous reconnecter"));
-                  Handel.error("AuthService", this.messageUser.value, "initTimer", err);
+                  Handel.error("AuthService", "initTimer", this.messageUser.value, err);
                   Handel.resetMessage(this.messageUser);
                 } else {
                   this.messageUser.next(MessageService.getTokenUnsuccessful("Erreur inconnue, veuillez contacter l'administrateur"));
@@ -168,7 +168,7 @@ export class AuthService {
    * @return Observable<User>
    */
   public createUser(user: User): Observable<User> {
-    const msg:string = "L'utilisateur";
+    const msg:string = "de votre compte, veuillez valider votre email";
     const url:string = `${environment.apiURL}/user/create`;
     return this.http.post<User>(url, user).pipe(
       tap({

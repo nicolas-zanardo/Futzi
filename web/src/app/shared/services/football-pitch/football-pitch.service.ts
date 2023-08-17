@@ -5,14 +5,14 @@ import {Category} from "../../interface/category.interface";
 import {environment} from "../../../../environments/environement.dev";
 import {HttpClient} from "@angular/common/http";
 import {MessageService} from "../../messages/MessageService";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FootballPitchService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public allFootballPitch$: BehaviorSubject<FootballPitch[]> = new BehaviorSubject<FootballPitch[]>([]);
 
   constructor(private http: HttpClient) { }

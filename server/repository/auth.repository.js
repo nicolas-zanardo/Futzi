@@ -82,7 +82,7 @@ exports.authUserLoginSocialRepository = async (req, res) => {
  */
 async function setToken(user, res) {
     user.password = null;
-    return await jsonWebToken.sign({ROLE: user.ROLE, email: user.email},
+    return jsonWebToken.sign({ROLE: user.ROLE, email: user.email},
         RSA_PRIVATE, {
             algorithm: 'RS256',
             subject: user.id.toString(),

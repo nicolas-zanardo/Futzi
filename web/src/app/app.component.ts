@@ -16,5 +16,4 @@ export class AppComponent {
   constructor(private authService: AuthService) {
     registerLocaleData(localeFr, 'fr');
   }
-
 }

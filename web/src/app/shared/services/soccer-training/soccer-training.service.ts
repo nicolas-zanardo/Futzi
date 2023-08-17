@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {environment} from "../../../../environments/environement.dev";
 import {SoccerTraining} from "../../interface/soccer-training.interface";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 import {MessageService} from "../../messages/MessageService";
 import {TrainingByCategoryInterface} from "../../interface/training-by-category.interface";
 
@@ -13,7 +13,7 @@ import {TrainingByCategoryInterface} from "../../interface/training-by-category.
 })
 export class SoccerTrainingService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public allSoccerTraining$: BehaviorSubject<SoccerTraining[]> = new BehaviorSubject<SoccerTraining[]>([]);
   public trainingByCat$: BehaviorSubject<TrainingByCategoryInterface[]> = new BehaviorSubject<TrainingByCategoryInterface[]>([]);
 

@@ -11,6 +11,8 @@ import {
   Validators
 } from "@angular/forms";
 import {RegexUser} from "../../shared/enum/regex-user";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MessageService} from "../../shared/messages/MessageService";
 
 
 @Component({
@@ -24,9 +26,11 @@ export class InscriptionComponent implements OnInit{
   public hidePassword = true;
   public hideConfirmPassword = true;
   public errorSend: string | undefined;
+  public isSend: boolean = false;
 
   constructor(
     private fb: FormBuilder,
+    private _snackBar: MatSnackBar,
     private router: Router,
     private authService: AuthService) {
   }
@@ -82,10 +86,19 @@ export class InscriptionComponent implements OnInit{
 
   public submit(): void {
     if(this.form.valid) {
+      this.isSend = true;
       this.authService.createUser(this.form.getRawValue()).subscribe( {
-        next: () => this.router.navigate(['/connection']),
+        next: () => {
+          this._snackBar.open(this.authService.messageUser.value!, "✅", {
+            duration: 5000
+          });
+          this.router.navigate(['/connexion']);
+        },
         error: (err) => { this.errorSend = err?.error },
-        complete: () => console.warn('INFO : USER HAS BEEN CREATED ', new Date())
+        complete: () => {
+          console.warn('INFO : USER HAS BEEN CREATED ', new Date());
+          this.isSend = false;
+        }
       });
     }
   }

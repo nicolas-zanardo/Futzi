@@ -3,7 +3,7 @@ import {BehaviorSubject, Observable, tap} from "rxjs";
 import {OpposingTeam} from "../../interface/opposing-team.interface";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environement.dev";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 import {MessageService} from "../../messages/MessageService";
 
 @Injectable({
@@ -11,7 +11,7 @@ import {MessageService} from "../../messages/MessageService";
 })
 export class OpposingTeamService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public allOpposingTeam$: BehaviorSubject<OpposingTeam[]> = new BehaviorSubject<OpposingTeam[]>([])
   constructor(private http: HttpClient) { }
 

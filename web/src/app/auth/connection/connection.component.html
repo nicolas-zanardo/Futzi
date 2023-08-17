@@ -14,11 +14,12 @@
       <h2>Connexion</h2>
     </div>
 
-
-    <mat-error *ngIf="errorSend" class="px-5 pt-3 w-100 d-flex justify-content-center border-1"><span>{{errorSend}}</span></mat-error>
-
 <!--    FORM-->
     <form class="form" [formGroup]="form" (submit)="submit()" *ngIf="!isAuthAsk">
+
+      <mat-error *ngIf="errorSend.value" class=" w-100 d-flex justify-content-center border-1 msg-user">
+        <div class="text-center" [style]="isErrorStyle">{{errorSend.value}}</div>
+      </mat-error>
 
 <!--      EMAIL-->
       <mat-form-field class="full-width">

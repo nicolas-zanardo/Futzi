@@ -1,3 +1,4 @@
+@import "../../../../src/scss/queries";
 table {
   width: 100%;
 }
@@ -37,4 +38,14 @@ tr.element-row:not(.example-expanded-row):active {
   display: flex;
   width: 100%;
   color: white;
+}
+
+.word-mat {
+  font-size: 1rem !important;
+  word-wrap: break-word !important;         /* All browsers since IE 5.5+ */
+  overflow-wrap: break-word !important;     /* Renamed property in CSS3 draft spec */
+  width: 100% !important;
+  @include sm {
+    font-size: 1.5rem !important;
+  }
 }

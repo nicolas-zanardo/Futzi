@@ -7,8 +7,17 @@
 
 <div mat-dialog-content>
   <b>Voulez-vous vraiment supprimer ce match ?</b>
-  <div class="d-flex justify-content-center align-items-center mt-3 border border-1 rounded p-3 bg-light">
-    <button class="btn btn-primary mx-2 p-2">{{data.category}}</button> <i>{{data.date | date:'yyyy/M/d'}} {{data.hour_start}} {{data.team_opposing}} | {{(data.football_pitch)?data.football_pitch:"extérieur"}} </i>
+  <div class="d-flex justify-content-center w-100 flex-column ">
+    <div class="bg-light mt-3 border border-1 rounded p-3 ">
+      <div>
+        Match : {{(data.is_local)?"local":"extérieur"}}
+      </div>
+      <div class="d-flex align-items-center">
+        Catégorie : <button mat-raised-button color="primary" class="mx-2 p-2">{{data.category?.toUpperCase()}}</button>
+      </div>
+      <div class="d-flex align-items-center mt-3 ms-3">📅 Date : {{data.date | date:'yyyy/MM/dd'}} {{data.hour_start}}</div>
+      <div class="d-flex align-items-center ms-3">⚽ Terrain : {{data.football_pitch}}</div>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-end">

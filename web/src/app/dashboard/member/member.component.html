@@ -5,11 +5,11 @@
 
   <h4>Contact Club</h4>
   <form class="mb-5" [formGroup]="formContact" (submit)="submitFormUserContact()">
-    <mat-form-field appearance="fill"  class="w-100">
+    <mat-form-field appearance="fill" class="w-100">
       <mat-label>Nom du contact</mat-label>
       <mat-select required [(value)]="selected" formControlName="contact">
 
-        <mat-form-field class="w-100 pt-3 px-3">
+        <mat-form-field class="d-flex pt-3 px-3">
           <mat-label>Recherche</mat-label>
           <input matInput (keyup)="filterUserList()" formControlName="search">
         </mat-form-field>
@@ -19,13 +19,11 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+
     <div class="d-flex justify-content-end">
       <button mat-raised-button color="primary"><mat-icon matSuffix>done</mat-icon>Modifier</button>
     </div>
   </form>
-
-
-
 
 
   <div class="mat-elevation-z8">
@@ -44,19 +42,21 @@
            class="mat-elevation-z8">
       <ng-container matColumnDef="{{item.column}}" *ngFor="let item of columnsToDisplay" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>{{item.name}}</b> </th>
-        <td mat-cell *matCellDef="let element">{{element[item.column]}}</td>
-      </ng-container>
-      <ng-container matColumnDef="expand" class="d-flex">
-        <th mat-header-cell *matHeaderCellDef aria-label="row actions" class="text-center"><b>STATUT</b></th>
-        <td mat-cell *matCellDef="let element" class="text-center">
-          <button mat-flat-button class="w-100 btnExpend" [style]="setBackgroundColorInfoUserStatus(element.info_status)" aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-            <span class="small-text d-flex align-items-center text-white">{{element.info_status}}
-              <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-              <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-            </span>
-          </button>
+        <td mat-cell *matCellDef="let element">{{element[item.column]}}
+          <div *ngIf="item.column=='STATUS'">
+            <button class="btn rounded w-100 text-white shadow my-2" [style]="setBackgroundColorInfoUserStatus(element.info_status)">
+              <div class="d-flex justify-content-between align-items-center py-2 w-100">
+                <div (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()" class="d-none d-sm-flex">
+                  <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                  <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                </div>
+                <div class="word-mat">{{element.info_status | uppercase}}</div>
+              </div>
+            </button>
+          </div>
         </td>
       </ng-container>
+
 
       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedDetail">
@@ -68,7 +68,7 @@
               <div class="py-3">
                 <h5>Contact</h5>
                 <div>☎ tel: {{element.phone_number}}</div>
-                <div>✉ email: {{element.email}}</div>
+                <div>{{element.is_valid_email?" ✅":"❌"}}✉ email: {{element.email}}</div>
               </div>
               <div class="py-3 d-flex align-items-center" *ngIf="currentUser?.id != element.id ">
                 <div>

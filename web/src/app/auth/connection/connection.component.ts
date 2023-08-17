@@ -5,6 +5,9 @@ import {AuthService} from "../../shared/services/auth/auth.service";
 import {RegexUser} from "../../shared/enum/regex-user";
 import {environment} from "../../../environments/environement.dev";
 import {MatDialog} from "@angular/material/dialog";
+import {MessageService} from "../../shared/messages/MessageService";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {BehaviorSubject} from "rxjs";
 
 
 @Component({
@@ -16,13 +19,15 @@ export class ConnectionComponent implements OnInit{
 
   public form!: FormGroup;
   public hide = true;
-  public errorSend: string | undefined;
+  public isErrorStyle: string = "";
+  public errorSend: BehaviorSubject<string|null> = this.authService.messageUser;
   public googleLogo: string = `${environment.imagesPUBLIC}button/Google__G__Logo.png`;
   public googleAuth : string = `${environment.apiURL}/auth/google`;
   public isAuthAsk : boolean = false;
 
   constructor(
     public dialog: MatDialog,
+    private _snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService) {
@@ -44,15 +49,24 @@ export class ConnectionComponent implements OnInit{
     })
   }
 
+  private setIsError(isError:boolean): string {
+    return isError?"color:red":"";
+  }
 
   submit(): void {
+    this.errorSend.next(null);
     if(this.form.valid) {
       this.isAuthAsk = true;
       this.authService.login(this.form.getRawValue()).subscribe({
         next: () => {
-          this.router.navigateByUrl('/member').then()},
+          this.router.navigateByUrl('/member').then();
+          this._snackBar.open(MessageService.loginSuccessful, "✅", {
+            duration: 5000
+          });
+        },
         error: (err) => {
-          this.errorSend = err?.error;
+          this.isErrorStyle = this.setIsError(true);
+          this.errorSend.next(MessageService.loginUnsuccessful);
           this.isAuthAsk = false;
         },
         complete: () => {
@@ -64,6 +78,6 @@ export class ConnectionComponent implements OnInit{
   }
 
   inscription(): void {
-    this.router.navigate(['/inscription']);
+    this.router.navigate(['/inscription']).then(r => {});
   }
 }

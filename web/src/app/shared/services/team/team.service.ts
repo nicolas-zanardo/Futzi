@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {environment} from "../../../../environments/environement.dev";
 import {Team} from "../../interface/team.interface";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 import {MessageService} from "../../messages/MessageService";
 import {User} from "../../interface/user.interface";
 
@@ -12,7 +12,7 @@ import {User} from "../../interface/user.interface";
 })
 export class TeamService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public currentTeam$: BehaviorSubject<Team | null> = new BehaviorSubject<Team | null>(null);
   public contactById$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public contact$: BehaviorSubject<User|null> = new BehaviorSubject<User|null>(null);

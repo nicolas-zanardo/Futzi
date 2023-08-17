@@ -17,7 +17,7 @@ export class MatchComponent implements OnInit {
   public nextMatch: BehaviorSubject<MatchPlay[]|[]> = this.matchPlayService.nextMatch$;
 
   constructor(
-    private matchPlayService: MatchPlayService
+    private matchPlayService: MatchPlayService,
   ) {}
 
   ngOnInit(): void {

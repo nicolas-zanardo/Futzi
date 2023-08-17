@@ -4,6 +4,8 @@ import {environment} from "../../../environments/environement.dev";
 import {UserService} from "../../shared/services/user/user.service";
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {SocialCredentialInterface} from "../../shared/interface/social-credential.interface";
+import {MessageService} from "../../shared/messages/MessageService";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -21,6 +23,7 @@ export class SocialComponent implements OnInit  {
   public messageUser: string | null = null;
 
   constructor(
+    private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private userService : UserService,
     private authService : AuthService,
@@ -47,6 +50,9 @@ export class SocialComponent implements OnInit  {
       this.isError = false;
       this.authService.socialLogin(userToken).subscribe({
         next: () => {
+          this._snackBar.open(MessageService.loginSuccessful, "✅", {
+            duration: 5000
+          });
           this.router.navigateByUrl('/member').then()},
         complete: () => console.warn('INFO : SOCIAL CONNECTION USER ', new Date())
       })

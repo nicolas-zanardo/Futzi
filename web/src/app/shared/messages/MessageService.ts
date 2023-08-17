@@ -2,7 +2,6 @@
  * @class  MessageService
  * Permit to create message on all services
  */
-import {BehaviorSubject} from "rxjs";
 
 export class MessageService {
 
@@ -53,8 +52,8 @@ export class MessageService {
   /**
    * LOGIN
    */
-  static loginSuccessful: string = `Vous êtes bien connecté`;
-  static loginUnsuccessful: string = `Echec de la connexion le mot de passe ou le l'utilisateur n'est pas correct`;
+  static loginSuccessful: string = `Vous êtes bien connecté(e)`;
+  static loginUnsuccessful: string = `Le mot de passe ou le l'utilisateur n'est pas correct`;
   static loginError(msg:string): string {
     return `Erreur lors de la connexion : ${msg}`;
   }

@@ -16,7 +16,7 @@ app-mobile-navbar {
   background-color: white;
   position: fixed;
   top: 90vh;
-  z-index: 99999999;
+  z-index: 10;
   @include sm {
     display: none;
   }

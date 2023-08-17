@@ -8,10 +8,11 @@
 
     <mat-error *ngIf="errorSend" class="px-5 pt-3 w-100 d-flex justify-content-center border-1"><span>{{errorSend}}</span></mat-error>
 
+    <div *ngIf="isSend" class="d-flex justify-content-center p-5 m-5"><mat-spinner></mat-spinner></div>
     <!--    FORM-->
-    <form class="form" [formGroup]="form" (submit)="submit()">
+    <form class="form" [formGroup]="form" (submit)="submit()" *ngIf="!isSend">
 
-      <div class="d-flex flex-wrap justify-content-center">
+      <div class="d-flex flex-wrap justify-content-center" >
 
         <div class="mx-2 form-raw">
           <h5>Indentité</h5>
@@ -108,7 +109,7 @@
       <!--      BTN SUBMIT-->
       <div class="d-flex justify-content-around mt-4">
         <button mat-button (click)="connection()">Connexion</button>
-        <button mat-raised-button color="accent" >Inscrivez-vous</button>
+        <button mat-raised-button color="accent">Inscrivez-vous</button>
       </div>
 
     </form>

@@ -6,7 +6,7 @@ import {environment} from "../../../../environments/environement.dev";
 import {User} from "../../interface/user.interface"
 import {ROLE} from "../../enum/role";
 import {SocialCredentialInterface} from "../../interface/social-credential.interface";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 import {MessageService} from "../../messages/MessageService";
 
 @Injectable({
@@ -14,7 +14,7 @@ import {MessageService} from "../../messages/MessageService";
 })
 export class UserService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>("");
   public allUsers$: BehaviorSubject<User[] | []> = new BehaviorSubject<User[] | []>([]);
   public userSocialToken$: BehaviorSubject<SocialCredentialInterface> =
     new BehaviorSubject<SocialCredentialInterface>({tokenURL: "", tokenTimeValidity: 0});

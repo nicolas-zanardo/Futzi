@@ -1,0 +1,9 @@
+<div class="bg-danger shadow-bg"><h1 class="text-white" mat-dialog-title>Suppression de l'utilisateur</h1></div>
+<div mat-dialog-content>
+  <p>Vous allez supprimer l'utilisateur :</p>
+  <p>{{data.firstname?.toUpperCase()}} {{data.lastname?.toUpperCase()}}</p>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button (click)="onNoClick()"><mat-icon fontIcon="arrow_back"></mat-icon> annuler</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial><mat-icon fontIcon="done"></mat-icon> ok</button>
+</div>

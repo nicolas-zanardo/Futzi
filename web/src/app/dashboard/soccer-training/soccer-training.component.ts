@@ -17,6 +17,8 @@ import {
 } from "./dialog-delete-soccer-training/dialog-delete-soccer-training.component";
 import {CategoryService} from "../../shared/services/category/category.service";
 import {FootballPitchService} from "../../shared/services/football-pitch/football-pitch.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MessageService} from "../../shared/messages/MessageService";
 
 
 @Component({
@@ -47,10 +49,11 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
   // FORM
   public formCreateTraining : FormGroup = new FormGroup({})
   // MAT DATABLE
-  public columnsToDisplayWithExpand = ['day', 'hour_start', 'expand'];
+  public columnsToDisplayWithExpand = ['day', 'hour_start', 'category'];
   public columnsToDisplay : {column: string, name: string}[] = [
     {column:'day', name: "Jour"},
-    {column:'hour_start', name: "Heure"}
+    {column:'hour_start', name: "Heure"},
+    {column:'category', name: "Catégories"}
   ];
   public expandedElement: SoccerTraining[] | null = null;
   public dataSource: MatTableDataSource<SoccerTraining>;
@@ -63,7 +66,8 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
     private trainingService: SoccerTrainingService,
     private categoryService: CategoryService,
     private footballPitchService: FootballPitchService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public _snackBar: MatSnackBar
   ) {
     this.hours = this.date.setHours();
     this.week = this.date.day;
@@ -155,7 +159,6 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
    */
   public openDialog(enterAnimationDuration: string, exitAnimationDuration: string, soccerTraining: SoccerTraining) {
     const dialogRef = this.dialog.open(DialogDeleteSoccerTrainingComponent, {
-      width: '100%',
       enterAnimationDuration,
       exitAnimationDuration,
       data: soccerTraining,
@@ -191,8 +194,11 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
             })
           }
           this.formCreateTraining.reset();
-          this.formCreateTraining.get('category')?.setValue('')
-          this.formCreateTraining.get('football_pitch')?.setValue('')
+          this.formCreateTraining.get('category')?.setValue('');
+          this.formCreateTraining.get('football_pitch')?.setValue('');
+          this._snackBar.open(MessageService.createSuccessful("de l'entrainement"), "✅", {
+            duration: 5000
+          })
         },
         error: (err) => {
           console.log(err?.error)
@@ -206,6 +212,9 @@ export class SoccerTrainingComponent implements OnInit, AfterViewInit{
       this.trainingService.deleteSoccerTraining(result.id).subscribe({
         next: () => {
           this.getAllTraining();
+          this._snackBar.open(MessageService.deleteSuccessful("de l'entrainement"), "✅", {
+            duration: 5000
+          })
         }
       })
     }

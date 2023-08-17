@@ -12,6 +12,10 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {RoleUserPipe} from "../../shared/pipe/role-user.pipe";
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {BehaviorSubject} from "rxjs";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MessageService} from "../../shared/messages/MessageService";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteMemberComponent} from "./delete-member/delete-member.component";
 
 @Component({
   selector: 'app-member',
@@ -47,10 +51,11 @@ export class MemberComponent implements OnInit, AfterViewInit  {
   ]
   public columnsToDisplay : {column: string, name: string}[] = [
     {column:'firstname', name: "Prénom"},
-    {column:'lastname', name: "Nom"}
+    {column:'lastname', name: "Nom"},
+    {column:'STATUS', name: "status"}
   ];
   // DATATABLE
-  public columnsToDisplayWithExpand = ['firstname', 'lastname', 'expand'];
+  public columnsToDisplayWithExpand = ['firstname', 'lastname', 'STATUS'];
   public expandedElement: User[] | null = null;
   public dataSource: MatTableDataSource<User>;
   // DATATABLE - PAGINATOR
@@ -58,6 +63,8 @@ export class MemberComponent implements OnInit, AfterViewInit  {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   constructor(
+    public dialog: MatDialog,
+    public _snackBar: MatSnackBar,
     private userService: UserService,
     private authService: AuthService,
     private teamService: TeamService,
@@ -81,9 +88,9 @@ export class MemberComponent implements OnInit, AfterViewInit  {
   //#################### STYLE CSS #############################
   public setBackgroundColorInfoUserStatus(status:string): string {
     let styleBckColor = "background-color: ";
-    if(status === "DEMANDE") {styleBckColor+="#04a6dd"};
-    if(status === "BANNI") {styleBckColor+="red"};
-    if(status === "MEMBRE") {styleBckColor+="#06387e"};
+    if(status === "DEMANDE" )  {styleBckColor+="#04a6dd"}
+    if(status === "BANNI"   )  {styleBckColor+="red"}
+    if(status === "MEMBRE"  )  {styleBckColor+="#06387e"}
     return styleBckColor;
   }
 
@@ -122,6 +129,9 @@ export class MemberComponent implements OnInit, AfterViewInit  {
     this.formContact.get("id")?.setValue(this.teamService.currentTeam$.value?.id)
     if(this.formContact.valid) {
       this.teamService.updateTeamContact(this.formContact.getRawValue()).subscribe(() => {
+        this._snackBar.open(MessageService.updateSuccessful("du contact"), "✅", {
+          duration: 5000
+        })
         this.listUsersContact = [];
         this.createListContact()
       })
@@ -187,7 +197,7 @@ export class MemberComponent implements OnInit, AfterViewInit  {
         if(ROLE != SetROLE.SUPPRIMER) {
           this.updateRoleUser(oldUser);
         } else {
-          this.deleteUser();
+          this.openDialog(oldUser);
         }
       } else {
         console.log("Not found user to send API request")
@@ -196,33 +206,38 @@ export class MemberComponent implements OnInit, AfterViewInit  {
     }
   }
 
-  private updateRoleUser(oldUser?: User): void {
+  private updateRoleUser(oldUser: User): void {
     this.userService.editUserROLE(this.formChangeStatus.getRawValue()).subscribe({
       next: () => {
         this.userService.allUsers$.subscribe({
           next: (users: User[] | []): void => {
             if(users.length) {
-              let user = users.find(user => user.id === this.formChangeStatus.get('id_user_update')?.value);
-              user!.info_status = this.authService.setInfoStatueByRole(oldUser!.ROLE!)
+              let user: User | undefined = users.find(user => user.id === this.formChangeStatus.get('id_user_update')?.value);
+              user!.info_status = this.authService.setInfoStatueByRole(oldUser.ROLE!);
               user!.ROLE = this.formChangeStatus.get('ROLE')?.value;
+              oldUser.info_status = this.authService.setInfoStatueByRole(oldUser.ROLE!);
+              this._snackBar.open(MessageService.updateSuccessful(`du ROLE membre ${user?.firstname?.toUpperCase()} ${user?.lastname?.toUpperCase()}`), "✅", {
+                duration: 5000
+              })
             }
           }
         });
-        oldUser!.info_status = this.authService.setInfoStatueByRole(oldUser!.ROLE!)
       },
       error: (err) => {
-        console.log("ERROR on request API ", err)
-        oldUser!.ROLE = this.authService.setRoleByInfoStatus(oldUser!.info_status!)
+        console.log("ERROR on request API ", err);
       }
     })
   }
 
-  private deleteUser(): void {
+  private deleteUser(oldUser: User): void {
     this.userService.deleteUser(this.formChangeStatus.get('id_user_update')!.value, this.formChangeStatus.get('id_current_user')!.value).subscribe({
       next: () => {
         this.userService.allUsers$.subscribe({
           next: (users: User[] | []): void => {
-            this.dataSource.data = this.dataSource.data.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
+              this.dataSource.data = this.dataSource.data.filter((user: User) => user.id != this.formChangeStatus.get('id_user_update')?.value);
+            this._snackBar.open(MessageService.updateSuccessful(`membre ${oldUser?.firstname?.toUpperCase()} ${oldUser?.lastname?.toUpperCase()}`), "✅", {
+              duration: 5000
+            })
           }
         });
       },
@@ -231,4 +246,22 @@ export class MemberComponent implements OnInit, AfterViewInit  {
       }
     })
   }
+
+  /**
+   * MODAL DELETE
+   * @param oldUser
+   * @private
+   */
+  private openDialog(oldUser: User): void {
+    const dialogRef = this.dialog.open(DeleteMemberComponent, {
+      data: oldUser
+    });
+
+    dialogRef.afterClosed().subscribe(oldUser => {
+      if(oldUser) {
+        this.deleteUser(oldUser);
+      }
+    });
+  }
+
 }

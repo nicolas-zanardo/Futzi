@@ -96,14 +96,13 @@ img {
 /* Fading animation */
 .fade {
   animation-name: fade;
-  animation-duration: 5s;
+  animation-duration: 5000ms;
 }
 
 @keyframes fade {
-  0% { opacity: 0.5;}
-  10% { opacity: 1;}
-  95% { opacity: 1;}
-  100% { opacity: 0.3;}
+  0% { opacity: 0.6;}
+  30% { opacity: 1;}
+  100% { opacity: 1;}
 }
 
 /* On smaller screens, decrease text size */

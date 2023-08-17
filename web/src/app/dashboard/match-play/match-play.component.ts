@@ -19,6 +19,8 @@ import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {SoccerTraining} from "../../shared/interface/soccer-training.interface";
 import {DialogDeleteMatchPlayComponent} from "./dialog-delete-match-play/dialog-delete-match-play.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MessageService} from "../../shared/messages/MessageService";
 
 @Component({
   selector: 'app-match-play',
@@ -50,7 +52,7 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
   public dataSource: MatTableDataSource<MatchPlay>;
   public columnsToDisplay: {column: string, name: string}[] = [
     {column: 'date', name:'date'},
-    {column: 'category', name:'Catégory'},
+    {column: 'category', name:'Catégorie'},
     {column: 'team_opposing', name:'Équipe'}
   ];
   public columnsToDisplayWithExpand = ['date', 'team_opposing', 'category'];
@@ -67,7 +69,8 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
     private footballPitchService: FootballPitchService,
     private opposingTeamService: OpposingTeamService,
     private matchService: MatchPlayService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public _snackBar: MatSnackBar
   ) {
     this.dataSource = new MatTableDataSource(this.dataMatch);
   }
@@ -160,7 +163,6 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
    */
   public openDialog(enterAnimationDuration: string, exitAnimationDuration: string, soccerTraining: SoccerTraining) {
     const dialogRef = this.dialog.open(DialogDeleteMatchPlayComponent, {
-      width: '100%',
       enterAnimationDuration,
       exitAnimationDuration,
       data: soccerTraining,
@@ -258,6 +260,9 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
           this.formCreateMatch.get('match_of_the_day')?.setValue(false);
           this.formCreateMatch.get('team')?.setValue(environment.teamName)
           this.formCreateMatch.get('football_pitch')?.enable();
+          this._snackBar.open(MessageService.createSuccessful("du match"), "✅", {
+            duration: 5000
+          })
         },
         error: (err) => {
           console.log(err?.error)
@@ -272,6 +277,9 @@ export class MatchPlayComponent implements OnInit, AfterViewInit{
         this.matchService.getAllMatchPlay().subscribe((matchPlay: MatchPlay[]) => {
           this.dataMatch = matchPlay;
           this.dataSource.data = this.dataMatch;
+          this._snackBar.open(MessageService.deleteSuccessful("du match"), "✅", {
+            duration: 5000
+          })
         })
       })
     }

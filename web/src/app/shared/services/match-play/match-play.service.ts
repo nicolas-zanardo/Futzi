@@ -5,14 +5,14 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../environments/environement.dev";
 import {SeasonDateInterface} from "../../interface/season-date.interface";
 import {MessageService} from "../../messages/MessageService";
-import {Handel} from "../handel-error";
+import {Handel} from "../handel";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatchPlayService {
 
-  public messageUser: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null);
   public allMatchPlay$: BehaviorSubject<MatchPlay[]> = new BehaviorSubject<MatchPlay[]>([]);
   public allMatchSeason$: BehaviorSubject<MatchPlay[]> = new BehaviorSubject<MatchPlay[]>([]);
   public nextMatch$: BehaviorSubject<MatchPlay[]|[]> = new BehaviorSubject<MatchPlay[] | []>([]);

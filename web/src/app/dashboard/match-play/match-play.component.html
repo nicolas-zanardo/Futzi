@@ -95,21 +95,25 @@
 
     <table mat-table
            [dataSource]="dataSource" multiTemplateDataRows matSort>
-      <ng-container matColumnDef="{{item.column}}" *ngFor="let item of columnsToDisplay">
+      <ng-container matColumnDef="{{item.column}}" *ngFor="let item of columnsToDisplay" class="d-flex">
         <th mat-header-cell *matHeaderCellDef mat-sort-header><b>{{item.name | titlecase}}</b></th>
-        <td mat-cell *matCellDef="let element" class="">
+        <td mat-cell *matCellDef="let element">
           <div *ngIf="item.column=='date'" class="word-mat">
             📅 <b>{{element[item.column]  | date:'yyyy/MM/dd'}}</b> 🕛 {{element.hour_start}}
           </div>
           <div *ngIf="item.column=='team_opposing'" class="word-mat">
-            {{element[item.column]  | uppercase}}
+            {{element[item.column]  | titlecase}}
           </div>
-          <div *ngIf="item.column=='category'" class="d-flex align-items-center pe-3">
-            <div  (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-              <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-              <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-            </div>
-            <small class="word-mat">{{element["category"] | uppercase}}</small>
+          <div *ngIf="item.column=='category'">
+            <button class="btn bg-primary rounded w-100 text-white shadow my-2">
+              <div class="d-flex justify-content-between align-items-center py-2 w-100">
+                <div (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()" class="d-none d-sm-flex">
+                  <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                  <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                </div>
+                <div class="word-mat">{{element["category"] | uppercase}}</div>
+              </div>
+            </button>
           </div>
         </td>
       </ng-container>
@@ -121,12 +125,12 @@
           <div class="element-detail"
                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
             <div class="element-description">
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center mt-2">
                 <div>{{(element.football_pitch)?("⚽ ⬇️TERRAIN : "+element.football_pitch | uppercase): ("⚽ ⬆️EXTERIEUR : "+element.team_opposing | uppercase)}}</div>
               </div>
-              <div>
-                <button mat-fab extended class="bg-danger text-white" (click)="openDialog('300ms', '200ms', element)">
-                  <mat-icon>delete</mat-icon>
+              <div class="mt-2">
+                <button mat-raised-button class="bg-danger text-white word-mat" (click)="openDialog('300ms', '200ms', element)">
+                  <mat-icon class="d-flex align-items-center word-mat">delete</mat-icon>
                   supprimer
                 </button>
               </div>

@@ -70,8 +70,4 @@ export class SlideshowComponent implements OnInit {
     dots[this.slideIndex-1].className += " active";
   }
 
-  public ngOnDestroy(): void {
-    this.stopSlide();
-  }
-
 }
