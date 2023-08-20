@@ -23,6 +23,7 @@ import { SocialComponent } from './auth/social/social.component';
 import { MobileNavbarComponent } from './shared/component/mobile-navbar/mobile-navbar.component';
 import { FooterComponent } from './shared/component/footer/footer.component';
 import { LogoutDialogComponent } from './shared/component/navbar/logout-dialog/logout-dialog.component';
+import { NotFoundComponent } from './shared/component/error/not-found/not-found.component';
 
 
 
@@ -37,6 +38,7 @@ import { LogoutDialogComponent } from './shared/component/navbar/logout-dialog/l
     MobileNavbarComponent,
     FooterComponent,
     LogoutDialogComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
