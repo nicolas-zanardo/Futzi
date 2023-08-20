@@ -10,7 +10,4 @@ export class NotFoundComponent {
 
   public imgError404: string = `${environment.imagesPUBLIC}erreur-404.jpg`;
 
-  constructor() {
-    console.log(this.imgError404)
-  }
 }

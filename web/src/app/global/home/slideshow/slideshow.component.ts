@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {environment} from "../../../../environments/environement.dev";
 
 @Component({
@@ -6,7 +6,7 @@ import {environment} from "../../../../environments/environement.dev";
   templateUrl: './slideshow.component.html',
   styleUrls: ['./slideshow.component.scss']
 })
-export class SlideshowComponent implements OnInit {
+export class SlideshowComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private slideIndex: number = 1;
   private automateSlide: any;
@@ -68,6 +68,10 @@ export class SlideshowComponent implements OnInit {
     }
     slides[this.slideIndex-1].style.display = "block";
     dots[this.slideIndex-1].className += " active";
+  }
+
+  public ngOnDestroy(): void {
+    this.stopSlide();
   }
 
 }

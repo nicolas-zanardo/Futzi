@@ -29,7 +29,7 @@ export class BanUserComponent {
     this.subscription?.unsubscribe();
     this.authService.logout();
     this._smackBar.open(MessageService.logout, "✅", {
-      duration: 10000
+      duration: 5000
     })
   }
 

@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {environment} from "../../../../environments/environement.dev";
 import {Router} from "@angular/router";
 import {JwtToken} from "../../interface/jwt-token.interface";
-import {BehaviorSubject, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {AuthService} from "../../services/auth/auth.service";
 import {ROLE} from "../../enum/role";
 import {MatDialog} from "@angular/material/dialog";
 import {LogoutDialogComponent} from "./logout-dialog/logout-dialog.component";
-import {User} from "../../interface/user.interface";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MessageService} from "../../messages/MessageService";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-navbar',
@@ -26,10 +26,10 @@ export class NavbarComponent implements OnInit {
   public btnUserClass: string;
 
   constructor(
-    public dialog: MatDialog,
-    public _smackBar: MatSnackBar,
-    private router: Router,
-    private authService: AuthService) {
+      public dialog: MatDialog,
+      public _smackBar: MatSnackBar,
+      private router: Router,
+      private authService: AuthService) {
     this.authService.initToken();
     this.btnUserClass = this.setBtnUserClass();
   }
@@ -69,7 +69,9 @@ export class NavbarComponent implements OnInit {
       if(result) {
         this.subscription?.unsubscribe();
         this.authService.logout();
-        this._smackBar.open(MessageService.logout, "✅")
+        this._smackBar.open(MessageService.logout, "✅", {
+          duration: 5000
+        })
       }
     });
   }
