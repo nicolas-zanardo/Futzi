@@ -1,3 +1,39 @@
-<p>ban-user works!</p>
 
-<button mat-stroked-button color="primary" (click)="logout()">Déconnexion</button>
+<div class="container mt-5">
+
+  <div class="d-flex justify-content-start align-items-center">
+    <mat-icon fontIcon="info" class="text-primary me-3"></mat-icon><h1> Votre accès a été révoqué</h1>
+  </div>
+
+  <div class="barre-title mt-3"></div>
+
+  <div class="d-flex justify-content-center align-items-center mt-5">
+
+    <main class="card p-5 shadow mt-5">
+      <div class="m-3">
+        <p>Bonjour <b>{{currentUser?.firstname | titlecase}}</b>,</p>
+        <br>
+        <div class="card p-3 shadow-sm bg-light">
+          <p><span class="text-danger">⚠️ Votre compte a été désactivé ⚠️</span></p>
+          <p>Veuillez contacter le responsable du club <b class="text-primary">Osny</b></p>
+          <br>
+          <p>
+            <b>{{contact.value?.firstname | titlecase}} {{contact.value?.lastname}}</b> <br>
+            ✉️ {{contact.value?.email}} <br>
+            📱 {{contact.value?.phone_number}}
+          </p>
+          <br>
+          <p>Nous vous prions de bien vouloir accepter nos excuses pour les désagréments occasionnés.</p>
+        </div>
+      </div>
+
+
+      <div class="mt-4 mb-5 text-center">
+        <button mat-raised-button color="primary" (click)="logout()">Déconnexion</button>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+
