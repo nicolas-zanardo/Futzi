@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {AuthService} from "./shared/services/auth/auth.service";
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr'
+import {User} from "./shared/interface/user.interface";
 
 @Component({
   selector: 'app-root',

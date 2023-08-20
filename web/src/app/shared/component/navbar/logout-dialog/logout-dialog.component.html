@@ -1,0 +1,12 @@
+<h1 mat-dialog-title class="d-flex justify-content-start align-items-center bg-primary text-white">
+  <mat-icon fontIcon="logout" class="me-3"></mat-icon> {{data!.firstname | titlecase}}
+</h1>
+
+<div mat-dialog-content class="mt-5">
+  <p>Avez vous fini votre travail ?</p>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button (click)="onNoClick()"><mat-icon fontIcon="arrow_back"></mat-icon> Annuler</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial><mat-icon fontIcon="done"></mat-icon> Ok</button>
+</div>

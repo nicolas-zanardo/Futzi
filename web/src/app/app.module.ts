@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule, Meta} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
@@ -22,6 +22,7 @@ import { DateComponent } from './shared/component/date/date.component';
 import { SocialComponent } from './auth/social/social.component';
 import { MobileNavbarComponent } from './shared/component/mobile-navbar/mobile-navbar.component';
 import { FooterComponent } from './shared/component/footer/footer.component';
+import { LogoutDialogComponent } from './shared/component/navbar/logout-dialog/logout-dialog.component';
 
 
 
@@ -35,6 +36,7 @@ import { FooterComponent } from './shared/component/footer/footer.component';
     SocialComponent,
     MobileNavbarComponent,
     FooterComponent,
+    LogoutDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,8 @@ import { FooterComponent } from './shared/component/footer/footer.component';
     ReactiveFormsModule,
     HttpClientModule,
     NgOptimizedImage,
-    DashboardModule
+    DashboardModule,
+    FormsModule
   ],
   providers: [
     {

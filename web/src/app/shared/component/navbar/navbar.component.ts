@@ -2,9 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {environment} from "../../../../environments/environement.dev";
 import {Router} from "@angular/router";
 import {JwtToken} from "../../interface/jwt-token.interface";
-import {Subscription} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {AuthService} from "../../services/auth/auth.service";
 import {ROLE} from "../../enum/role";
+import {MatDialog} from "@angular/material/dialog";
+import {LogoutDialogComponent} from "./logout-dialog/logout-dialog.component";
+import {User} from "../../interface/user.interface";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MessageService} from "../../messages/MessageService";
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +18,7 @@ import {ROLE} from "../../enum/role";
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() public isLogged!: boolean | null ;
+  @Input() public isLogged!: boolean | null;
   public logo: string = `${environment.imagesPUBLIC}LOGO_OSNY.png`;
   public jwtToken?: JwtToken;
   public subscription?: Subscription;
@@ -21,6 +26,8 @@ export class NavbarComponent implements OnInit {
   public btnUserClass: string;
 
   constructor(
+    public dialog: MatDialog,
+    public _smackBar: MatSnackBar,
     private router: Router,
     private authService: AuthService) {
     this.authService.initToken();
@@ -47,9 +54,23 @@ export class NavbarComponent implements OnInit {
   }
 
   public logout() {
-    this.subscription?.unsubscribe();
-    this.authService.logout();
+    this.openDialog();
+
   }
 
-    protected readonly environment = environment;
+  private openDialog(): void {
+    window.document.getElementById("logout")?.setAttribute("disabled", "disabled")
+    const dialogRef = this.dialog.open(LogoutDialogComponent, {
+      data: this.authService.currentUser$.value,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      window.document.getElementById("logout")?.removeAttribute("disabled")
+      if(result) {
+        this.subscription?.unsubscribe();
+        this.authService.logout();
+        this._smackBar.open(MessageService.logout, "✅")
+      }
+    });
+  }
 }

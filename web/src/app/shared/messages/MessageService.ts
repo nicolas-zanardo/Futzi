@@ -58,5 +58,10 @@ export class MessageService {
     return `Erreur lors de la connexion : ${msg}`;
   }
 
+  /**
+   * LOGOUT
+   */
+  static logout: string = `La déconnexion a été effectuée avec succès.`;
+
 }
 

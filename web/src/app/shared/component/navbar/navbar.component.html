@@ -12,7 +12,7 @@
       <button *ngIf="isLogged && jwtToken?.isAuthenticated && !isDisplayBtn('/member')" [disabled]="isBanUser" [class]="btnUserClass" routerLink="/member" routerLinkActive="active-user">
         <mat-icon aria-hidden="false" aria-label="person icon" fontIcon="person"></mat-icon>
       </button>
-      <button mat-stroked-button *ngIf="isLogged && isDisplayBtn('/member')" (click)="logout()">
+      <button mat-stroked-button *ngIf="isLogged && isDisplayBtn('/member')" (click)="logout()" id="logout">
         <mat-icon aria-hidden="false" aria-label="logout icon" fontIcon="logout"></mat-icon>
         <span class="small">Déconnexion</span>
       </button>

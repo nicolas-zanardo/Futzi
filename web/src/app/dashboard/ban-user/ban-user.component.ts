@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth/auth.service";
+import {MessageService} from "../../shared/messages/MessageService";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Subscription} from "rxjs";
+import {TeamService} from "../../shared/services/team/team.service";
+
 
 @Component({
   selector: 'app-ban-user',
@@ -8,11 +12,22 @@ import {AuthService} from "../../shared/services/auth/auth.service";
   styleUrls: ['./ban-user.component.scss']
 })
 export class BanUserComponent {
+
+  public subscription?: Subscription;
+
   constructor(
-    private router: Router,
+    public _smackBar: MatSnackBar,
+    public teamService: TeamService,
     private authService: AuthService) {
+    this.teamService.getTeam().subscribe();
   }
+
   public logout(): void {
+    this.subscription?.unsubscribe();
     this.authService.logout();
+    this._smackBar.open(MessageService.logout, "✅", {
+      duration: 10000
+    })
   }
+
 }
