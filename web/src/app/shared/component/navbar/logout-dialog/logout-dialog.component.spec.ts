@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoutDialogComponent } from './logout-dialog.component';
+import {MaterialModules} from "../../../layout/material.modules";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 describe('LogoutDialogComponent', () => {
   let component: LogoutDialogComponent;
@@ -8,7 +10,12 @@ describe('LogoutDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LogoutDialogComponent ]
+      imports: [MaterialModules],
+      declarations: [ LogoutDialogComponent ],
+      providers: [
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: { myData: {} } }
+      ]
     })
     .compileComponents();
 
