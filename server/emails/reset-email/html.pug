@@ -1,0 +1,20 @@
+img(src='http://localhost:3000/api/images/public/LOGO_OSNY.png', width=100)
+br
+br
+div(style="font-family: Arial, Helvetica, sans-serif;")
+    p Bonjour,
+        b=` ${user.firstname} ${user.lastname}`
+    br
+    p Une demande de réinitialisation de mot de passe a été effectuée. Veuillez cliquer sur le lien pour procéder au changement de votre mot de passe.
+    samll
+        i (La durée de validité du lien est de 15 minutes.)
+    br
+    p 🔁
+        a(href=process.env.CLIENT_WEB+"/reset-password/"+user.token_reset_password) Procédez à la modification de votre mot de passe.
+    br
+    br
+    p Cordialement,
+    br
+    b #{contact.firstname} #{contact.lastname}
+    div ✉️ #{contact.email}
+    div 📱 #{contact.phone_number}

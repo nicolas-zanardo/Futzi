@@ -1,0 +1,14 @@
+img(src='http://localhost:3000/api/images/public/LOGO_OSNY.png', width=100)
+br
+br
+div(style="font-family: Arial, Helvetica, sans-serif;")
+    p Bonjour,
+        b=` ${user.firstname} ${user.lastname}`
+    br
+    p La modification de votre mot de passe a été effectuée avec succès.
+    br
+    p Cordialement,
+    br
+    b #{contact.firstname} #{contact.lastname}
+    div ✉️ #{contact.email}
+    div 📱 #{contact.phone_number}

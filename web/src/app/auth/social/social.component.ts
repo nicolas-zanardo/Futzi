@@ -11,7 +11,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 @Component({
   selector: 'app-social',
   templateUrl: './social.component.html',
-  styleUrls: ['./social.component.css']
+  styleUrls: ['./social.component.scss']
 })
 export class SocialComponent implements OnInit  {
 
@@ -39,7 +39,6 @@ export class SocialComponent implements OnInit  {
     });
   }
 
-
   private isValidSocialCredential(userToken: SocialCredentialInterface | null | undefined) {
     this.isError = true;
     if(userToken) this.checkSocialCredential(userToken, this.token);
@@ -66,7 +65,7 @@ export class SocialComponent implements OnInit  {
   }
 
   private isTrueCredential(userToken : SocialCredentialInterface, token: string | null | undefined) {
-    const isValidDate = userToken!.tokenTimeValidity! >= Date.now();
+    const isValidDate = userToken!.token_time_validity! >= Date.now();
     const isValidToken = userToken!.tokenURL === token;
     return isValidDate && isValidToken;
   }

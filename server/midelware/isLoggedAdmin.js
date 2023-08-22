@@ -2,7 +2,7 @@ const fs = require("fs");
 const {Database} = require("../Database/Database");
 const jsonWebToken = require('jsonwebtoken');
 const RSA_PUB = fs.readFileSync('./RSA/key.pub', 'utf8');
-const sql = require("../query/user.query");
+const sql = require("../query/user/user.query");
 const {findRoleUser} = require("../component/auth/role-user");
 const {ROLE} = require("../enum/ROLES");
 

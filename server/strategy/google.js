@@ -1,10 +1,11 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20');
-const {findUserByEmail} = require("../query/user.query");
+const {findUserByEmail} = require("../query/user/user.query");
 const {Database} = require("../Database/Database");
-const {createUserStrategyRepository, updateUserAuthSocialTokenRepository} = require("../repository/user.repository");
+const {createUserStrategyRepository, updateUserAuthSocialTokenRepository} = require("../repository/user/user.repository");
 const {User} = require("../model/User.model");
 const bcrypt = require("bcrypt");
+const {GenerateToken} = require("../component/tool/GenerateToken");
 
 const addTimeValidityToken = 1000*30;
 
@@ -46,23 +47,21 @@ exports.googleStrategy = () => {
                 let user = rows[0]
                 if (user) {
                     user.tokenURL = accessToken;
-                    user.tokenTimeValidity = Date.now() + addTimeValidityToken;
-                    updateUserAuthSocialTokenRepository(accessToken, user.tokenTimeValidity, user.id);
+                    user.token_time_validity = Date.now() + addTimeValidityToken;
+                    updateUserAuthSocialTokenRepository(accessToken, user.token_time_validity, user.id);
                     return cb(null, user);
                 } else {
                     const newUser = new User;
                     newUser.email = profile.emails[0].value;
-                    newUser.isValidMail = profile.emails[0].verified;
+                    newUser.is_valid_mail = profile.emails[0].verified;
                     newUser.lastname = profile.name.familyName;
                     newUser.firstname = profile.name.givenName;
                     newUser.phone_number = "VEUILLEZ RENSEIGNER VOTRE NUMERO DE TELEPHONE";
                     newUser.ROLE = '["USER"]';
                     newUser.tokenURL = accessToken;
-                    newUser.tokenTimeValidity = Date.now() + addTimeValidityToken;
-                    let PWD = "";
-                    for (let i = 0; i < 30; i++) {
-                        PWD += String.fromCharCode(Math.floor(Math.random() * 128));
-                    }
+                    newUser.token_time_validity = Date.now() + addTimeValidityToken;
+                    const genToken = new GenerateToken();
+                    const PWD = genToken.create(200, genToken.tokenPassword);
                     newUser.password = bcrypt.hashSync(PWD, bcrypt.genSaltSync(16));
                     createUserStrategyRepository(newUser);
                     return cb(null, newUser);

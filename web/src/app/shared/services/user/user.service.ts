@@ -17,7 +17,7 @@ export class UserService {
   public messageUser: BehaviorSubject<string|null> = new BehaviorSubject<string|null>("");
   public allUsers$: BehaviorSubject<User[] | []> = new BehaviorSubject<User[] | []>([]);
   public userSocialToken$: BehaviorSubject<SocialCredentialInterface> =
-    new BehaviorSubject<SocialCredentialInterface>({tokenURL: "", tokenTimeValidity: 0});
+    new BehaviorSubject<SocialCredentialInterface>({tokenURL: "", token_time_validity: 0});
 
   constructor(private http: HttpClient) {}
 

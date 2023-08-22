@@ -1,0 +1,17 @@
+img(src='http://localhost:3000/api/images/public/LOGO_OSNY.png', width=100)
+br
+br
+div(style="font-family: Arial, Helvetica, sans-serif;")
+    p Bonjour,
+        b=` ${user.firstname} ${user.lastname}`
+    br
+    p Pour finaliser la validation de votre compte, veuillez confirmer votre adresse e-mail.
+    p ➡️
+        a(href=process.env.CLIENT_WEB+"/valid-email-account/"+user.token_valid_email) Confirmer votre email
+    br
+    br
+    p Cordialement,
+    br
+    b #{contact.firstname} #{contact.lastname}
+    div ✉️ #{contact.email}
+    div 📱 #{contact.phone_number}

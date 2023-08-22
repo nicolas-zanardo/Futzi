@@ -9,9 +9,7 @@ const passport = require('passport');
 const {googleStrategy} = require("./strategy/google");
 require('dotenv').config();
 
-
 const indexRouter = require('./routes');
-
 
 const app = express();
 

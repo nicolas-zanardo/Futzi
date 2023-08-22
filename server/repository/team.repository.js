@@ -1,5 +1,5 @@
 const {Database} = require("../Database/Database");
-const {findTeam, updateTeam} = require("../query/team.query");
+const {findTeam, updateTeam, getContactTeam} = require("../query/team.query");
 const {deleteOpposingTeam} = require("../query/opposing-team.query");
 
 /**
@@ -50,12 +50,40 @@ exports.updateTeamContactTeamRepository = async(req, res) => {
         .then(db.connection.end());
 }
 
+/**
+ * deleteTeamRepository
+ * @param id
+ * @param res
+ * @param next
+ * @return {Promise<unknown>}
+ */
 exports.deleteTeamRepository = async(id,res,next) => {
     const db = new Database();
     return await db.connection.promise().query(deleteOpposingTeam(), [id])
         .then((rows) => {
             console.log(`░▒▓ INFO : DELETE CONTACT TEAM : ${new Date()} `);
             return res.status(200).json(rows);
+        }).catch(err => {
+            console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
+                contacter l'administrateur 🤬`);
+        }).then(db.connection.end());
+}
+
+/**
+ * getContactTeamRepository
+ * @param res
+ * @return {Promise<unknown>}
+ */
+exports.getContactTeamRepository = async(res=null) => {
+    const db = new Database();
+    return await db.connection.promise().query(getContactTeam(), [])
+        .then(([rows]) => {
+            console.log(`░▒▓ INFO : GET CONTACT TEAM : ${new Date()} `);
+            if(res) {
+                return res.status(200).json(rows[0]);
+            }
+            return rows[0];
         }).catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
             return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, 
