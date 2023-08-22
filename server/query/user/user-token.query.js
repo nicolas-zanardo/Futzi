@@ -36,7 +36,7 @@ exports.findUserByTokenValidEmail = () => {
  * @return {string}
  */
 exports.updateStatusValidEmail = () => {
-    return "UPDATE user SET is_valid_email=? token_reset_password=?, token_time_validity=?, tokenURL=?, token_valid_email=? WHERE id=?"
+    return "UPDATE user SET is_valid_email=?, token_reset_password=?, token_time_validity=?, tokenURL=?, token_valid_email=? WHERE id=?"
 }
 
 

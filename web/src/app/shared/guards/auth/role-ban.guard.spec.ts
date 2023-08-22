@@ -11,7 +11,7 @@ describe('RoleBanGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([
-        { path: 'connection', component: ConnectionComponent },
+        { path: 'connexion', component: ConnectionComponent },
       ])]
     });
     guard = TestBed.inject(RoleBanGuard);

@@ -21,7 +21,7 @@ const {sendEmailRepository} = require("../email.repository");
  * @const addTimeValidityToken
  * @type {number}
  */
-const addTimeValidityToken = 1000*60*15000;
+const addTimeValidityToken = 1000*60*15;
 
 /**
  * findUserByIdRepository

@@ -18,6 +18,7 @@ export class UserService {
   public allUsers$: BehaviorSubject<User[] | []> = new BehaviorSubject<User[] | []>([]);
   public userSocialToken$: BehaviorSubject<SocialCredentialInterface> =
     new BehaviorSubject<SocialCredentialInterface>({tokenURL: "", token_time_validity: 0});
+  public userRequest$: BehaviorSubject<User|null> = new BehaviorSubject<User|null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -121,7 +122,7 @@ export class UserService {
    * @return Observable<SocialCredentialInterface | null>
    */
   public getUserByTokenURL(token: string | null | undefined) : Observable<SocialCredentialInterface | null> {
-    const url: string = `${environment.apiURL}/user/token-url/${token}`;
+    const url: string = `${environment.apiURL}/user/token/token-url/${token}`;
     return this.http.get<SocialCredentialInterface | null>(url).pipe(tap({
       next: (user) => {
         if(user) {
@@ -134,6 +135,46 @@ export class UserService {
         Handel.resetMessage(this.messageUser);
       }
     }));
+  }
+
+  /**
+   * getUserByTokenValidEmail
+   * @param token
+   */
+  public getUserByTokenValidEmail(token: string | null | undefined): Observable<User|null> {
+    const url: string = `${environment.apiURL}/user/token/find-by-token-valid-email/${token}`;
+    return this.http.get<User | null>(url).pipe(tap({
+      next: (user) => {
+        if(user) {
+          this.userRequest$.next(user);
+        }
+      },
+      error: (err) => {
+        this.messageUser.next(MessageService.getDataError("recupération de l'utilisateur par le token"));
+        Handel.error("UserService", "getUserByTokenURL", this.messageUser.value, err);
+        Handel.resetMessage(this.messageUser);
+      }
+    }));
+  }
+
+  /**
+   * validTokenValidEmail
+   * @param user
+   */
+  public validTokenValidEmail(user: User): Observable<User|string> {
+    const url: string = `${environment.apiURL}/user/token/valid-token-valid-email`;
+    return this.http.post<User>(url, user).pipe(
+        tap({
+          next: (user: User) => {
+            this.userRequest$.next(user);
+          },
+          error: (err) => {
+            this.messageUser.next(err.error);
+            Handel.error("UserService", "validTokenValidEmail", this.messageUser.value, err);
+            Handel.resetMessage(this.messageUser);
+          }
+        })
+    )
   }
 
   /**
@@ -159,4 +200,5 @@ export class UserService {
       })
     );
   }
+
 }

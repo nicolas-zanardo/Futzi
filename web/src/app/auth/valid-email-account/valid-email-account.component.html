@@ -1,0 +1,24 @@
+<div class="container vh-60 d-flex align-items-center">
+
+    <div class="text-center w-100">
+        <div class="mt-5">
+            <div class="barre-title"></div>
+            <div *ngIf="errorMessage" class="mb-5">
+                <div><img src="{{clock}}" alt="clock"></div>
+                <button mat-raised-button class="bg-danger text-white" routerLink="/connexion">{{errorMessage}}</button>
+            </div>
+            <div *ngIf="validMessage" class="m-5">
+                <div class="card bg-light p-3">
+                    <p>Bonjour <b>{{userRequest.value?.firstname}} {{userRequest.value?.lastname}}</b>,</p>
+                    <p>La vérification de votre adresse e-mail a été effectuée avec succès. Vous pouvez maintenant procéder à votre connexion.</p>
+                    <br>
+                    <div class="mx-5">
+                        <button mat-raised-button color="primary" routerLink="/connexion">{{validMessage}}</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="barre-title"></div>
+        </div>
+    </div>
+</div>

@@ -117,26 +117,37 @@ exports.findUserByTokenValidEmailRepository = async (token, res) => {
     return await db.connection.promise().query(
         findUserByTokenValidEmail(), [token.trim()]
     ).then(([row]) => {
+
         return res.status(200).json(row[0]);
     }).catch((err) => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
     }).finally(db.connection.end());
 }
 
-exports.setValidEmailAddressRepository = async(user, res) => {
+/**
+ * setValidEmailAddressRepository
+ * @param userToken
+ * @param res
+ * @return {Promise<any>}
+ */
+exports.setValidEmailAddressRepository = async(userToken, res) => {
     const db = new Database();
     return await db.connection.promise().query(
-        findUserById(), [user.id]
+        findUserById(), [userToken.id]
     ).then(([row]) => {
         let user = row[0];
         if(user && user.token_time_validity > Date.now()) {
             const db = new Database();
             return db.connection.promise().query(
                 updateStatusValidEmail(),
-                [true, null, null, null, user.id]
-            ).then(([row]) => {
-                res.json(row);
-            })
+                [true, null, null, null, null, user.id]
+            ).then(() => {
+                return res.status(200).json(user);
+            }).catch((err) => {
+                console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+            }).finally(db.connection.end());
         }
-    })
+    }).catch((err) => {
+        console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
+    }).finally(db.connection.end());
 }

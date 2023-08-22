@@ -202,8 +202,16 @@ export class AuthService {
           Handel.resetMessage(this.messageUser);
         },
         error: (err) => {
-          this.messageUser.next(MessageService.loginUnsuccessful);
-          Handel.resetMessage(this.messageUser);
+          if(err.status === 403) {
+            console.log(err.status === 403)
+            this.messageUser.next(MessageService.loginUnsuccessful);
+            Handel.resetMessage(this.messageUser);
+          }
+          if(err.status === 428) {
+            console.log(err.status === 428)
+            this.messageUser.next("Un e-mail contenant un lien de validation a été envoyé pour vérifier votre adresse e-mail.");
+            Handel.resetMessage(this.messageUser);
+          }
         }
       })
     )
@@ -268,17 +276,17 @@ export class AuthService {
     return "DELETE";
   }
 
-  public setRoleByInfoStatus(info_status: string): string {
-    switch (info_status) {
-      case 'BANNI':
-        return SetROLE.BANNI;
-      case 'MEMBRE':
-        return SetROLE.MEMBRE;
-      case 'DEMANDE':
-        return SetROLE.DEMANDE;
-    }
-    return SetROLE.SUPPRIMER;
-  }
+  // public setRoleByInfoStatus(info_status: string): string {
+  //   switch (info_status) {
+  //     case 'BANNI':
+  //       return SetROLE.BANNI;
+  //     case 'MEMBRE':
+  //       return SetROLE.MEMBRE;
+  //     case 'DEMANDE':
+  //       return SetROLE.DEMANDE;
+  //   }
+  //   return SetROLE.SUPPRIMER;
+  // }
 
   /**
    * logout

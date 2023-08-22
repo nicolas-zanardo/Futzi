@@ -10,6 +10,9 @@ export interface User {
   ROLE?: string;
   info_status?: string;
   tokenURL?: string;
+  token_valid_email?: string;
+  token_reset_password?: string;
+  token_time_validity?: number;
   is_valid_email?: boolean;
   id_category?: number;
   createdAt?: string;

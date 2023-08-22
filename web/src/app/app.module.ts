@@ -24,6 +24,7 @@ import { MobileNavbarComponent } from './shared/component/mobile-navbar/mobile-n
 import { FooterComponent } from './shared/component/footer/footer.component';
 import { LogoutDialogComponent } from './shared/component/navbar/logout-dialog/logout-dialog.component';
 import { NotFoundComponent } from './shared/component/error/not-found/not-found.component';
+import { ValidEmailAccountComponent } from './auth/valid-email-account/valid-email-account.component';
 
 
 
@@ -39,6 +40,7 @@ import { NotFoundComponent } from './shared/component/error/not-found/not-found.
     FooterComponent,
     LogoutDialogComponent,
     NotFoundComponent,
+    ValidEmailAccountComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,6 +31,7 @@ export class ConnectionComponent implements OnInit{
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService) {
+    this.errorSend.next(null);
   }
 
   ngOnInit(): void {
@@ -64,9 +65,8 @@ export class ConnectionComponent implements OnInit{
             duration: 5000
           });
         },
-        error: (err) => {
+        error: () => {
           this.isErrorStyle = this.setIsError(true);
-          this.errorSend.next(MessageService.loginUnsuccessful);
           this.isAuthAsk = false;
         },
         complete: () => {

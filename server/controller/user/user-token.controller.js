@@ -12,7 +12,7 @@ const {User} = require("../../model/User.model");
  * @param req
  * @param res
  * @param next
- * @returns {Promise<void>}
+ * @returns {Promise<Response>}
  */
 exports.findUserByTokenURLController = async(req, res, next) => {
     try{
@@ -31,6 +31,7 @@ exports.findUserByTokenURLController = async(req, res, next) => {
  */
 exports.findUserByTokenResetPasswordController = async(req, res, next) => {
     try {
+        if(!req.params.token) return res.status(404).json(null);
         return findUserByTokenResetPasswordRepository(req.params.token.trim(), res)
     } catch (e) {
         next(e);
@@ -64,7 +65,8 @@ exports.resetPasswordController = async(req,res,next) => {
  */
 exports.findUserByTokenValidEmailController = async(req, res, next) => {
     try {
-        return await findUserByTokenValidEmailRepository(req.param.token.trim(), res);
+        if(!req.params.token) return res.status(404).json(null);
+        return await findUserByTokenValidEmailRepository(req.params.token.trim(), res);
     } catch (e) {
         next(e);
     }
@@ -83,7 +85,7 @@ exports.setValidEmailAddressController = async(req,res,next) => {
         user.id = req.body.id;
         user.token_time_validity = req.body.token_time_validity;
         user.token_valid_email = req.body.token_valid_email;
-        if(user.token_time_validity > Date.now()) {
+        if(user.token_time_validity < Date.now()) {
             return await res.status(401).json("Time has exceeded.")
         }
         return await setValidEmailAddressRepository(user,res);

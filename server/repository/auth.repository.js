@@ -3,11 +3,12 @@ const {Database} = require("../Database/Database");
 const jsonWebToken = require("jsonwebtoken");
 const fs= require("fs");
 const {authFindUserByIdForToken} = require("../query/auth.query");
-const {findUserByEmail, findUserByTokenURL} = require("../query/user/user.query");
+const {findUserByEmail} = require("../query/user/user.query");
 const {GenerateToken} = require("../component/tool/GenerateToken");
 const {updateUserTokenRepository} = require("./user/user-token.repository");
 const {EmailTransport} = require("../component/emails/EmailTransport");
 const {sendEmailRepository} = require("./email.repository");
+const {findUserByTokenURL} = require("../query/user/user-token.query");
 
 /**
  * RSA
@@ -18,7 +19,7 @@ const RSA_PRIVATE = fs.readFileSync('RSA/key', 'utf8');
  * @const addTimeValidityToken
  * @type {number}
  */
-const addTimeValidityToken = 1000*60*15000;
+const addTimeValidityToken = 1000*60*15;
 
 /**
  * authFindUserByIdForTokenRepository
@@ -97,7 +98,7 @@ exports.authUserLoginSocialRepository = async (req, res) => {
  */
 async function setToken(user, res) {
     user.password = null;
-    return jsonWebToken.sign({ROLE: user.ROLE, email: user.email},
+    return jsonWebToken.sign({ROLE: user.ROLE, email: user.email, is_valid_email: user.is_valid_email},
         RSA_PRIVATE, {
             algorithm: 'RS256',
             subject: user.id.toString(),
