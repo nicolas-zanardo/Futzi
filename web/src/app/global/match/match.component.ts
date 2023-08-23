@@ -15,6 +15,8 @@ export class MatchComponent implements OnInit {
   public logoOsny: string = `${environment.imagesPUBLIC}LOGO_OSNY.png`;
   public matchOfTheDay: BehaviorSubject<MatchPlay|undefined> = this.matchPlayService.matchOfTheDay$;
   public nextMatch: BehaviorSubject<MatchPlay[]|[]> = this.matchPlayService.nextMatch$;
+  public ballon: string = `${environment.imagesPUBLIC}ballon.gif`;
+  public logo:string = `${environment.imagesPUBLIC}LOGO_OSNY.png`;
 
   constructor(
     private matchPlayService: MatchPlayService,

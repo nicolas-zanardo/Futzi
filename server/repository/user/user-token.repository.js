@@ -54,12 +54,12 @@ exports.updateUserTokenRepository = (user) => {
  * @param res
  * @return {void}
  */
-exports.findUserByTokenResetPasswordRepository = (token, res) => {
+exports.findUserByTokenResetPasswordRepository = async(token, res) => {
     const db = new Database();
-    db.connection.promise().query(
+    return await db.connection.promise().query(
         findUserByTokenPassword(), [token.trim()]
     ).then(([row]) => {
-        res.status(200).json(row[0]);
+        return res.status(200).json(row[0]);
     }).catch((err) => {
         console.log(`✘ 🅴🆁🆁🅾🆁 SQL findUserByTokenResetPasswordRepository : ${new Date()}, ${err}`);
     }).finally(db.connection.end());

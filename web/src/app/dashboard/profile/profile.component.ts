@@ -5,6 +5,8 @@ import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} fro
 import {RegexUser} from "../../shared/enum/regex-user";
 import {ROLE} from "../../shared/enum/role";
 import {UserService} from "../../shared/services/user/user.service";
+import {environment} from "../../../environments/environement.dev";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-profile',
@@ -22,8 +24,12 @@ export class ProfileComponent implements OnInit{
   public errorUserCredentialFormResponse: string | null = null;
   public hideOldPassword = true;
   public hideNewPassword = true;
+  public temper:string = `${environment.imagesPUBLIC}temper.gif`;
+  public waitSubmitInfo: boolean = false;
+  public waitSubmitPwd: boolean = false
 
   constructor(
+    public _snackBar: MatSnackBar,
     private authService: AuthService,
     private userService: UserService,
     private fb : FormBuilder
@@ -84,6 +90,8 @@ export class ProfileComponent implements OnInit{
    */
   public submitUserFormGroup(): void {
     if(this.userForm.valid) {
+      this.waitSubmitInfo = true;
+      window.document.getElementById('btnInfo')?.setAttribute("disabled", "disabled");
       this.userService.editUserInformation(this.userForm.getRawValue()).subscribe( {
         next: (response: any) => {
           if(response) {
@@ -99,10 +107,22 @@ export class ProfileComponent implements OnInit{
               id_category: this.user?.id_category
             };
             this.authService.currentUser$.next(newUser);
+            this._snackBar.open("Les informations de votre compte ont bien été modifié", "✅", {
+              duration: 5000
+            })
           }
         },
-        error: (err) => { this.errorUserFormResponse = err?.error },
+        error: (err) => {
+          this._snackBar.open("Les informations de votre compte n'ont pas été modifié", "❌", {
+            duration: 5000
+          })
+          this.errorUserFormResponse = err?.error;
+          this.waitSubmitInfo = false;
+          window.document.getElementById('btnInfo')?.removeAttribute("disabled");
+        },
         complete: () => {
+          window.document.getElementById('btnInfo')?.removeAttribute("disabled");
+          this.waitSubmitInfo = false;
           console.warn('INFO : USER INFO UPDATE', new Date());
           this.user = this.authService.currentUser$.value;
         }
@@ -115,13 +135,27 @@ export class ProfileComponent implements OnInit{
    */
   public submitUserCredentialFormGroup(formDirective: FormGroupDirective):void {
     if(this.userCredentialForm.valid) {
+      this.waitSubmitPwd = true;
+      window.document.getElementById('btnPwd')?.setAttribute("disabled", "disabled");
       this.userService.editUserCredential(this.userCredentialForm.getRawValue()).subscribe({
         next: (message: any) => {
           this.errorUserCredentialFormResponse = message;
           formDirective.resetForm();
+          this._snackBar.open("Le mot de passe a bien été modifié", "✅", {
+            duration: 5000
+          });
         },
-        error: (err) => { this.errorUserCredentialFormResponse = err?.error},
+        error: (err) => {
+          this.errorUserCredentialFormResponse = err?.error
+          this._snackBar.open("Le mot de passe n'a pas été modifié", "❌", {
+            duration: 5000
+          });
+          window.document.getElementById('btnPwd')?.removeAttribute("disabled");
+          this.waitSubmitPwd = false;
+        },
         complete: () => {
+          window.document.getElementById('btnPwd')?.removeAttribute("disabled");
+          this.waitSubmitPwd = false;
           setTimeout(()=> {
             this.errorUserCredentialFormResponse = "";
           },5000)

@@ -157,6 +157,7 @@ export class UserService {
     }));
   }
 
+
   /**
    * validTokenValidEmail
    * @param user
@@ -175,6 +176,56 @@ export class UserService {
           }
         })
     )
+  }
+
+  /**
+   * askResetPassword
+   * @param email
+   */
+  public askResetPassword(email: {email:string}): Observable<string> {
+    const url:string = `${environment.apiURL}/user/token/forget-password`;
+    return this.http.post<string>(url, email).pipe(
+      tap({
+        next: (resp: string) => {
+          this.messageUser.next(resp);
+        }
+      })
+    )
+  }
+
+  /**
+   * getUserByTokenRestPassword
+   * @param token
+   */
+  public getUserByTokenRestPassword(token: string|null|undefined): Observable<User|null> {
+    const url:string = `${environment.apiURL}/user/token/find-by-token-reste-password/${token}`;
+    return this.http.get<User|null>(url).pipe(tap({
+      next: (user: User|null) => {
+        if(user){
+          this.userRequest$.next(user);
+        }
+      },
+      error: (err) => {
+        this.messageUser.next(MessageService.getDataError("recupération de l'utilisateur par le token"));
+        Handel.error("UserService", "getUserByTokenURL", this.messageUser.value, err);
+        Handel.resetMessage(this.messageUser);
+      }
+    }))
+  }
+
+  public resetPassword(user: User): Observable<string> {
+    const url: string = `${environment.apiURL}/user/token/valid-token-reste-password`;
+    return this.http.post<string>(url, user).pipe(tap({
+      next: (resp:string) => {
+        this.messageUser.next(resp);
+        Handel.resetMessage(this.messageUser);
+      },
+      error: (err) => {
+        this.messageUser.next(MessageService.getDataError("Le mot de passe n'a pas été modifié"));
+        Handel.error("UserService", "resetPassword", this.messageUser.value, err);
+        Handel.resetMessage(this.messageUser);
+      }
+    }))
   }
 
   /**

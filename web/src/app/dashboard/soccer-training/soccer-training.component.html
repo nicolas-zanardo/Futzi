@@ -2,60 +2,62 @@
   <h1>Entrainemant</h1>
   <div class="barre-title"></div>
 
+  <div class="card border border-0 my-5 shadow">
+    <div class="mx-4 mt-3"><h4>Ajouter un entrainement</h4></div>
+    <form class="px-5 pt-2 d-flex justify-content-around justify-content-sm-between flex-wrap" [formGroup]="formCreateTraining" (submit)="submit()">
+      <mat-form-field appearance="fill" class="mx-2">
+        <mat-label>Jour</mat-label>
+        <mat-select formControlName="day">
+          <mat-option *ngFor="let day of week" [value]="day.value">
+            {{day.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div class="mx-4 mt-5"><h4>Ajouter un entrainement</h4></div>
-  <form class="d-flex justify-content-around justify-content-sm-between flex-wrap pb-5" [formGroup]="formCreateTraining" (submit)="submit()">
-    <mat-form-field appearance="fill" class="mx-2">
-      <mat-label>Jour</mat-label>
-      <mat-select formControlName="day">
-        <mat-option *ngFor="let day of week" [value]="day.value">
-          {{day.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="fill" class="mx-2">
+        <mat-label>Heure</mat-label>
+        <mat-select formControlName="hour_start">
+          <mat-option *ngFor="let hour of hours" [value]="hour.value">
+            {{hour.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="mx-2">
-      <mat-label>Heure</mat-label>
-      <mat-select formControlName="hour_start">
-        <mat-option *ngFor="let hour of hours" [value]="hour.value">
-          {{hour.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="fill" class="mx-2">
+        <mat-label>Catégorie</mat-label>
+        <input type="text"
+               aria-label="Catégorie"
+               matInput
+               formControlName="category"
+               [matAutocomplete]="cat">
+        <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name | uppercase">
+            {{option.name | uppercase}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="mx-2">
-      <mat-label>Catégorie</mat-label>
-      <input type="text"
-             aria-label="Catégorie"
-             matInput
-             formControlName="category"
-             [matAutocomplete]="cat">
-      <mat-autocomplete autoActiveFirstOption #cat="matAutocomplete">
-        <mat-option *ngFor="let option of filteredOptionsCategory | async" [value]="option.name | uppercase">
-          {{option.name | uppercase}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+      <mat-form-field appearance="fill" class="mx-2">
+        <mat-label>Terrain</mat-label>
+        <input type="text"
+               aria-label="Terrain"
+               matInput
+               formControlName="football_pitch"
+               [matAutocomplete]="FBpitch">
+        <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
+          <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name | uppercase">
+            {{pitch.name | uppercase}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="mx-2">
-      <mat-label>Terrain</mat-label>
-      <input type="text"
-             aria-label="Terrain"
-             matInput
-             formControlName="football_pitch"
-             [matAutocomplete]="FBpitch">
-      <mat-autocomplete autoActiveFirstOption #FBpitch="matAutocomplete">
-        <mat-option *ngFor="let pitch of filteredOptionsFootballPitch | async" [value]="pitch.name | uppercase">
-          {{pitch.name | uppercase}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+      <div class="d-flex justify-content-end w-100 px-2">
+        <button mat-raised-button color="primary" class="p-3 px-5 mt-0 mb-4 mx-2"><mat-icon fontIcon="done"></mat-icon> Ajouter</button>
+      </div>
 
-    <div class="d-flex justify-content-end w-100 px-2">
-      <button mat-raised-button color="primary" class="p-3 px-5 mt-0 mb-4 mx-2"><mat-icon fontIcon="done"></mat-icon> Ajouter</button>
-    </div>
+    </form>
+  </div>
 
-  </form>
 
 <!--  MAT TABLE-->
   <div class="mat-elevation-z8">

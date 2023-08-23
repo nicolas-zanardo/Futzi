@@ -56,10 +56,8 @@ exports.findUserByEmailToResetPasswordRepository = async(email, res) => {
     const db = new Database();
     return await db.connection.promise().query(findUserByEmail(), email.trim())
         .then(([row]) => {
-            let resJson = false;
             let user = row[0];
-            if(user.email) {
-                resJson = true;
+            if(user) {
                 let user = row[0];
                 console.log(`░▒▓ INFO : FIND USER BY ID : ${new Date()}`);
                 sendEmailRepository(user, EmailTransport.sendEmail, 'reset-email');
@@ -70,7 +68,7 @@ exports.findUserByEmailToResetPasswordRepository = async(email, res) => {
                 user.token_valid_email = null
                 updateUserTokenRepository(user);
             }
-            return res.status(200).json(resJson);
+            return res.status(200).json("Un e-mail contenant un lien a été envoyé à votre boîte aux lettres");
         }).catch(err => {
             console.log(`✘ 🅴🆁🆁🅾🆁 SQL : ${new Date()}, ${err}`);
             return res.status(500).json(`⚽ ERROR: PROBLEME SUR LE CODE, contacter l'administrateur 🤬`);

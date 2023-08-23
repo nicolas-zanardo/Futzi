@@ -44,6 +44,7 @@ exports.findUserByIdController = async(req,res,next) => {
  */
 exports.forgetPasswordController = async(req,res,next) => {
     try{
+        if(!req.body.email) return res.status(404).json("Le serveur n'a pas reçut l'email utilisateur");
         return await findUserByEmailToResetPasswordRepository(req.body.email.trim(), res);
     }catch (e) {
         next(e);

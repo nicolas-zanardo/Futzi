@@ -12,7 +12,7 @@ exports.findUserByTokenURL = () => {
  * @return {string}
  */
 exports.findUserByTokenPassword = () => {
-    return "SELECT id, token_reset_password, token_time_validity FROM user WHERE token_reset_password=?"
+    return "SELECT id, token_reset_password, token_time_validity, firstname, lastname FROM user WHERE token_reset_password=?"
 }
 
 /**

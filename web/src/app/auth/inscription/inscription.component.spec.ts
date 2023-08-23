@@ -6,6 +6,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {MatcherValidatorModule} from "../../shared/component/matcher/matcher-validator.module";
 
 describe('InscriptionComponent', () => {
   let component: InscriptionComponent;
@@ -19,7 +20,8 @@ describe('InscriptionComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        MatcherValidatorModule
       ],
       declarations: [ InscriptionComponent ]
     })

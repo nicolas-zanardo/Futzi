@@ -8,6 +8,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {MessageService} from "../../shared/messages/MessageService";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BehaviorSubject} from "rxjs";
+import {DialogResetPasswordComponent} from "./dialog-reset-password/dialog-reset-password.component";
+import {UserService} from "../../shared/services/user/user.service";
+import {Handel} from "../../shared/services/handel";
 
 
 @Component({
@@ -30,6 +33,7 @@ export class ConnectionComponent implements OnInit{
     private _snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router,
+    private userService: UserService,
     private authService: AuthService) {
     this.errorSend.next(null);
   }
@@ -80,4 +84,23 @@ export class ConnectionComponent implements OnInit{
   inscription(): void {
     this.router.navigate(['/inscription']).then(r => {});
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
+      data: {email: this.form.get('email')?.value},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(typeof result === "string") {
+        let emailObj = {email:result};
+        this.userService.askResetPassword(emailObj).subscribe((resp)=> {
+          this.errorSend.next(resp);
+          Handel.resetMessage(this.errorSend);
+        });
+      } else {
+        this.userService.messageUser.next("L'adresse e-mail n'est pas une chaîne de caractères valide.")
+      }
+    });
+  }
+
 }

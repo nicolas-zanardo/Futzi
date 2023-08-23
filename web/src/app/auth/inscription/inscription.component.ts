@@ -2,17 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from "@angular/forms";
 import {RegexUser} from "../../shared/enum/regex-user";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {MessageService} from "../../shared/messages/MessageService";
+import {MatcherValidatorModule} from "../../shared/component/matcher/matcher-validator.module";
 
 
 @Component({
@@ -29,6 +26,7 @@ export class InscriptionComponent implements OnInit{
   public isSend: boolean = false;
 
   constructor(
+    private matchValidator: MatcherValidatorModule,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
     private router: Router,
@@ -48,7 +46,7 @@ export class InscriptionComponent implements OnInit{
       password: new FormControl('', Validators.compose([
         Validators.minLength(8),
         Validators.required,
-        this.matchValidator('confirmPassword', true)
+        this.matchValidator.password('confirmPassword', true)
       ])),
       firstname: new FormControl('', Validators.compose([
         Validators.minLength(4),
@@ -64,25 +62,12 @@ export class InscriptionComponent implements OnInit{
       ])),
       passwordConfirm: new FormControl('', Validators.compose([
         Validators.required,
-        this.matchValidator('password')
+        this.matchValidator.password('password')
       ]))
     }, { } )
   }
 
-  public matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control.parent && reverse) {
-        const c = (control.parent?.controls as any)[matchTo] as AbstractControl;
-        if (c) {
-          c.updateValueAndValidity();
-        }
-        return null;
-      }
-      return !!control.parent && !!control.parent.value &&
-      control.value === (control.parent?.controls as any)[matchTo].value?
-        null : { matching: true };
-    };
-  }
+
 
   public submit(): void {
     if(this.form.valid) {

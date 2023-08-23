@@ -7,6 +7,7 @@ import {DataUserGuard} from "./shared/guards/user/data-user.guard";
 import {SocialComponent} from "./auth/social/social.component";
 import {NotFoundComponent} from "./shared/component/error/not-found/not-found.component";
 import {ValidEmailAccountComponent} from "./auth/valid-email-account/valid-email-account.component";
+import {ValidResetPasswordComponent} from "./auth/valid-reset-password/valid-reset-password.component";
 
 
 
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: "connexion", canActivate: [DataUserGuard], component: ConnectionComponent },
   { path: "inscription", canActivate: [DataUserGuard], component: InscriptionComponent },
   { path: "valid-email-account/:token", canActivate: [DataUserGuard], component: ValidEmailAccountComponent},
+  { path: "reset-password/:token", canActivate:[DataUserGuard], component: ValidResetPasswordComponent},
   { path: "**", canActivate: [DataUserGuard], component: NotFoundComponent}
 
 ]; // sets up routes constant where you define your routes

@@ -76,7 +76,7 @@
           <mat-form-field class="full-width">
             <mat-label>Mot de passe</mat-label>
             <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-            <button type="button" mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
               <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
             <mat-error *ngIf="form.get('password')!.hasError('minlength')">
@@ -91,7 +91,7 @@
           <mat-form-field class="full-width">
             <mat-label>Confirmez</mat-label>
             <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="passwordConfirm">
-            <button type="button" mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide confirm password'" [attr.aria-pressed]="hideConfirmPassword">
+            <button type="button" mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide confirm password'" [attr.aria-pressed]="hideConfirmPassword">
               <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
             <mat-error *ngIf="form.get('passwordConfirm')?.hasError('matching')">

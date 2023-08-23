@@ -25,7 +25,10 @@ import { FooterComponent } from './shared/component/footer/footer.component';
 import { LogoutDialogComponent } from './shared/component/navbar/logout-dialog/logout-dialog.component';
 import { NotFoundComponent } from './shared/component/error/not-found/not-found.component';
 import { ValidEmailAccountComponent } from './auth/valid-email-account/valid-email-account.component';
-
+import { DialogResetPasswordComponent } from './auth/connection/dialog-reset-password/dialog-reset-password.component';
+import { ValidResetPasswordComponent } from './auth/valid-reset-password/valid-reset-password.component';
+import {MatcherValidatorModule} from "./shared/component/matcher/matcher-validator.module";
+import {NavigateModule} from "./shared/component/navigate/navigate.module";
 
 
 @NgModule({
@@ -41,6 +44,8 @@ import { ValidEmailAccountComponent } from './auth/valid-email-account/valid-ema
     LogoutDialogComponent,
     NotFoundComponent,
     ValidEmailAccountComponent,
+    DialogResetPasswordComponent,
+    ValidResetPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +58,9 @@ import { ValidEmailAccountComponent } from './auth/valid-email-account/valid-ema
     HttpClientModule,
     NgOptimizedImage,
     DashboardModule,
-    FormsModule
+    FormsModule,
+    MatcherValidatorModule,
+    NavigateModule
   ],
   providers: [
     {

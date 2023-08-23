@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../shared/services/user/user.service";
 import {User} from "../../shared/interface/user.interface";
 import {environment} from "../../../environments/environement.dev";
+import {NavigateModule} from "../../shared/component/navigate/navigate.module";
 
 @Component({
   selector: 'app-valid-email-account',
@@ -19,7 +20,7 @@ export class ValidEmailAccountComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    private nav: NavigateModule,
     private userService : UserService,
   ) {}
 
@@ -28,10 +29,9 @@ export class ValidEmailAccountComponent implements OnInit {
           this.token = param.get('token');
       })
       this.userService.getUserByTokenValidEmail(this.token).subscribe( value => {
-          console.log(this.userRequest.value)
           if(value) return this.validEmail(value);
           this.errorMessage = "Le token n'est pas valide, veuillez vous reconnecter";
-          this.backToLogin();
+          this.nav.backToLogin();
       })
   }
 
@@ -41,13 +41,9 @@ export class ValidEmailAccountComponent implements OnInit {
         this.userService.validTokenValidEmail(user).subscribe();
     } else {
         this.errorMessage = "Le token n'est pas valide, veuillez vous reconnecter";
-        this.backToLogin();
+        this.nav.backToLogin();
     }
   }
 
-  private backToLogin() {
-      setTimeout(()=> {
-        this.router.navigate(['/connexion']).then(r => {});
-      }, 1000*60*2)
-  }
+
 }
