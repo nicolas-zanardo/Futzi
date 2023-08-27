@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { AuthContext } from '../../../components/authProvider';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -12,6 +13,8 @@ export default function Body() {
     "http://10.0.2.2:3000/api/images/public/slideshow/slide-3.jpg"
   ]);
 
+  const {user, token} = useContext(AuthContext);
+
   return (
     <View>
       <View style={styles.scrollview}>
@@ -22,7 +25,10 @@ export default function Body() {
             </ImageBackground>
           ))}
         </Swiper>
-        <View style={styles.line}/>    
+        <View style={styles.line}/>  
+        <View>
+          <Text>Bonjour, {user?.firstname || 'Guest'}</Text>
+        </View>  
       </View>
     </View>
   )
@@ -30,7 +36,7 @@ export default function Body() {
 
 const styles = StyleSheet.create({
   scrollview: {
-    height:610,
+    height:615,
     margin:0
   },
   img: {
