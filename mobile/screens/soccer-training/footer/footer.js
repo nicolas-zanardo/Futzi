@@ -7,7 +7,9 @@ export default function Footer() {
   return(
     <View style={styles.footer}>
       <TouchableOpacity onPress={() => navigation.navigate('home')}><Image source={require('../../assets/home_FILL1_wght100_GRAD0_opsz48.png')}/></TouchableOpacity>
+      <View style={styles.VerticalLine}></View>
       <TouchableOpacity><Image source={require('../../assets/sports_soccer_FILL0_wght100_GRAD0_opsz48.png')}/></TouchableOpacity>
+      <View style={styles.VerticalLine}></View>
       <TouchableOpacity><Image source={require('../../assets/directions_run_FILL1_wght100_GRAD0_opsz48.png')}/></TouchableOpacity>
     </View>
   )
@@ -17,5 +19,10 @@ const styles = StyleSheet.create({
   footer: {
       flexDirection:'row',
       justifyContent:'space-around'
-  }
+  },
+  VerticalLine: {
+    height:'100%',
+    width:1,
+    backgroundColor: '#D3D3D3'
+}
 })
